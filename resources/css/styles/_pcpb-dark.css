@@ -1,0 +1,123 @@
+/* Sidebar/Aside - sempre preto */
+.aside {
+  background: linear-gradient(180deg, #000000 0%, #1a1a1a 100%) !important;
+  border-right: 1px solid #333 !important;
+}
+
+/* Header da sidebar */
+.aside-brand {
+  background: #000000 !important;
+  color: white !important;
+  border-bottom: 1px solid #333 !important;
+}
+
+/* Itens do menu lateral */
+.aside-menu-item {
+  color: #d1d5db !important; /* text-gray-300 */
+  transition: all 0.3s ease !important;
+  border-bottom: 1px solid transparent !important;
+}
+
+.aside-menu-item:hover {
+  color: #bea55a !important;
+  background: rgba(190, 165, 90, 0.1) !important;
+  border-bottom: 1px solid #bea55a !important;
+  transform: translateX(4px) !important;
+}
+
+/* Item ativo do menu */
+.aside-menu-item-active {
+  color: #bea55a !important;
+  background: rgba(190, 165, 90, 0.2) !important;
+  border-right: 3px solid #bea55a !important;
+  font-weight: 600 !important;
+}
+
+/* Ícones dourados quando ativo */
+.aside-menu-item-active svg {
+  color: #bea55a !important;
+}
+
+/* Dropdowns do menu */
+.aside-menu-dropdown {
+  background: rgba(26, 26, 26, 0.95) !important;
+  border-left: 2px solid #bea55a !important;
+  margin-left: 1rem !important;
+}
+
+.aside-menu-dropdown .aside-menu-item {
+  padding-left: 2rem !important;
+  font-size: 0.875rem !important;
+}
+
+.aside-menu-dropdown .aside-menu-item:hover {
+  background: rgba(190, 165, 90, 0.15) !important;
+  transform: none !important;
+  border-bottom: none !important;
+  border-left: 2px solid #bea55a !important;
+}
+
+/* NavBar superior */
+nav {
+  background: linear-gradient(90deg, #000000 0%, #1a1a1a 100%) !important;
+  border-bottom: 1px solid #333 !important;
+}
+
+/* Itens da navbar */
+.navbar-item-label {
+  color: #d1d5db !important;
+  transition: color 0.2s ease !important;
+}
+
+.navbar-item-label:hover {
+  color: #bea55a !important;
+}
+
+.navbar-item-label-active {
+  color: #bea55a !important;
+}
+
+/* Scrollbar personalizada */
+.aside-scrollbars::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.aside-scrollbars::-webkit-scrollbar-track {
+  background: #1a1a1a !important;
+}
+
+.aside-scrollbars::-webkit-scrollbar-thumb {
+  background: #bea55a !important;
+  border-radius: 3px !important;
+}
+
+.aside-scrollbars::-webkit-scrollbar-thumb:hover {
+  background: #d4c166 !important;
+}
+
+/* Overlay */
+.overlay {
+  background: linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.8),
+    rgba(26, 26, 26, 0.8)
+  ) !important;
+}
+
+.aside-menu-item svg {
+  transition: color 0.3s ease !important;
+}
+
+.aside-menu-item:hover svg {
+  color: #bea55a !important;
+}
+
+/* Ajustar texto do botão de logout */
+.aside-menu-item[class*='info'] {
+  color: #d1d5db !important;
+}
+
+.aside-menu-item[class*='info']:hover {
+  color: #bea55a !important;
+  background: rgba(190, 165, 90, 0.1) !important;
+}
