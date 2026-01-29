@@ -27,6 +27,24 @@ export default defineConfig({
             },
         }),
     ],
+    server: {
+        // Configurações para hot reload funcionar no Docker
+        host: '0.0.0.0', // Escuta em todas as interfaces
+        port: 5173,
+        strictPort: true,
+        hmr: {
+            // Host que o navegador irá usar para conectar ao HMR
+            // Use 'localhost' se estiver acessando de localhost:8015
+            host: 'localhost',
+            port: 5173,
+            protocol: 'ws',
+        },
+        watch: {
+            // Necessário para funcionar com volumes do Docker
+            usePolling: true,
+            interval: 1000,
+        },
+    },
     build: {
         chunkSizeWarningLimit: 2000, // Aumentar limite para aceitar bundle maior
         rollupOptions: {

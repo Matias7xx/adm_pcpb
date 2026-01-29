@@ -40,8 +40,10 @@ RUN echo "upload_max_filesize = 1G\npost_max_size = 1G\nmemory_limit = 1024M\nma
 # Configurações específicas para curl e resolução DNS
 RUN echo "default_socket_timeout = 60\nauto_detect_line_endings = On" >> /usr/local/etc/php/conf.d/network.ini
 
-# Configuração do OPcache para produção
-RUN echo "opcache.enable=1\nopcache.memory_consumption=256\nopcache.interned_strings_buffer=16\nopcache.max_accelerated_files=20000\nopcache.validate_timestamps=0\nopcache.save_comments=1\nopcache.fast_shutdown=1" > /usr/local/etc/php/conf.d/opcache.ini
+# Configuração do OPcache (será controlado via APP_ENV no entrypoint)
+# Em produção: opcache habilitado e otimizado
+# Em desenvolvimento (local): opcache desabilitado para hot reload
+RUN echo "opcache.enable=1\nopcache.memory_consumption=256\nopcache.interned_strings_buffer=16\nopcache.max_accelerated_files=20000\nopcache.validate_timestamps=1\nopcache.revalidate_freq=0\nopcache.save_comments=1\nopcache.fast_shutdown=1" > /usr/local/etc/php/conf.d/opcache.ini
 
 # Instale o Composer
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
@@ -73,8 +75,9 @@ RUN mkdir -p storage/logs storage/framework/{cache,sessions,views} bootstrap/cac
 RUN chown -R www-data:www-data storage bootstrap/cache && \
     chmod -R 755 storage bootstrap/cache
 
-# Build dos assets para produção
-RUN npm run build
+# Build dos assets será feito no entrypoint baseado no APP_ENV
+# Para produção: npm run build será executado
+# Para desenvolvimento: npm run dev será executado
 
 # Copiar script de entrada e dar permissão
 COPY docker-entrypoint.sh /usr/local/bin/
