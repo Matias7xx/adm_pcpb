@@ -9,7 +9,7 @@ const props = defineProps({
   },
   height: {
     type: String,
-    default: '200px',
+    default: '250px',
   },
 });
 
@@ -280,6 +280,7 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center; /* Desktop: centralizado */
   display: block;
 }
 
@@ -452,47 +453,14 @@ onUnmounted(() => {
 
 /* Responsivo */
 @media (max-width: 768px) {
-  .banner-title {
-    font-size: 1.5rem;
+  .banner-carousel-container {
+    height: auto !important; 
+    aspect-ratio: 3 / 1;
   }
 
-  .banner-description {
-    font-size: 1rem;
-  }
-
-  .nav-button {
-    padding: 0.375rem;
-  }
-
-  .nav-icon {
-    width: 1.75rem;
-    height: 1.75rem;
-  }
-
-  .banner-overlay {
-    padding: 1rem;
-  }
-
-  .nav-button-prev {
-    left: 0.5rem;
-  }
-
-  .nav-button-next {
-    right: 0.5rem;
-  }
-
-  .indicators-container {
-    bottom: 0.75rem;
-    padding: 0.375rem 0.75rem;
-  }
-
-  .indicator {
-    width: 6px;
-    height: 6px;
-  }
-
-  .indicator-active {
-    width: 18px;
+  .banner-image {
+    transform: none;
+    object-position: center center; 
   }
 }
 

@@ -13,7 +13,7 @@ class HandleCors
    */
   public function handle(Request $request, Closure $next): Response
   {
-    $allowedOrigins = ['http://localhost:8000', 'http://localhost:8001'];
+    $allowedOrigins = ['http://localhost:8000', 'http://localhost:8015'];
 
     $origin = $request->headers->get('Origin');
 

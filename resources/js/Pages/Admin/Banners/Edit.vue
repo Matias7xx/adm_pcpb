@@ -162,7 +162,7 @@ const submit = () => {
         <FormField
           label="Imagem do Banner"
           :required="!imagemPreview"
-          help="Formato: JPEG, PNG, GIF ou WebP. Tamanho máximo: 5MB. Dimensões recomendadas: 1920x400px"
+          help="Formato: JPEG, PNG, GIF ou WebP. Tamanho máximo: 5MB. Dimensões recomendadas: 1900x350px"
         >
           <div class="space-y-4">
             <!-- Preview -->
