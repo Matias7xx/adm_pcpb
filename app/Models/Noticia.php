@@ -23,6 +23,7 @@ class Noticia extends Model
     'data_publicacao',
     'status',
     'visualizacoes',
+    'ordem_destaque',
   ];
 
   protected $casts = [
@@ -30,6 +31,7 @@ class Noticia extends Model
     'data_publicacao' => 'date',
     'visualizacoes' => 'integer',
     'carousel_images' => 'array',
+    'ordem_destaque' => 'integer',
   ];
 
   /**

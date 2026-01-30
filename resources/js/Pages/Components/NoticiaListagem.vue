@@ -641,7 +641,7 @@ onUnmounted(() => {
                   </Link>
 
                   <!-- Descrição -->
-                  <p
+                  <!-- <p
                     class="text-xs sm:text-sm text-gray-600 leading-relaxed line-clamp-2"
                   >
                     <span class="sm:hidden">{{
@@ -650,7 +650,7 @@ onUnmounted(() => {
                     <span class="hidden sm:inline">{{
                       truncateText(noticia.descricao_curta, 210)
                     }}</span>
-                  </p>
+                  </p> -->
                 </div>
 
                 <!-- Ação -->

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('noticias', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
-            $table->text('descricao_curta');
+            $table->text('descricao_curta')->nullable()->default('');
             $table->longText('conteudo')->nullable()->default('');
             $table->string('imagem')->nullable();
             $table->json('carousel_images')->nullable();

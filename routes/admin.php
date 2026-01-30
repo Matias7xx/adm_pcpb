@@ -191,15 +191,29 @@ Route::group([
     | Gerenciamento de Notícias
     |--------------------------------------------------------------------------
     */
-    Route::resource('noticias', NoticiaController::class);
+
+    // Buscar destaques atuais (para widget)
+    Route::get('noticias/destaques-atuais', [NoticiaController::class, 'getDestaquesAtuais'])
+        ->name('noticias.destaques-atuais');
+
+    // Confirmar substituição de destaque (quando já tem 2)
+    Route::post('noticias/confirmar-substituicao-destaque', [NoticiaController::class, 'confirmarSubstituicaoDestaque'])
+        ->name('noticias.confirmar-substituicao-destaque');
+
+    // Atualizar ordem dos destaques (drag and drop)
+    Route::post('noticias/atualizar-ordem-destaques', [NoticiaController::class, 'atualizarOrdemDestaques'])
+        ->name('noticias.atualizar-ordem-destaques');
+
     Route::patch('noticias/{noticia}/toggle-destaque', [NoticiaController::class, 'toggleDestaque'])
-        ->name('noticias.toggle-destaque');
+    ->name('noticias.toggle-destaque')
+    ->where('noticia', '[0-9]+'); // Garante que aqui só passe número
+
+    Route::resource('noticias', NoticiaController::class);
 
     // Vídeos Institucionais
     Route::resource('videos', VideoController::class)->names('video');
     Route::post('videos/atualizar-ordem', [VideoController::class, 'atualizarOrdem'])->name('video.atualizar-ordem');
     Route::patch('videos/{video}/toggle-ativo', [VideoController::class, 'toggleAtivo'])->name('video.toggle-ativo');
-
 
      /*
     |--------------------------------------------------------------------------

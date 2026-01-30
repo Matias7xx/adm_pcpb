@@ -177,7 +177,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <!-- Conteúdo principal - CORRIGIDO: lg:flex-row -->
+      <!-- Conteúdo principal -->
       <div class="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-12">
         <!-- Coluna principal de notícias -->
         <main class="w-full">
@@ -360,11 +360,11 @@ onUnmounted(() => {
                     </Link>
 
                     <!-- Descrição -->
-                    <p
+                    <!-- <p
                       class="text-xs sm:text-sm text-gray-600 leading-relaxed line-clamp-2"
                     >
                       {{ truncateText(noticia.descricao_curta, 300) }}
-                    </p>
+                    </p> -->
                   </div>
 
                   <!-- Ação -->

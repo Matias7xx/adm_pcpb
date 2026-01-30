@@ -115,6 +115,25 @@ Breadcrumbs::resource('admin.matriculas', 'Matrículas');
 Breadcrumbs::resource('admin.directors', 'Diretores');
 Breadcrumbs::resource('admin.alojamento', 'Reserva de Alojamento');
 Breadcrumbs::resource('admin.noticias', 'Notícias');
+Breadcrumbs::for('admin.noticias.destaques-atuais', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.noticias.index');
+    $trail->push('Destaques Atuais');
+});
+
+Breadcrumbs::for('admin.noticias.confirmar-substituicao-destaque', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.noticias.index');
+    $trail->push('Confirmar Substituição de Destaque');
+});
+
+Breadcrumbs::for('admin.noticias.atualizar-ordem-destaques', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.noticias.index');
+    $trail->push('Atualizar Ordem dos Destaques');
+});
+
+Breadcrumbs::for('admin.noticias.toggle-destaque', function (BreadcrumbTrail $trail, $noticia) {
+    $trail->parent('admin.noticias.show', $noticia);
+    $trail->push('Alterar Destaque');
+});
 Breadcrumbs::resource('admin.video', 'Vídeos');
 Breadcrumbs::resource('admin.contato', 'Mensagens de Contato');
 Breadcrumbs::resource('admin.requerimentos', 'Requerimentos');

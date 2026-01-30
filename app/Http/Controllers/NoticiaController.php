@@ -122,40 +122,42 @@ class NoticiaController extends Controller
   }
 
   /**
-   * Retorna as últimas notícias em formato JSON para componentes
-   * Usado na HOME para exibir as 3 últimas notícias
+   * * Retorna as últimas notícias em formato JSON para componentes
+   * Usado na HOME para exibir as notícias em destaque
    */
   public function ultimasNoticias()
-  {
+{
     $cacheKey = 'noticias_destaque_banner';
 
     $noticias = \Cache::remember($cacheKey, now()->addMinutes(10), function () {
-      return Noticia::where('status', 'publicado')
-        ->where('data_publicacao', '<=', now())
-        ->where('destaque', true) // <<<< SÓ DESTAQUES
-        ->whereNull('deleted_at')
-        ->orderBy('data_publicacao', 'desc')
-        ->orderBy('created_at', 'desc')
-        ->orderBy('id', 'desc')
-        ->take(3)
-        ->get()
-        ->map(function ($noticia) {
-          return [
-            'id' => $noticia->id,
-            'titulo' => $noticia->titulo,
-            'descricao_curta' => $noticia->descricao_curta,
-            'imagem' => $noticia->imagem
-              ? UploadHelper::getPublicUrl($noticia->imagem)
-              : null,
-            'data_publicacao' => $noticia->data_formatada,
-            'destaque' => $noticia->destaque,
-            'visualizacoes' => $noticia->visualizacoes,
-          ];
-        });
+        return Noticia::where('status', 'publicado')
+            ->where('data_publicacao', '<=', now())
+            ->where('destaque', true)
+            ->whereNull('deleted_at')
+            ->orderBy('ordem_destaque', 'asc')
+            ->orderBy('data_publicacao', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->take(2)
+            ->get()
+            ->map(function ($noticia) {
+                return [
+                    'id' => $noticia->id,
+                    'titulo' => $noticia->titulo,
+                    'descricao_curta' => $noticia->descricao_curta,
+                    'imagem' => $noticia->imagem
+                        ? UploadHelper::getPublicUrl($noticia->imagem)
+                        : null,
+                    'data_publicacao' => $noticia->data_formatada,
+                    'destaque' => $noticia->destaque,
+                    'ordem_destaque' => $noticia->ordem_destaque,
+                    'visualizacoes' => $noticia->visualizacoes,
+                ];
+            });
     });
 
     return response()->json($noticias);
-  }
+}
 
   public function noticiasHome()
   {

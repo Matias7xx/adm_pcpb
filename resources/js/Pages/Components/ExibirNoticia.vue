@@ -305,12 +305,12 @@ const navegarComScroll = url => {
           </div>
 
           <!-- Descrição curta -->
-          <p
+          <!-- <p
             v-if="noticia.descricao_curta"
             class="text-base sm:text-lg text-gray-700 mb-4 sm:mb-6 leading-relaxed"
           >
             {{ noticia.descricao_curta }}
-          </p>
+          </p> -->
         </div>
 
         <!-- Carrossel de Imagens -->
