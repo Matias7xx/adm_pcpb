@@ -533,7 +533,7 @@ public function toggleDestaque(Request $request, Noticia $noticia)
 
     return redirect()
         ->back()
-        ->with('message', 'Notícia marcada como destaque!');
+        ->with('message', 'Notícia marcada como destaque!', 'flash_id', uniqid());
 }
 
   /**

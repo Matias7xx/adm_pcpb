@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { ref, onMounted, computed, watch } from 'vue';
+import { router, usePage } from '@inertiajs/vue3';
 import {
   mdiStar,
   mdiSwapVertical,
@@ -9,6 +9,7 @@ import {
   mdiAlertCircle,
 } from '@mdi/js';
 
+const page = usePage();
 const destaques = ref([]);
 const loading = ref(true);
 const error = ref(null);
@@ -82,6 +83,14 @@ const visualizarNoSite = noticiaId => {
 onMounted(() => {
   loadDestaques();
 });
+
+watch(
+  () => page.props.flash,
+  () => {
+    loadDestaques();
+  },
+  { deep: true } 
+);
 </script>
 
 <template>
