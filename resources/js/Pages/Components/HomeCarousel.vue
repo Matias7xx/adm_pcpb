@@ -200,6 +200,18 @@ onMounted(async () => {
 
     <!-- Conteúdo Principal -->
     <div v-else-if="showNews" class="news-container">
+      <!-- <div class="mb-6 md:mb-8 lg:mb-8">
+        <div class="flex items-center gap-4">
+          <hr class="flex-1 border-t border-gray-300" />
+          <h2
+            id="noticias-titulo"
+            class="text-gray-700 font-semibold text-xl sm:text-2xl tracking-wide uppercase whitespace-nowrap"
+          >
+            Notícias em Destaque
+          </h2>
+          <hr class="flex-1 border-t border-gray-300" />
+        </div>
+      </div> -->
       <div
         class="news-grid"
         :class="{ 'single-item': newsItems.length === 1 }"

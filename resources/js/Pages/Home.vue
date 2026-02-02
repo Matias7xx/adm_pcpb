@@ -47,7 +47,7 @@ import BannerCarousel from '@/Components/BannerCarousel.vue';
         </section>
 
         <!-- Cards Grid -->
-        <section class="mb-12">
+        <section class="mb-14">
           <Cards />
         </section>
 

@@ -36,7 +36,7 @@ class NoticiaController extends Controller
       ->orderBy('data_publicacao', 'desc')
       ->orderBy('created_at', 'desc')
       ->orderBy('id', 'desc')
-      ->paginate(6)
+      ->paginate(9)
       ->withQueryString();
 
     // Transformar dados para garantir URLs corretas das imagens
@@ -161,33 +161,32 @@ class NoticiaController extends Controller
 
   public function noticiasHome()
   {
-    $cacheKey = 'noticias_home_lista';
+      $cacheKey = 'noticias_home_lista';
 
-    $noticias = \Cache::remember($cacheKey, now()->addMinutes(10), function () {
-      return Noticia::where('status', 'publicado')
-        ->where('data_publicacao', '<=', now())
-        ->whereNull('deleted_at')
-        ->orderBy('data_publicacao', 'desc')
-        ->orderBy('created_at', 'desc')
-        ->orderBy('id', 'desc')
-        ->take(6)
-        ->get()
-        ->map(function ($noticia) {
-          return [
-            'id' => $noticia->id,
-            'titulo' => $noticia->titulo,
-            'descricao_curta' => $noticia->descricao_curta,
-            'imagem' => $noticia->imagem
-              ? UploadHelper::getPublicUrl($noticia->imagem)
-              : null,
-            'data_publicacao' => $noticia->data_formatada,
-            'destaque' => $noticia->destaque,
-            'visualizacoes' => $noticia->visualizacoes,
-          ];
-        });
-    });
-
-    return response()->json($noticias);
+      return \Cache::remember($cacheKey, now()->addMinutes(10), function () {
+          return Noticia::where('status', 'publicado')
+              ->where('data_publicacao', '<=', now())
+              ->whereNull('deleted_at')
+              ->where('destaque', false) // <--- ADICIONE ESTA LINHA para não repetir o carrossel
+              ->orderBy('data_publicacao', 'desc')
+              ->orderBy('created_at', 'desc')
+              ->orderBy('id', 'desc')
+              ->take(6) // Mantendo 6 para fechar duas linhas de 3
+              ->get()
+              ->map(function ($noticia) {
+                  return [
+                      'id' => $noticia->id,
+                      'titulo' => $noticia->titulo,
+                      'descricao_curta' => $noticia->descricao_curta,
+                      'imagem' => $noticia->imagem
+                          ? UploadHelper::getPublicUrl($noticia->imagem)
+                          : null,
+                      'data_publicacao' => $noticia->data_formatada,
+                      'destaque' => $noticia->destaque,
+                      'visualizacoes' => $noticia->visualizacoes,
+                  ];
+              });
+      });
   }
 
   /**
