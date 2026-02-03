@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\VideoPublicController;
 use App\Http\Controllers\BannerController;
-
+use App\Http\Controllers\OperacaoController;
 
 /* URL::forceScheme(env('HTTP_SCHEMA'));
 URL::forceRootUrl(env('APP_URL')); */
@@ -111,6 +111,8 @@ Route::get('/manual-aluno', function () {
 Route::get('/concursos', function () {
     return Inertia::render('Concursos');
 })->name('concursos');
+
+Route::get('/banners', [BannerController::class, 'index']);
 
 /*
 |--------------------------------------------------------------------------
@@ -263,8 +265,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/confirmacao', 'confirmacao')->name('confirmacao');
     });
 
-    Route::get('/banners', [BannerController::class, 'index']);
-
 
     // Requerimentos
     Route::controller(RequerimentoController::class)->prefix('requerimentos')->name('requerimentos.')->group(function () {
@@ -273,6 +273,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/', 'store')->name('store');
         Route::get('/confirmacao', 'confirmacao')->name('confirmacao');
     });
+
+     // Dashboard de operações
+    Route::get('/operacoes/dashboard', [OperacaoController::class, 'dashboard'])
+        ->name('operacoes.dashboard');
+    
+    // Rota para gerar PDF
+    Route::get('/operacoes/{operacao}/pdf', [OperacaoController::class, 'gerarPdf'])
+        ->name('operacoes.pdf');
+    
+    // Rotas CRUD de operações
+    Route::resource('operacoes', OperacaoController::class)
+    ->parameters(['operacoes' => 'operacao']);
 
     // Certificados - Acesso autenticado
     Route::controller(CertificadoController::class)->prefix('certificados')->name('certificados.')->group(function () {

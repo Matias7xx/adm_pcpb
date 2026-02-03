@@ -73,8 +73,8 @@
           <div v-for="item in outros" :key="item.id" class="card-item">
             <a
               :href="item.link"
-              target="_blank"
-              rel="noopener noreferrer"
+              :target="item.external ? '_blank' : '_self'"
+              :rel="item.external ? 'noopener noreferrer' : ''"
               class="card-link"
             >
               {{ item.titulo }}
@@ -130,33 +130,38 @@ const maisAcessados = ref([
 ]);
 
 const outros = ref([
-  { id: 1, titulo: 'Acadepol', link: 'https://acadepol.pb.gov.br/' },
+  { id: 1, titulo: 'Acadepol', link: 'https://acadepol.pb.gov.br/', external: true },
   {
     id: 2,
     titulo: 'Portal do Servidor',
     link: 'https://portaldoservidor.pb.gov.br/',
+    external: true,
   },
   {
     id: 3,
     titulo: 'Boletim Interno',
     link: 'https://policiacivil.pb.gov.br/boletim-interno-1',
+    external: true,
   },
-  { id: 4, titulo: 'Diário Oficial', link: 'https://acadepol.pb.gov.br/' },
+  { id: 4, titulo: 'Diário Oficial', link: 'https://acadepol.pb.gov.br/', external: true },
   {
     id: 5,
     titulo: 'Notícias',
     link: '/noticias',
+    external: false,
   },
   {
     id: 6,
     titulo: 'PJe - Processo Judicial Eletrônico',
     link: 'https://www.policiacivil.pb.gov.br/links-uteis/pje-1',
+    external: true,
   },
   {
     id: 7,
     titulo: 'Cadastro de Operações',
-    link: 'https://acadepol.pb.gov.br/',
+    link: '/operacoes',
     novo: false,
+    external: false,
   },
 ]);
 </script>
