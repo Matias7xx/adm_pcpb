@@ -38,11 +38,13 @@ class OperacaoController extends Controller
             ->orderBy('data_operacao', 'desc');
 
         if ($request->filled('data_inicio')) {
-            $query->where('data_operacao', '>=', $request->data_inicio);
-        }
-
-        if ($request->filled('data_fim')) {
-            $query->where('data_operacao', '<=', $request->data_fim);
+            if ($request->filled('data_fim')) {
+                // Se ambos preenchidos: range
+                $query->whereBetween('data_operacao', [$request->data_inicio, $request->data_fim]);
+            } else {
+                // Se só data_inicio: data exata
+                $query->whereDate('data_operacao', $request->data_inicio);
+            }
         }
 
         if ($request->filled('origem')) {
@@ -113,7 +115,8 @@ class OperacaoController extends Controller
             abort(403, 'Você não tem permissão para visualizar esta operação.');
         }
 
-        $operacao->load('user');
+        // Carregar relacionamento com resultado
+        $operacao->load(['user', 'resultado']);
 
         return Inertia::render('Operacoes/Show', [
             'operacao' => $operacao,

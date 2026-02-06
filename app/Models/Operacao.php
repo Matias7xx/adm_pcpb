@@ -219,4 +219,12 @@ class Operacao extends Model
         $delegacias[] = 'PREJUDICADO';
         return $delegacias;
     }
+
+        /**
+     * Relacionamento com resultado da operação (1:1)
+     */
+    public function resultado()
+    {
+        return $this->hasOne(ResultadoOperacao::class);
+    }
 }

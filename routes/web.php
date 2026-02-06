@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\VideoPublicController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\OperacaoController;
+use App\Http\Controllers\ResultadoOperacaoController;
 
 /* URL::forceScheme(env('HTTP_SCHEMA'));
 URL::forceRootUrl(env('APP_URL')); */
@@ -285,6 +286,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Rotas CRUD de operações
     Route::resource('operacoes', OperacaoController::class)
     ->parameters(['operacoes' => 'operacao']);
+
+    // Dashboard de resultados de operações
+    Route::get('/resultados-operacao/dashboard', [ResultadoOperacaoController::class, 'dashboard'])
+        ->name('resultados-operacao.dashboard');
+    
+    // Rota para gerar PDF do resultado
+    Route::get('/resultados-operacao/{resultado}/pdf', [ResultadoOperacaoController::class, 'gerarPdf'])
+        ->name('resultados-operacao.pdf');
+    
+    // Rotas CRUD de resultados de operações
+    Route::resource('resultados-operacao', ResultadoOperacaoController::class)
+        ->parameters(['resultados-operacao' => 'resultado']);
 
     // Certificados - Acesso autenticado
     Route::controller(CertificadoController::class)->prefix('certificados')->name('certificados.')->group(function () {

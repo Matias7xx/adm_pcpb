@@ -125,6 +125,13 @@ const voltarEtapa = () => {
   }
 };
 
+const apenasNumeros = (event) => {
+  const char = String.fromCharCode(event.keyCode);
+  if (!/^[0-9]$/.test(char)) {
+    event.preventDefault();
+  }
+};
+
 // Submit
 const submit = () => {
   errorsEtapa.value = {};
@@ -279,6 +286,7 @@ const erro = (campo) => {
                 <input
                   v-model="form.autoridade_responsavel_matricula"
                   type="text"
+                  @keypress="apenasNumeros"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   :class="erro('autoridade_responsavel_matricula') ? 'border-red-500' : 'border-gray-300'"
                 />
@@ -438,6 +446,7 @@ const erro = (campo) => {
                   v-model.number="form.quantidade_total_alvos"
                   type="number"
                   min="0"
+                  @keypress="apenasNumeros"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   :class="erro('quantidade_total_alvos') ? 'border-red-500' : 'border-gray-300'"
                 />
@@ -454,6 +463,7 @@ const erro = (campo) => {
                   v-model.number="form.quantidade_mandados_prisao"
                   type="number"
                   min="0"
+                  @keypress="apenasNumeros"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   :class="erro('quantidade_mandados_prisao') ? 'border-red-500' : 'border-gray-300'"
                 />
@@ -470,6 +480,7 @@ const erro = (campo) => {
                   v-model.number="form.quantidade_mandados_busca_apreensao"
                   type="number"
                   min="0"
+                  @keypress="apenasNumeros"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   :class="erro('quantidade_mandados_busca_apreensao') ? 'border-red-500' : 'border-gray-300'"
                 />
@@ -486,6 +497,7 @@ const erro = (campo) => {
                   v-model.number="form.quantidade_mandados_busca_apreensao_infrator"
                   type="number"
                   min="0"
+                  @keypress="apenasNumeros"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   :class="erro('quantidade_mandados_busca_apreensao_infrator') ? 'border-red-500' : 'border-gray-300'"
                 />
@@ -502,6 +514,7 @@ const erro = (campo) => {
                   v-model.number="form.quantidade_alvos_outros_estados"
                   type="number"
                   min="0"
+                  @keypress="apenasNumeros"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   :class="erro('quantidade_alvos_outros_estados') ? 'border-red-500' : 'border-gray-300'"
                 />
@@ -518,6 +531,7 @@ const erro = (campo) => {
                   v-model.number="form.quantidade_policiais_empregados"
                   type="number"
                   min="1"
+                  @keypress="apenasNumeros"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   :class="erro('quantidade_policiais_empregados') ? 'border-red-500' : 'border-gray-300'"
                 />
@@ -534,6 +548,7 @@ const erro = (campo) => {
                   v-model.number="form.quantidade_viaturas_empregadas"
                   type="number"
                   min="0"
+                  @keypress="apenasNumeros"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   :class="erro('quantidade_viaturas_empregadas') ? 'border-red-500' : 'border-gray-300'"
                 />
