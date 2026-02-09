@@ -45,10 +45,10 @@ Route::get('/', function () {
 
 // Rotas para upload do CKEditor
 Route::post('/api/upload-ckeditor-images', [UploadController::class, 'uploadCKEditorImage'])
-    ->middleware(['web']); // Apenas middleware web para CSRF
+    ->middleware(['web', 'auth', 'verified']);
 
 Route::post('/api/upload-ckeditor-files', [UploadController::class, 'uploadCKEditorFile'])
-    ->middleware(['web']); // Apenas middleware web para CSRF
+    ->middleware(['web', 'auth', 'verified']);
 
 Route::get('/download', [App\Http\Controllers\DownloadController::class, 'downloadFile'])
     ->name('file.download'); //Download do file na notícia
