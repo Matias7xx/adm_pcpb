@@ -232,11 +232,21 @@ const handleCarouselImageUpload = async (event) => {
 };
 
 // Remover imagem do carrossel
-const removeCarouselImage = index => {
-  if (confirm('Deseja realmente remover esta imagem do carrossel?')) {
-    carouselImagesLocal.value.splice(index, 1);
-    emit('update:carouselImages', carouselImagesLocal.value);
+const removeCarouselImage = (index) => {
+  
+  if (!confirm('Deseja realmente remover esta imagem do carrossel?')) {
+    return;
   }
+  
+  // Criar novo array sem a imagem removida
+  const novoArray = carouselImagesLocal.value.filter((_, i) => i !== index);
+  
+  
+  // Atualizar o valor local
+  carouselImagesLocal.value = novoArray;
+  
+  // Emitir para o componente pai
+  emit('update:carouselImages', [...novoArray]);
 };
 
 // Mover imagem para cima
@@ -904,7 +914,7 @@ onMounted(async () => {
             <!-- Remover -->
             <button
               type="button"
-              @click="removeCarouselImage(index)"
+              @click.stop="removeCarouselImage(index)"
               class="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
               title="Remover imagem"
             >

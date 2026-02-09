@@ -17,7 +17,7 @@ import FormControl from '@/Components/FormControl.vue';
 import BaseDivider from '@/Components/BaseDivider.vue';
 import BaseButton from '@/Components/BaseButton.vue';
 import BaseButtons from '@/Components/BaseButtons.vue';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import NoticiasEditor from './partials/NoticiasEditor.vue';
 
 const props = defineProps({
@@ -53,6 +53,8 @@ const isUploading = ref(false);
 const uploadProgress = ref(0);
 const wordCount = ref(0);
 const isProcessingImages = ref(false);
+
+const carouselImagesLocal = ref([...props.noticia.carousel_images || []]);
 
 // Função para lidar com o preview da imagem
 const handleImageUpload = event => {
@@ -141,6 +143,8 @@ const cancelarRemocao = () => {
   }
 };
 
+const hasFileUpload = form.imagem instanceof File;
+
 // Função para processar imagens base64 no conteúdo
 const processContentImages = async content => {
   if (!content.includes('data:image/')) {
@@ -214,12 +218,16 @@ const processContentImages = async content => {
 
 // Método para enviar o formulário
 const submit = async () => {
+  
   try {
     // Processar imagens no conteúdo antes de enviar
     if (form.conteudo.includes('data:image/')) {
       const processedContent = await processContentImages(form.conteudo);
       form.conteudo = processedContent;
     }
+
+    // IMPORTANTE: Garantir que carousel_images está atualizado
+    form.carousel_images = [...carouselImagesLocal.value];
 
     form
       .transform(data => ({
@@ -228,14 +236,13 @@ const submit = async () => {
       }))
       .post(route('admin.noticias.update', props.noticia.id), {
         preserveScroll: true,
-        forceFormData: true,
+        forceFormData: hasFileUpload,
         onSuccess: () => {
-          // Reset após sucesso
           isUploading.value = false;
           uploadProgress.value = 0;
           isProcessingImages.value = false;
         },
-        onError: () => {
+        onError: (errors) => {
           isProcessingImages.value = false;
         },
       });
@@ -271,6 +278,14 @@ const currentImagePreview = computed(() => {
   }
   return null;
 });
+
+watch(
+  carouselImagesLocal,
+  (newValue) => {
+    form.carousel_images = [...newValue]; // Cria uma cópia
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -617,7 +632,7 @@ const currentImagePreview = computed(() => {
           <NoticiasEditor
             v-if="!isPreviewMode"
             v-model="form.conteudo"
-            v-model:carousel-images="form.carousel_images"
+            v-model:carousel-images="carouselImagesLocal"
             :error="form.errors.conteudo"
             @word-count-change="handleWordCountChange"
           />
