@@ -54,7 +54,7 @@ const uploadProgress = ref(0);
 const wordCount = ref(0);
 const isProcessingImages = ref(false);
 
-const carouselImagesLocal = ref([...props.noticia.carousel_images || []]);
+const carouselImagesLocal = ref([...(props.noticia.carousel_images || [])]);
 
 // Função para lidar com o preview da imagem
 const handleImageUpload = event => {
@@ -218,7 +218,6 @@ const processContentImages = async content => {
 
 // Método para enviar o formulário
 const submit = async () => {
-  
   try {
     // Processar imagens no conteúdo antes de enviar
     if (form.conteudo.includes('data:image/')) {
@@ -242,7 +241,7 @@ const submit = async () => {
           uploadProgress.value = 0;
           isProcessingImages.value = false;
         },
-        onError: (errors) => {
+        onError: errors => {
           isProcessingImages.value = false;
         },
       });
@@ -254,9 +253,7 @@ const submit = async () => {
 
 // Verificar se o formulário tem todos os campos obrigatórios
 const isFormValid = computed(() => {
-  return (
-    form.titulo && form.data_publicacao && form.status
-  );
+  return form.titulo && form.data_publicacao && form.status;
 });
 
 // Verificar se está processando
@@ -281,7 +278,7 @@ const currentImagePreview = computed(() => {
 
 watch(
   carouselImagesLocal,
-  (newValue) => {
+  newValue => {
     form.carousel_images = [...newValue]; // Cria uma cópia
   },
   { deep: true }

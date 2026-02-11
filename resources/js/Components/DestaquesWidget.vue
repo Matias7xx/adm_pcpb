@@ -89,17 +89,23 @@ watch(
   () => {
     loadDestaques();
   },
-  { deep: true } 
+  { deep: true }
 );
 </script>
 
 <template>
-  <div class="bg-gray-100 rounded-lg shadow-lg p-6 mb-6 border-2 border-gray-200">
+  <div
+    class="bg-gray-100 rounded-lg shadow-lg p-6 mb-6 border-2 border-gray-200"
+  >
     <!-- Cabeçalho -->
     <div class="flex items-center justify-between mb-4">
       <div class="flex items-center space-x-3">
         <div class="bg-amber-500 p-2 rounded-lg">
-          <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            class="w-6 h-6 text-white"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
             <path :d="mdiStar" />
           </svg>
         </div>
@@ -121,7 +127,11 @@ watch(
         class="flex items-center space-x-2 px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         title="Trocar ordem dos destaques"
       >
-        <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="w-5 h-5 text-gray-600"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path :d="mdiSwapVertical" />
         </svg>
         <span class="text-sm font-medium text-gray-700">Inverter Ordem</span>
@@ -130,13 +140,22 @@ watch(
 
     <!-- Loading -->
     <div v-if="loading" class="flex justify-center py-8">
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"></div>
+      <div
+        class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"
+      ></div>
     </div>
 
     <!-- Error -->
-    <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-4">
+    <div
+      v-else-if="error"
+      class="bg-red-50 border border-red-200 rounded-lg p-4"
+    >
       <div class="flex items-start">
-        <svg class="w-5 h-5 text-red-500 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="w-5 h-5 text-red-500 mt-0.5"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path :d="mdiAlertCircle" />
         </svg>
         <div class="ml-3">
@@ -183,7 +202,7 @@ watch(
             >
               <span class="text-gray-400 text-sm">Sem imagem</span>
             </div>
-            
+
             <!-- Overlay com ações -->
             <div
               class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-all flex items-center justify-center opacity-0 hover:opacity-100"
@@ -280,7 +299,7 @@ watch(
             >
               <span class="text-gray-400 text-sm">Sem imagem</span>
             </div>
-            
+
             <!-- Overlay com ações -->
             <div
               class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-all flex items-center justify-center opacity-0 hover:opacity-100"
@@ -360,8 +379,8 @@ watch(
             Nenhuma notícia em destaque
           </p>
           <p class="text-xs text-blue-700 mt-1">
-            Marque até 2 notícias como destaque para aparecerem na página inicial
-            do site.
+            Marque até 2 notícias como destaque para aparecerem na página
+            inicial do site.
           </p>
         </div>
       </div>

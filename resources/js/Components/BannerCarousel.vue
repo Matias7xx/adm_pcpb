@@ -158,10 +158,7 @@ onUnmounted(() => {
           />
 
           <!-- Overlay com título e descrição (opcional) -->
-          <div
-            v-if="banner.titulo || banner.descricao"
-            class="banner-overlay"
-          >
+          <div v-if="banner.titulo || banner.descricao" class="banner-overlay">
             <div class="banner-content">
               <!-- <h2 v-if="banner.titulo" class="banner-title">
                 {{ banner.titulo }}
@@ -181,7 +178,12 @@ onUnmounted(() => {
           class="nav-button nav-button-prev"
           aria-label="Banner anterior"
         >
-          <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg
+            class="nav-icon"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -196,7 +198,12 @@ onUnmounted(() => {
           class="nav-button nav-button-next"
           aria-label="Próximo banner"
         >
-          <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg
+            class="nav-icon"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -356,7 +363,7 @@ onUnmounted(() => {
   height: 2rem;
   stroke-width: 2.5;
   filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8))
-          drop-shadow(-1px -1px 2px rgba(0, 0, 0, 0.8));
+    drop-shadow(-1px -1px 2px rgba(0, 0, 0, 0.8));
 }
 
 /* Indicadores */
@@ -454,13 +461,13 @@ onUnmounted(() => {
 /* Responsivo */
 @media (max-width: 768px) {
   .banner-carousel-container {
-    height: auto !important; 
+    height: auto !important;
     aspect-ratio: 3 / 1;
   }
 
   .banner-image {
     transform: none;
-    object-position: center center; 
+    object-position: center center;
   }
 }
 

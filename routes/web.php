@@ -169,9 +169,9 @@ Route::controller(ContatoController::class)->prefix('fale-conosco')->name('conta
 */
 
 // Alojamento - Página intermediária de escolha
-Route::get('/alojamento/escolha-tipo', function () {
+Route::get('/escolha-cin', function () {
     return Inertia::render('Components/TipoSolicitante');
-})->name('alojamento.escolha.tipo');
+})->name('escolha.cin');
 
 Route::controller(VisitanteController::class)->prefix('visitante')->name('visitante.')->group(function () {
     // Formulário de reserva para visitantes

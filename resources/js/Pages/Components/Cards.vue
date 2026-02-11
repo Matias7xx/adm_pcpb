@@ -104,18 +104,18 @@ const maisAcessados = ref([
   },
   {
     id: 3,
-    titulo: 'Carteira de Identidade Nacional (CIN) - 1ª Via',
+    titulo: 'Veículos',
     link: 'https://paraibadigital.pb.gov.br/14acb242-aee5-4abd-b57b-2f93d584c7dd',
   },
   {
     id: 4,
-    titulo: 'Carteira de Identidade Nacional (CIN) - 2ª Via',
-    link: 'https://paraibadigital.pb.gov.br/548f5b66-6e8b-42a5-b7c4-6c31623511c4',
+    titulo: 'Carteira de Identidade Nacional',
+    link: '/escolha-cin',
   },
   {
     id: 5,
     titulo: 'Antecedentes Criminais',
-    link: 'https://www.policiacivil.pb.gov.br/servicos/certidao-de-antecedentes-criminais',
+    link: 'https://app.sesds.pb.gov.br/AAC/EmitirAAC',
   },
   {
     id: 6,
@@ -130,7 +130,12 @@ const maisAcessados = ref([
 ]);
 
 const outros = ref([
-  { id: 1, titulo: 'Acadepol', link: 'https://acadepol.pb.gov.br/', external: true },
+  {
+    id: 1,
+    titulo: 'Acadepol',
+    link: 'https://acadepol.pb.gov.br/',
+    external: true,
+  },
   {
     id: 2,
     titulo: 'Portal do Servidor',
@@ -143,7 +148,12 @@ const outros = ref([
     link: 'https://policiacivil.pb.gov.br/boletim-interno-1',
     external: true,
   },
-  { id: 4, titulo: 'Diário Oficial', link: 'https://acadepol.pb.gov.br/', external: true },
+  {
+    id: 4,
+    titulo: 'Diário Oficial',
+    link: 'https://acadepol.pb.gov.br/',
+    external: true,
+  },
   {
     id: 5,
     titulo: 'Notícias',

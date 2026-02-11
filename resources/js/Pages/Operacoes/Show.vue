@@ -9,31 +9,31 @@ const props = defineProps({
   estatisticas: Object,
 });
 
-const formatarData = (data) => {
+const formatarData = data => {
   return new Date(data).toLocaleDateString('pt-BR');
 };
 
-const formatarHora = (hora) => {
+const formatarHora = hora => {
   if (!hora) return '';
-  
+
   // Se já está no formato HH:MM, retorna direto
   if (typeof hora === 'string' && hora.match(/^\d{2}:\d{2}$/)) {
     return hora;
   }
-  
+
   // Se tem mais caracteres (datetime), pega só os primeiros 5
   if (typeof hora === 'string' && hora.length >= 5) {
     return hora.substring(0, 5);
   }
-  
+
   return hora;
 };
 
-const getOrigemClass = (origem) => {
+const getOrigemClass = origem => {
   return 'bg-slate-100 text-slate-700 border border-slate-200';
 };
 
-const getUnidadeEspecializadaNome = (codigo) => {
+const getUnidadeEspecializadaNome = codigo => {
   const unidades = {
     DAV: 'DAV (Acidente de Veículos)',
     DCCPAT: 'DCCPAT (Patrimônio)',
@@ -45,7 +45,8 @@ const getUnidadeEspecializadaNome = (codigo) => {
     DECC: 'DECC (Crimes Cibernéticos)',
     DECCOR: 'DECCOR (Combate a Corrupção)',
     DECCOT: 'DECCOT (Ordem Tributária)',
-    DECHRADI: 'DECHRADI (Homofóbicos, Racismo e Delitos de Intolerância Religiosa)',
+    DECHRADI:
+      'DECHRADI (Homofóbicos, Racismo e Delitos de Intolerância Religiosa)',
     DECON: 'DECON (Consumidor)',
     DESARME: 'DESARME',
     DHE: 'DHE (Homicídios e Entorpecentes)',
@@ -158,28 +159,42 @@ const getUnidadeEspecializadaNome = (codigo) => {
             {{ operacao.origem_operacao }}
           </span>
           <span class="text-gray-500">•</span>
-          <span class="text-gray-600 text-sm">{{ formatarData(operacao.data_operacao) }}</span>
+          <span class="text-gray-600 text-sm">{{
+            formatarData(operacao.data_operacao)
+          }}</span>
         </div>
       </div>
 
       <!-- Card de Resultado/Debriefing -->
-      <div class="bg-gradient-to-r from-gray-200 to-gray-100 shadow rounded-lg mb-6 p-6">
+      <div
+        class="bg-gradient-to-r from-gray-200 to-gray-100 shadow rounded-lg mb-6 p-6"
+      >
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-4">
             <div>
               <h3 class="text-xl font-semibold text-gray-900">
-                {{ operacao.resultado ? 'Resultado da Operação' : 'Resultado da Operação (Debriefing)' }}
+                {{
+                  operacao.resultado
+                    ? 'Resultado da Operação'
+                    : 'Resultado da Operação (Debriefing)'
+                }}
               </h3>
               <p class="text-gray-600 text-sm mt-1">
-                {{ operacao.resultado ? 'Os resultados desta operação já foram cadastrados' : 'Cadastre os resultados obtidos após a deflagração da operação' }}
+                {{
+                  operacao.resultado
+                    ? 'Os resultados desta operação já foram cadastrados'
+                    : 'Cadastre os resultados obtidos após a deflagração da operação'
+                }}
               </p>
             </div>
           </div>
-          
+
           <!-- Botão condicional -->
           <Link
             v-if="!operacao.resultado"
-            :href="route('resultados-operacao.create', { operacao_id: operacao.id })"
+            :href="
+              route('resultados-operacao.create', { operacao_id: operacao.id })
+            "
             class="px-6 py-3 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors flex items-center gap-2 font-medium shadow-md hover:shadow-lg"
           >
             <svg
@@ -237,23 +252,35 @@ const getUnidadeEspecializadaNome = (codigo) => {
 
           <div class="space-y-3">
             <div>
-              <label class="text-sm font-medium text-gray-600">Data da Operação</label>
-              <p class="text-gray-900 mt-1">{{ formatarData(operacao.data_operacao) }}</p>
+              <label class="text-sm font-medium text-gray-600"
+                >Data da Operação</label
+              >
+              <p class="text-gray-900 mt-1">
+                {{ formatarData(operacao.data_operacao) }}
+              </p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-600">Origem da Operação</label>
+              <label class="text-sm font-medium text-gray-600"
+                >Origem da Operação</label
+              >
               <p class="text-gray-900 mt-1">{{ operacao.origem_operacao }}</p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-600">UF Responsável</label>
+              <label class="text-sm font-medium text-gray-600"
+                >UF Responsável</label
+              >
               <p class="text-gray-900 mt-1">{{ operacao.uf_responsavel }}</p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-600">Unidade Policial Responsável</label>
-              <p class="text-gray-900 mt-1">{{ operacao.unidade_policial_responsavel }}</p>
+              <label class="text-sm font-medium text-gray-600"
+                >Unidade Policial Responsável</label
+              >
+              <p class="text-gray-900 mt-1">
+                {{ operacao.unidade_policial_responsavel }}
+              </p>
             </div>
           </div>
         </div>
@@ -266,13 +293,19 @@ const getUnidadeEspecializadaNome = (codigo) => {
 
           <div class="space-y-3">
             <div>
-              <label class="text-sm font-medium text-gray-600">Local do Briefing</label>
+              <label class="text-sm font-medium text-gray-600"
+                >Local do Briefing</label
+              >
               <p class="text-gray-900 mt-1">{{ operacao.local_briefing }}</p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-600">Horário do Briefing</label>
-              <p class="text-gray-900 mt-1">{{ formatarHora(operacao.horario_briefing) }}</p>
+              <label class="text-sm font-medium text-gray-600"
+                >Horário do Briefing</label
+              >
+              <p class="text-gray-900 mt-1">
+                {{ formatarHora(operacao.horario_briefing) }}
+              </p>
             </div>
           </div>
         </div>
@@ -285,15 +318,27 @@ const getUnidadeEspecializadaNome = (codigo) => {
 
           <div class="space-y-4">
             <div>
-              <label class="text-sm font-medium text-gray-600">Autoridade Policial Responsável</label>
-              <p class="text-gray-900 mt-1">{{ operacao.autoridade_responsavel_nome }}</p>
-              <p class="text-sm text-gray-600">Matrícula: {{ operacao.autoridade_responsavel_matricula }}</p>
+              <label class="text-sm font-medium text-gray-600"
+                >Autoridade Policial Responsável</label
+              >
+              <p class="text-gray-900 mt-1">
+                {{ operacao.autoridade_responsavel_nome }}
+              </p>
+              <p class="text-sm text-gray-600">
+                Matrícula: {{ operacao.autoridade_responsavel_matricula }}
+              </p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-600">Policial Responsável pelo Cadastro</label>
-              <p class="text-gray-900 mt-1">{{ operacao.policial_responsavel_nome }}</p>
-              <p class="text-sm text-gray-600">Matrícula: {{ operacao.policial_responsavel_matricula }}</p>
+              <label class="text-sm font-medium text-gray-600"
+                >Policial Responsável pelo Cadastro</label
+              >
+              <p class="text-gray-900 mt-1">
+                {{ operacao.policial_responsavel_nome }}
+              </p>
+              <p class="text-sm text-gray-600">
+                Matrícula: {{ operacao.policial_responsavel_matricula }}
+              </p>
             </div>
           </div>
         </div>
@@ -307,22 +352,32 @@ const getUnidadeEspecializadaNome = (codigo) => {
           <div class="grid grid-cols-2 gap-4">
             <div class="bg-gray-100 p-4 rounded-lg">
               <p class="text-sm text-neutral-600 font-medium">Total de Alvos</p>
-              <p class="text-2xl font-bold text-neutral-700 mt-1">{{ estatisticas.total_alvos }}</p>
+              <p class="text-2xl font-bold text-neutral-700 mt-1">
+                {{ estatisticas.total_alvos }}
+              </p>
             </div>
 
             <div class="bg-gray-100 p-4 rounded-lg">
-              <p class="text-sm text-neutral-600 font-medium">Total de Mandados</p>
-              <p class="text-2xl font-bold text-neutral-700 mt-1">{{ estatisticas.total_mandados }}</p>
+              <p class="text-sm text-neutral-600 font-medium">
+                Total de Mandados
+              </p>
+              <p class="text-2xl font-bold text-neutral-700 mt-1">
+                {{ estatisticas.total_mandados }}
+              </p>
             </div>
 
             <div class="bg-gray-100 p-4 rounded-lg">
               <p class="text-sm text-neutral-600 font-medium">Policiais</p>
-              <p class="text-2xl font-bold text-neutral-700 mt-1">{{ estatisticas.policiais_empregados }}</p>
+              <p class="text-2xl font-bold text-neutral-700 mt-1">
+                {{ estatisticas.policiais_empregados }}
+              </p>
             </div>
 
             <div class="bg-gray-100 p-4 rounded-lg">
               <p class="text-sm text-neutral-600 font-medium">Viaturas</p>
-              <p class="text-2xl font-bold text-neutral-700 mt-1">{{ estatisticas.viaturas_empregadas }}</p>
+              <p class="text-2xl font-bold text-neutral-700 mt-1">
+                {{ estatisticas.viaturas_empregadas }}
+              </p>
             </div>
           </div>
         </div>
@@ -336,22 +391,30 @@ const getUnidadeEspecializadaNome = (codigo) => {
           <div class="space-y-3">
             <div class="flex justify-between items-center">
               <span class="text-gray-700">Mandados de Prisão</span>
-              <span class="font-semibold text-gray-900">{{ estatisticas.mandados_prisao }}</span>
+              <span class="font-semibold text-gray-900">{{
+                estatisticas.mandados_prisao
+              }}</span>
             </div>
 
             <div class="flex justify-between items-center">
               <span class="text-gray-700">Mandados de Busca e Apreensão</span>
-              <span class="font-semibold text-gray-900">{{ estatisticas.mandados_busca }}</span>
+              <span class="font-semibold text-gray-900">{{
+                estatisticas.mandados_busca
+              }}</span>
             </div>
 
             <div class="flex justify-between items-center">
               <span class="text-gray-700">Mandados de Busca de Infrator</span>
-              <span class="font-semibold text-gray-900">{{ estatisticas.mandados_busca_infrator }}</span>
+              <span class="font-semibold text-gray-900">{{
+                estatisticas.mandados_busca_infrator
+              }}</span>
             </div>
 
             <div class="flex justify-between items-center">
               <span class="text-gray-700">Alvos em Outros Estados</span>
-              <span class="font-semibold text-gray-900">{{ estatisticas.alvos_outros_estados }}</span>
+              <span class="font-semibold text-gray-900">{{
+                estatisticas.alvos_outros_estados
+              }}</span>
             </div>
           </div>
         </div>
@@ -364,13 +427,19 @@ const getUnidadeEspecializadaNome = (codigo) => {
 
           <div class="space-y-3">
             <div>
-              <label class="text-sm font-medium text-gray-600">Cidades Alvo</label>
+              <label class="text-sm font-medium text-gray-600"
+                >Cidades Alvo</label
+              >
               <p class="text-gray-900 mt-1">{{ operacao.cidades_alvo }}</p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-600">Crimes Investigados</label>
-              <p class="text-gray-900 mt-1">{{ operacao.crimes_investigados }}</p>
+              <label class="text-sm font-medium text-gray-600"
+                >Crimes Investigados</label
+              >
+              <p class="text-gray-900 mt-1">
+                {{ operacao.crimes_investigados }}
+              </p>
             </div>
           </div>
         </div>
@@ -383,35 +452,55 @@ const getUnidadeEspecializadaNome = (codigo) => {
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label class="text-sm font-medium text-gray-600">Vinculada à Unidade</label>
+              <label class="text-sm font-medium text-gray-600"
+                >Vinculada à Unidade</label
+              >
               <p class="text-gray-900 mt-2">{{ operacao.vinculada_unidade }}</p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-600">Unidade Especializada</label>
+              <label class="text-sm font-medium text-gray-600"
+                >Unidade Especializada</label
+              >
               <p class="text-gray-900 mt-2">
-                {{ getUnidadeEspecializadaNome(operacao.vinculada_unidade_especializada) }}
-                <span v-if="operacao.vinculada_unidade_especializada === 'OUTRA'" class="block text-md text-gray-900">
+                {{
+                  getUnidadeEspecializadaNome(
+                    operacao.vinculada_unidade_especializada
+                  )
+                }}
+                <span
+                  v-if="operacao.vinculada_unidade_especializada === 'OUTRA'"
+                  class="block text-md text-gray-900"
+                >
                   ({{ operacao.outra_unidade_policial }})
                 </span>
               </p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-600">Delegacia Seccional</label>
-              <p class="text-gray-900 mt-2">{{ operacao.vinculada_delegacia_seccional }}</p>
+              <label class="text-sm font-medium text-gray-600"
+                >Delegacia Seccional</label
+              >
+              <p class="text-gray-900 mt-2">
+                {{ operacao.vinculada_delegacia_seccional }}
+              </p>
             </div>
           </div>
         </div>
 
         <!-- Solicitação de Apoio -->
-        <div v-if="operacao.solicitacao_apoio_diop" class="bg-white shadow rounded-lg p-6 lg:col-span-2">
+        <div
+          v-if="operacao.solicitacao_apoio_diop"
+          class="bg-white shadow rounded-lg p-6 lg:col-span-2"
+        >
           <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
             Solicitação de Apoio à DIOP
           </h2>
 
           <div class="bg-gray-100 border border-gray-200 rounded-lg p-4">
-            <p class="text-gray-900 whitespace-pre-line">{{ operacao.solicitacao_apoio_diop }}</p>
+            <p class="text-gray-900 whitespace-pre-line">
+              {{ operacao.solicitacao_apoio_diop }}
+            </p>
           </div>
         </div>
       </div>
@@ -419,9 +508,7 @@ const getUnidadeEspecializadaNome = (codigo) => {
       <!-- Rodapé com informações de cadastro -->
       <div class="bg-white shadow rounded-lg p-6 mt-6">
         <div class="text-sm text-gray-600 text-center">
-          <p>
-            Operação cadastrada em {{ formatarData(operacao.created_at) }}
-          </p>
+          <p>Operação cadastrada em {{ formatarData(operacao.created_at) }}</p>
         </div>
       </div>
     </div>
@@ -429,5 +516,4 @@ const getUnidadeEspecializadaNome = (codigo) => {
   <Footer />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

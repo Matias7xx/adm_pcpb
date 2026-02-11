@@ -19,14 +19,10 @@ const filtrosBusca = ref({
 });
 
 const aplicarFiltros = () => {
-  router.get(
-    route('operacoes.index'),
-    filtrosBusca.value,
-    {
-      preserveState: true,
-      preserveScroll: true,
-    }
-  );
+  router.get(route('operacoes.index'), filtrosBusca.value, {
+    preserveState: true,
+    preserveScroll: true,
+  });
 };
 
 const limparFiltros = () => {
@@ -39,13 +35,13 @@ const limparFiltros = () => {
   router.get(route('operacoes.index'));
 };
 
-const excluirOperacao = (id) => {
+const excluirOperacao = id => {
   if (confirm('Tem certeza que deseja excluir esta operação?')) {
     router.delete(route('operacoes.destroy', id));
   }
 };
 
-const getOrigemClass = (origem) => {
+const getOrigemClass = origem => {
   // Retorna uma cor neutra e profissional para todas as categorias
   return 'text-slate-700';
 };
@@ -66,9 +62,12 @@ const getOrigemClass = (origem) => {
         <div class="bg-white shadow rounded-lg mb-6 p-6">
           <div class="flex items-center justify-between mb-4">
             <div>
-              <h1 class="text-3xl font-bold text-gray-900">Gerência de Operações</h1>
+              <h1 class="text-3xl font-bold text-gray-900">
+                Gerência de Operações
+              </h1>
               <p class="text-gray-600 mt-1">
-                Gerenciamento de operações da {{ $page.props.auth.user.lotacao }}
+                Gerenciamento de operações da
+                {{ $page.props.auth.user.lotacao }}
               </p>
             </div>
             <Link
@@ -130,7 +129,9 @@ const getOrigemClass = (origem) => {
                   <option value="">Todas</option>
                   <option value="Nacional">Nacional</option>
                   <option value="Estadual">Estadual</option>
-                  <option value="Apoio a outro Estado">Apoio a outro Estado</option>
+                  <option value="Apoio a outro Estado">
+                    Apoio a outro Estado
+                  </option>
                 </select>
               </div>
             </div>
@@ -154,7 +155,10 @@ const getOrigemClass = (origem) => {
 
         <!-- Lista de Operações -->
         <div class="bg-white shadow rounded-lg overflow-hidden">
-          <div v-if="operacoes.data.length === 0" class="p-8 text-center text-gray-500">
+          <div
+            v-if="operacoes.data.length === 0"
+            class="p-8 text-center text-gray-500"
+          >
             <svg
               class="w-16 h-16 mx-auto mb-4 text-gray-300"
               fill="none"
@@ -169,7 +173,9 @@ const getOrigemClass = (origem) => {
               />
             </svg>
             <p class="text-lg">Nenhuma operação encontrada</p>
-            <p class="text-sm mt-2">Clique em "Nova Operação" para cadastrar uma</p>
+            <p class="text-sm mt-2">
+              Clique em "Nova Operação" para cadastrar uma
+            </p>
           </div>
 
           <div v-else class="overflow-x-auto">
@@ -223,7 +229,11 @@ const getOrigemClass = (origem) => {
                     </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {{ new Date(operacao.data_operacao).toLocaleDateString('pt-BR') }}
+                    {{
+                      new Date(operacao.data_operacao).toLocaleDateString(
+                        'pt-BR'
+                      )
+                    }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <span
@@ -237,11 +247,14 @@ const getOrigemClass = (origem) => {
                     <div class="flex flex-col">
                       <span>{{ operacao.autoridade_responsavel_nome }}</span>
                       <span class="text-xs text-gray-500">
-                        Matrícula: {{ operacao.autoridade_responsavel_matricula }}
+                        Matrícula:
+                        {{ operacao.autoridade_responsavel_matricula }}
                       </span>
                     </div>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td
+                    class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                  >
                     <div class="flex items-center justify-end gap-2">
                       <!-- <Link
                         :href="route('operacoes.show', operacao.id)"
@@ -358,8 +371,8 @@ const getOrigemClass = (origem) => {
                   link.active
                     ? 'bg-blue-600 text-white'
                     : link.url
-                    ? 'bg-white text-gray-700 hover:bg-gray-100'
-                    : 'bg-gray-100 text-gray-400 cursor-not-allowed',
+                      ? 'bg-white text-gray-700 hover:bg-gray-100'
+                      : 'bg-gray-100 text-gray-400 cursor-not-allowed',
                 ]"
                 :disabled="!link.url"
                 v-html="link.label"
@@ -374,5 +387,4 @@ const getOrigemClass = (origem) => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

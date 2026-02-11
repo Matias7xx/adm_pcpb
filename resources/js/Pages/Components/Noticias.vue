@@ -166,7 +166,10 @@ onUnmounted(() => {
       <div class="mb-6 md:mb-8 lg:mb-12">
         <div class="flex items-center gap-4">
           <hr class="flex-1 border-t border-gray-300" />
-          <h2 id="noticias-titulo" class="text-gray-700 font-semibold text-xl sm:text-2xl tracking-wide uppercase whitespace-nowrap">
+          <h2
+            id="noticias-titulo"
+            class="text-gray-700 font-semibold text-xl sm:text-2xl tracking-wide uppercase whitespace-nowrap"
+          >
             Notícias
           </h2>
           <hr class="flex-1 border-t border-gray-300" />
@@ -174,12 +177,20 @@ onUnmounted(() => {
       </div>
 
       <main class="w-full">
-        <div v-if="loading" class="flex flex-col justify-center items-center py-16 lg:py-24">
-          <div class="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-[#bea55a]"></div>
+        <div
+          v-if="loading"
+          class="flex flex-col justify-center items-center py-16 lg:py-24"
+        >
+          <div
+            class="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-[#bea55a]"
+          ></div>
           <p class="mt-4 text-gray-600 font-medium">Carregando notícias...</p>
         </div>
 
-        <div v-else-if="noticias.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
+        <div
+          v-else-if="noticias.length > 0"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10"
+        >
           <article
             v-for="noticia in noticias"
             :key="noticia.id"
@@ -192,26 +203,37 @@ onUnmounted(() => {
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 @error="handleImageError"
               />
-              <div v-else class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">Sem imagem</div>
+              <div
+                v-else
+                class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm"
+              >
+                Sem imagem
+              </div>
             </div>
 
             <div class="p-5 flex flex-col flex-1">
               <div class="flex-1">
                 <Link :href="`/noticias/${noticia.id}`">
-                  <h3 class="text-lg font-bold text-[#bea55a] mb-4 leading-tight line-clamp-3 group-hover:text-[#a38d49] transition-colors">
+                  <h3
+                    class="text-lg font-bold text-[#bea55a] mb-4 leading-tight line-clamp-3 group-hover:text-[#a38d49] transition-colors"
+                  >
                     {{ noticia.titulo }}
                   </h3>
                 </Link>
               </div>
 
-              <div class="mt-auto pt-4 border-t border-gray-100 flex flex-col gap-2">
+              <div
+                class="mt-auto pt-4 border-t border-gray-100 flex flex-col gap-2"
+              >
                 <Link
                   :href="`/noticias/${noticia.id}`"
                   class="text-sm font-bold uppercase tracking-wider text-gray-800 hover:text-[#bea55a] flex items-center gap-1 transition-colors"
                 >
                   SAIBA MAIS »
                 </Link>
-                <time class="text-[11px] text-gray-400 uppercase tracking-widest font-medium">
+                <time
+                  class="text-[11px] text-gray-400 uppercase tracking-widest font-medium"
+                >
                   {{ noticia.data_publicacao }}
                 </time>
               </div>

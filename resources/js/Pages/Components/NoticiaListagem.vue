@@ -324,19 +324,34 @@ onUnmounted(() => {
 
   <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <Link href="/" class="inline-flex items-center text-sm text-gray-600 hover:text-[#bea55a] mb-6 transition-colors focus:outline-none">
-        <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      <Link
+        href="/"
+        class="inline-flex items-center text-sm text-gray-600 hover:text-[#bea55a] mb-6 transition-colors focus:outline-none"
+      >
+        <svg
+          class="h-4 w-4 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          />
         </svg>
         Voltar para Home
       </Link>
 
-      <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6 lg:p-8">
+      <div
+        class="mb-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6 lg:p-8"
+      >
         <div class="lg:flex lg:items-center lg:justify-between">
           <div class="flex-1">
             <p class="text-gray-600 text-md">
-              Explore nosso arquivo completo e fique sempre atualizado sobre as atividades da Polícia Civil da Paraíba.
+              Explore nosso arquivo completo e fique sempre atualizado sobre as
+              atividades da Polícia Civil da Paraíba.
             </p>
           </div>
 
@@ -348,9 +363,21 @@ onUnmounted(() => {
                 placeholder="Buscar notícias..."
                 class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#bea55a] focus:border-[#bea55a] transition-colors"
               />
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              >
+                <svg
+                  class="h-5 w-5 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
               </div>
             </div>
@@ -358,28 +385,46 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div v-if="loading" class="flex flex-col justify-center items-center py-20 lg:py-32">
-        <div class="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-[#bea55a]"></div>
+      <div
+        v-if="loading"
+        class="flex flex-col justify-center items-center py-20 lg:py-32"
+      >
+        <div
+          class="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-[#bea55a]"
+        ></div>
         <p class="mt-4 text-gray-600 font-medium">Carregando notícias...</p>
       </div>
 
       <template v-else>
-        <div v-if="noticias.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
+        <div
+          v-if="noticias.length > 0"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10"
+        >
           <article
             v-for="noticia in noticias"
             :key="noticia.id"
             class="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 flex flex-col h-full"
           >
-            <div class="aspect-video relative overflow-hidden flex-shrink-0 bg-gray-50">
+            <div
+              class="aspect-video relative overflow-hidden flex-shrink-0 bg-gray-50"
+            >
               <img
                 v-if="noticia.imagem"
                 :src="noticia.imagem"
                 :alt="noticia.titulo"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-              <div v-else class="w-full h-full flex items-center justify-center text-gray-400 text-xs">SEM IMAGEM</div>
-              
-              <div v-if="noticia.destaque" class="absolute top-3 left-3 bg-[#bea55a] text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm z-10 uppercase">
+              <div
+                v-else
+                class="w-full h-full flex items-center justify-center text-gray-400 text-xs"
+              >
+                SEM IMAGEM
+              </div>
+
+              <div
+                v-if="noticia.destaque"
+                class="absolute top-3 left-3 bg-[#bea55a] text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm z-10 uppercase"
+              >
                 Destaque
               </div>
             </div>
@@ -387,22 +432,38 @@ onUnmounted(() => {
             <div class="p-5 flex flex-col flex-1">
               <div class="flex-1">
                 <Link :href="`/noticias/${noticia.id}`">
-                  <h3 class="text-lg font-bold text-[#bea55a] mb-4 leading-tight line-clamp-3 group-hover:text-[#a38d49] transition-colors duration-300">
+                  <h3
+                    class="text-lg font-bold text-[#bea55a] mb-4 leading-tight line-clamp-3 group-hover:text-[#a38d49] transition-colors duration-300"
+                  >
                     {{ noticia.titulo }}
                   </h3>
                 </Link>
               </div>
 
-              <div class="mt-auto pt-4 border-t border-gray-100 flex flex-col gap-2">
+              <div
+                class="mt-auto pt-4 border-t border-gray-100 flex flex-col gap-2"
+              >
                 <Link
                   :href="`/noticias/${noticia.id}`"
                   class="text-sm font-bold uppercase tracking-wider text-gray-800 hover:text-[#bea55a] flex items-center gap-1 transition-colors"
                 >
                   SAIBA MAIS »
                 </Link>
-                <div class="text-[11px] text-gray-400 uppercase tracking-widest font-medium flex items-center">
-                  <svg class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <div
+                  class="text-[11px] text-gray-400 uppercase tracking-widest font-medium flex items-center"
+                >
+                  <svg
+                    class="h-3 w-3 mr-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
                   </svg>
                   {{ noticia.data_publicacao }}
                 </div>
@@ -411,26 +472,57 @@ onUnmounted(() => {
           </article>
         </div>
 
-        <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">Nenhuma notícia encontrada</h3>
-          <button @click="clearSearch" class="mt-4 px-6 py-2 bg-[#bea55a] text-white rounded-lg hover:bg-[#a38d49]">Limpar busca</button>
+        <div
+          v-else
+          class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center"
+        >
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            Nenhuma notícia encontrada
+          </h3>
+          <button
+            @click="clearSearch"
+            class="mt-4 px-6 py-2 bg-[#bea55a] text-white rounded-lg hover:bg-[#a38d49]"
+          >
+            Limpar busca
+          </button>
         </div>
 
-        <div v-if="totalPages > 1" class="flex flex-col sm:flex-row justify-between items-center mt-12 gap-4">
+        <div
+          v-if="totalPages > 1"
+          class="flex flex-col sm:flex-row justify-between items-center mt-12 gap-4"
+        >
           <div class="text-sm text-gray-600">
-            Mostrando <b>{{ (currentPage - 1) * itemsPerPage + 1 }}</b> a <b>{{ Math.min(currentPage * itemsPerPage, totalItems) }}</b> de <b>{{ totalItems }}</b>
+            Mostrando <b>{{ (currentPage - 1) * itemsPerPage + 1 }}</b> a
+            <b>{{ Math.min(currentPage * itemsPerPage, totalItems) }}</b> de
+            <b>{{ totalItems }}</b>
           </div>
           <nav class="inline-flex rounded-lg shadow-sm">
-            <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-2 border border-gray-300 rounded-l-lg bg-white disabled:opacity-50">«</button>
-            <button 
-              v-for="page in getPaginationPages()" 
+            <button
+              @click="changePage(currentPage - 1)"
+              :disabled="currentPage === 1"
+              class="px-3 py-2 border border-gray-300 rounded-l-lg bg-white disabled:opacity-50"
+            >
+              «
+            </button>
+            <button
+              v-for="page in getPaginationPages()"
               @click="typeof page === 'number' && changePage(page)"
-              :class="page === currentPage ? 'bg-[#bea55a] text-white border-[#bea55a]' : 'bg-white text-gray-700 border-gray-300'"
+              :class="
+                page === currentPage
+                  ? 'bg-[#bea55a] text-white border-[#bea55a]'
+                  : 'bg-white text-gray-700 border-gray-300'
+              "
               class="px-4 py-2 border transition-colors"
             >
               {{ page }}
             </button>
-            <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-2 border border-gray-300 rounded-r-lg bg-white disabled:opacity-50">»</button>
+            <button
+              @click="changePage(currentPage + 1)"
+              :disabled="currentPage === totalPages"
+              class="px-3 py-2 border border-gray-300 rounded-r-lg bg-white disabled:opacity-50"
+            >
+              »
+            </button>
           </nav>
         </div>
       </template>

@@ -32,11 +32,9 @@ import BannerCarousel from '@/Components/BannerCarousel.vue';
     </header>
 
     <section class="">
-        <div
-      class="h-1 bg-black"
-    ></div>
-        <BannerCarousel />
-      </section>
+      <div class="h-1 bg-black"></div>
+      <BannerCarousel />
+    </section>
 
     <!-- Main Content -->
     <main class="flex-grow">

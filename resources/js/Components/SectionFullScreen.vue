@@ -6,7 +6,6 @@ import {
   gradientBgDark,
   gradientBgPinkRed,
 } from '@/colors';
-import imgUrl from '@/src/assets/logo-pcpb1.png';
 
 const props = defineProps({
   bg: {

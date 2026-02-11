@@ -117,7 +117,10 @@ const toggleAtivo = id => {
 
           <tbody>
             <tr v-if="banners.data.length === 0">
-              <td colspan="7" class="text-center py-8 text-gray-500 dark:text-gray-400">
+              <td
+                colspan="7"
+                class="text-center py-8 text-gray-500 dark:text-gray-400"
+              >
                 Nenhum banner cadastrado
               </td>
             </tr>
@@ -193,10 +196,16 @@ const toggleAtivo = id => {
               </td>
               <td data-label="Período">
                 <div class="text-xs">
-                  <div v-if="banner.data_inicio" class="text-gray-600 dark:text-gray-400">
+                  <div
+                    v-if="banner.data_inicio"
+                    class="text-gray-600 dark:text-gray-400"
+                  >
                     {{ banner.data_inicio }}
                   </div>
-                  <div v-if="banner.data_fim" class="text-gray-600 dark:text-gray-400">
+                  <div
+                    v-if="banner.data_fim"
+                    class="text-gray-600 dark:text-gray-400"
+                  >
                     até {{ banner.data_fim }}
                   </div>
                   <div

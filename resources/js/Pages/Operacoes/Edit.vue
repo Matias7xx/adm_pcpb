@@ -16,7 +16,8 @@ const isEdit = true;
 const form = useForm({
   nome_operacao: props.operacao.nome_operacao,
   autoridade_responsavel_nome: props.operacao.autoridade_responsavel_nome,
-  autoridade_responsavel_matricula: props.operacao.autoridade_responsavel_matricula,
+  autoridade_responsavel_matricula:
+    props.operacao.autoridade_responsavel_matricula,
   origem_operacao: props.operacao.origem_operacao,
   uf_responsavel: props.operacao.uf_responsavel,
   data_operacao: props.operacao.data_operacao,
@@ -24,15 +25,20 @@ const form = useForm({
   horario_briefing: props.operacao.horario_briefing?.substring(0, 5) || '',
   quantidade_total_alvos: props.operacao.quantidade_total_alvos,
   quantidade_mandados_prisao: props.operacao.quantidade_mandados_prisao,
-  quantidade_mandados_busca_apreensao: props.operacao.quantidade_mandados_busca_apreensao,
-  quantidade_mandados_busca_apreensao_infrator: props.operacao.quantidade_mandados_busca_apreensao_infrator,
-  quantidade_alvos_outros_estados: props.operacao.quantidade_alvos_outros_estados,
-  quantidade_policiais_empregados: props.operacao.quantidade_policiais_empregados,
+  quantidade_mandados_busca_apreensao:
+    props.operacao.quantidade_mandados_busca_apreensao,
+  quantidade_mandados_busca_apreensao_infrator:
+    props.operacao.quantidade_mandados_busca_apreensao_infrator,
+  quantidade_alvos_outros_estados:
+    props.operacao.quantidade_alvos_outros_estados,
+  quantidade_policiais_empregados:
+    props.operacao.quantidade_policiais_empregados,
   quantidade_viaturas_empregadas: props.operacao.quantidade_viaturas_empregadas,
   cidades_alvo: props.operacao.cidades_alvo,
   crimes_investigados: props.operacao.crimes_investigados,
   vinculada_unidade: props.operacao.vinculada_unidade,
-  vinculada_unidade_especializada: props.operacao.vinculada_unidade_especializada,
+  vinculada_unidade_especializada:
+    props.operacao.vinculada_unidade_especializada,
   outra_unidade_policial: props.operacao.outra_unidade_policial || '',
   vinculada_delegacia_seccional: props.operacao.vinculada_delegacia_seccional,
   solicitacao_apoio_diop: props.operacao.solicitacao_apoio_diop || '',
@@ -46,7 +52,7 @@ const totalEtapas = 5;
 const errorsEtapa = ref({});
 
 // Validação por etapa
-const validarEtapa = (etapa) => {
+const validarEtapa = etapa => {
   const erros = {};
 
   if (etapa === 1) {
@@ -55,7 +61,8 @@ const validarEtapa = (etapa) => {
     if (!form.autoridade_responsavel_nome?.trim())
       erros.autoridade_responsavel_nome = 'O nome da autoridade é obrigatório.';
     if (!form.autoridade_responsavel_matricula?.trim())
-      erros.autoridade_responsavel_matricula = 'A matrícula da autoridade é obrigatória.';
+      erros.autoridade_responsavel_matricula =
+        'A matrícula da autoridade é obrigatória.';
     if (!form.origem_operacao)
       erros.origem_operacao = 'A origem da operação é obrigatória.';
     if (!form.uf_responsavel)
@@ -76,31 +83,66 @@ const validarEtapa = (etapa) => {
   }
 
   if (etapa === 3) {
-    if (form.quantidade_total_alvos === null || form.quantidade_total_alvos === '')
-      erros.quantidade_total_alvos = 'A quantidade total de alvos é obrigatória.';
-    if (form.quantidade_mandados_prisao === null || form.quantidade_mandados_prisao === '')
-      erros.quantidade_mandados_prisao = 'A quantidade de mandados de prisão é obrigatória.';
-    if (form.quantidade_mandados_busca_apreensao === null || form.quantidade_mandados_busca_apreensao === '')
-      erros.quantidade_mandados_busca_apreensao = 'A quantidade de mandados de busca é obrigatória.';
-    if (form.quantidade_mandados_busca_apreensao_infrator === null || form.quantidade_mandados_busca_apreensao_infrator === '')
-      erros.quantidade_mandados_busca_apreensao_infrator = 'A quantidade de mandados de busca (infrator) é obrigatória.';
-    if (form.quantidade_alvos_outros_estados === null || form.quantidade_alvos_outros_estados === '')
-      erros.quantidade_alvos_outros_estados = 'A quantidade de alvos em outros estados é obrigatória.';
-    if (form.quantidade_policiais_empregados === null || form.quantidade_policiais_empregados === '' || form.quantidade_policiais_empregados < 1)
-      erros.quantidade_policiais_empregados = 'Deve haver pelo menos 1 policial empregado.';
-    if (form.quantidade_viaturas_empregadas === null || form.quantidade_viaturas_empregadas === '')
-      erros.quantidade_viaturas_empregadas = 'A quantidade de viaturas é obrigatória.';
+    if (
+      form.quantidade_total_alvos === null ||
+      form.quantidade_total_alvos === ''
+    )
+      erros.quantidade_total_alvos =
+        'A quantidade total de alvos é obrigatória.';
+    if (
+      form.quantidade_mandados_prisao === null ||
+      form.quantidade_mandados_prisao === ''
+    )
+      erros.quantidade_mandados_prisao =
+        'A quantidade de mandados de prisão é obrigatória.';
+    if (
+      form.quantidade_mandados_busca_apreensao === null ||
+      form.quantidade_mandados_busca_apreensao === ''
+    )
+      erros.quantidade_mandados_busca_apreensao =
+        'A quantidade de mandados de busca é obrigatória.';
+    if (
+      form.quantidade_mandados_busca_apreensao_infrator === null ||
+      form.quantidade_mandados_busca_apreensao_infrator === ''
+    )
+      erros.quantidade_mandados_busca_apreensao_infrator =
+        'A quantidade de mandados de busca (infrator) é obrigatória.';
+    if (
+      form.quantidade_alvos_outros_estados === null ||
+      form.quantidade_alvos_outros_estados === ''
+    )
+      erros.quantidade_alvos_outros_estados =
+        'A quantidade de alvos em outros estados é obrigatória.';
+    if (
+      form.quantidade_policiais_empregados === null ||
+      form.quantidade_policiais_empregados === '' ||
+      form.quantidade_policiais_empregados < 1
+    )
+      erros.quantidade_policiais_empregados =
+        'Deve haver pelo menos 1 policial empregado.';
+    if (
+      form.quantidade_viaturas_empregadas === null ||
+      form.quantidade_viaturas_empregadas === ''
+    )
+      erros.quantidade_viaturas_empregadas =
+        'A quantidade de viaturas é obrigatória.';
   }
 
   if (etapa === 4) {
     if (!form.vinculada_unidade)
       erros.vinculada_unidade = 'A unidade vinculada é obrigatória.';
     if (!form.vinculada_unidade_especializada)
-      erros.vinculada_unidade_especializada = 'A unidade especializada é obrigatória.';
-    if (form.vinculada_unidade_especializada === 'OUTRA' && !form.outra_unidade_policial?.trim())
-      erros.outra_unidade_policial = 'Especifique a unidade policial quando selecionar "OUTRA".';
+      erros.vinculada_unidade_especializada =
+        'A unidade especializada é obrigatória.';
+    if (
+      form.vinculada_unidade_especializada === 'OUTRA' &&
+      !form.outra_unidade_policial?.trim()
+    )
+      erros.outra_unidade_policial =
+        'Especifique a unidade policial quando selecionar "OUTRA".';
     if (!form.vinculada_delegacia_seccional)
-      erros.vinculada_delegacia_seccional = 'A delegacia seccional é obrigatória.';
+      erros.vinculada_delegacia_seccional =
+        'A delegacia seccional é obrigatória.';
   }
 
   return erros;
@@ -136,7 +178,7 @@ const mostrarOutraUnidade = computed(() => {
 });
 
 // Helper: exibe erro do servidor OU da validação client-side
-const erro = (campo) => {
+const erro = campo => {
   return form.errors[campo] || errorsEtapa.value[campo];
 };
 </script>
@@ -201,12 +243,12 @@ const erro = (campo) => {
                 i === 1
                   ? 'Identificação'
                   : i === 2
-                  ? 'Briefing'
-                  : i === 3
-                  ? 'Mandados'
-                  : i === 4
-                  ? 'Vinculações'
-                  : 'Apoio'
+                    ? 'Briefing'
+                    : i === 3
+                      ? 'Mandados'
+                      : i === 4
+                        ? 'Vinculações'
+                        : 'Apoio'
               }}
             </span>
           </div>
@@ -236,10 +278,15 @@ const erro = (campo) => {
                 v-model="form.nome_operacao"
                 type="text"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                :class="erro('nome_operacao') ? 'border-red-500' : 'border-gray-300'"
+                :class="
+                  erro('nome_operacao') ? 'border-red-500' : 'border-gray-300'
+                "
                 placeholder="Ex: Operação Luz Azul"
               />
-              <div v-if="erro('nome_operacao')" class="text-red-500 text-sm mt-1">
+              <div
+                v-if="erro('nome_operacao')"
+                class="text-red-500 text-sm mt-1"
+              >
                 {{ erro('nome_operacao') }}
               </div>
             </div>
@@ -247,15 +294,23 @@ const erro = (campo) => {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                  Nome da Autoridade Policial Responsável <span class="text-red-500">*</span>
+                  Nome da Autoridade Policial Responsável
+                  <span class="text-red-500">*</span>
                 </label>
                 <input
                   v-model="form.autoridade_responsavel_nome"
                   type="text"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('autoridade_responsavel_nome') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('autoridade_responsavel_nome')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 />
-                <div v-if="erro('autoridade_responsavel_nome')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('autoridade_responsavel_nome')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('autoridade_responsavel_nome') }}
                 </div>
               </div>
@@ -268,9 +323,16 @@ const erro = (campo) => {
                   v-model="form.autoridade_responsavel_matricula"
                   type="text"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('autoridade_responsavel_matricula') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('autoridade_responsavel_matricula')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 />
-                <div v-if="erro('autoridade_responsavel_matricula')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('autoridade_responsavel_matricula')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('autoridade_responsavel_matricula') }}
                 </div>
               </div>
@@ -284,14 +346,25 @@ const erro = (campo) => {
                 <select
                   v-model="form.origem_operacao"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('origem_operacao') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('origem_operacao')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 >
                   <option value="">Selecione...</option>
-                  <option v-for="(label, value) in opcoes.origens" :key="value" :value="value">
+                  <option
+                    v-for="(label, value) in opcoes.origens"
+                    :key="value"
+                    :value="value"
+                  >
                     {{ label }}
                   </option>
                 </select>
-                <div v-if="erro('origem_operacao')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('origem_operacao')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('origem_operacao') }}
                 </div>
               </div>
@@ -303,13 +376,24 @@ const erro = (campo) => {
                 <select
                   v-model="form.uf_responsavel"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('uf_responsavel') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('uf_responsavel')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 >
-                  <option v-for="(nome, sigla) in opcoes.ufs" :key="sigla" :value="sigla">
+                  <option
+                    v-for="(nome, sigla) in opcoes.ufs"
+                    :key="sigla"
+                    :value="sigla"
+                  >
                     {{ sigla }} - {{ nome }}
                   </option>
                 </select>
-                <div v-if="erro('uf_responsavel')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('uf_responsavel')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('uf_responsavel') }}
                 </div>
               </div>
@@ -322,9 +406,14 @@ const erro = (campo) => {
                   v-model="form.data_operacao"
                   type="date"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('data_operacao') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('data_operacao') ? 'border-red-500' : 'border-gray-300'
+                  "
                 />
-                <div v-if="erro('data_operacao')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('data_operacao')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('data_operacao') }}
                 </div>
               </div>
@@ -339,10 +428,15 @@ const erro = (campo) => {
                   v-model="form.cidades_alvo"
                   rows="3"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('cidades_alvo') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('cidades_alvo') ? 'border-red-500' : 'border-gray-300'
+                  "
                   placeholder="Ex: João Pessoa, Campina Grande, Patos"
                 ></textarea>
-                <div v-if="erro('cidades_alvo')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('cidades_alvo')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('cidades_alvo') }}
                 </div>
               </div>
@@ -355,10 +449,17 @@ const erro = (campo) => {
                   v-model="form.crimes_investigados"
                   rows="3"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('crimes_investigados') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('crimes_investigados')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                   placeholder="Ex: Tráfico de drogas, Homicídio qualificado"
                 ></textarea>
-                <div v-if="erro('crimes_investigados')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('crimes_investigados')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('crimes_investigados') }}
                 </div>
               </div>
@@ -380,10 +481,17 @@ const erro = (campo) => {
                   v-model="form.local_briefing"
                   type="text"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('local_briefing') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('local_briefing')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                   placeholder="Ex: ACADEPOL"
                 />
-                <div v-if="erro('local_briefing')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('local_briefing')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('local_briefing') }}
                 </div>
               </div>
@@ -396,9 +504,16 @@ const erro = (campo) => {
                   v-model="form.horario_briefing"
                   type="time"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('horario_briefing') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('horario_briefing')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 />
-                <div v-if="erro('horario_briefing')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('horario_briefing')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('horario_briefing') }}
                 </div>
               </div>
@@ -414,16 +529,24 @@ const erro = (campo) => {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                  Total de Alvos (Buscas e Prisões) <span class="text-red-500">*</span>
+                  Total de Alvos (Buscas e Prisões)
+                  <span class="text-red-500">*</span>
                 </label>
                 <input
                   v-model.number="form.quantidade_total_alvos"
                   type="number"
                   min="0"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('quantidade_total_alvos') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('quantidade_total_alvos')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 />
-                <div v-if="erro('quantidade_total_alvos')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('quantidade_total_alvos')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('quantidade_total_alvos') }}
                 </div>
               </div>
@@ -437,41 +560,66 @@ const erro = (campo) => {
                   type="number"
                   min="0"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('quantidade_mandados_prisao') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('quantidade_mandados_prisao')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 />
-                <div v-if="erro('quantidade_mandados_prisao')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('quantidade_mandados_prisao')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('quantidade_mandados_prisao') }}
                 </div>
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                  Mandados de Busca e Apreensão <span class="text-red-500">*</span>
+                  Mandados de Busca e Apreensão
+                  <span class="text-red-500">*</span>
                 </label>
                 <input
                   v-model.number="form.quantidade_mandados_busca_apreensao"
                   type="number"
                   min="0"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('quantidade_mandados_busca_apreensao') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('quantidade_mandados_busca_apreensao')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 />
-                <div v-if="erro('quantidade_mandados_busca_apreensao')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('quantidade_mandados_busca_apreensao')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('quantidade_mandados_busca_apreensao') }}
                 </div>
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                  Mandados de Busca e Apreensão de Infrator <span class="text-red-500">*</span>
+                  Mandados de Busca e Apreensão de Infrator
+                  <span class="text-red-500">*</span>
                 </label>
                 <input
-                  v-model.number="form.quantidade_mandados_busca_apreensao_infrator"
+                  v-model.number="
+                    form.quantidade_mandados_busca_apreensao_infrator
+                  "
                   type="number"
                   min="0"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('quantidade_mandados_busca_apreensao_infrator') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('quantidade_mandados_busca_apreensao_infrator')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 />
-                <div v-if="erro('quantidade_mandados_busca_apreensao_infrator')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('quantidade_mandados_busca_apreensao_infrator')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('quantidade_mandados_busca_apreensao_infrator') }}
                 </div>
               </div>
@@ -485,9 +633,16 @@ const erro = (campo) => {
                   type="number"
                   min="0"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('quantidade_alvos_outros_estados') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('quantidade_alvos_outros_estados')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 />
-                <div v-if="erro('quantidade_alvos_outros_estados')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('quantidade_alvos_outros_estados')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('quantidade_alvos_outros_estados') }}
                 </div>
               </div>
@@ -501,25 +656,40 @@ const erro = (campo) => {
                   type="number"
                   min="1"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('quantidade_policiais_empregados') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('quantidade_policiais_empregados')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 />
-                <div v-if="erro('quantidade_policiais_empregados')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('quantidade_policiais_empregados')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('quantidade_policiais_empregados') }}
                 </div>
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                  Viaturas da Polícia Civil Empregadas <span class="text-red-500">*</span>
+                  Viaturas da Polícia Civil Empregadas
+                  <span class="text-red-500">*</span>
                 </label>
                 <input
                   v-model.number="form.quantidade_viaturas_empregadas"
                   type="number"
                   min="0"
                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  :class="erro('quantidade_viaturas_empregadas') ? 'border-red-500' : 'border-gray-300'"
+                  :class="
+                    erro('quantidade_viaturas_empregadas')
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  "
                 />
-                <div v-if="erro('quantidade_viaturas_empregadas')" class="text-red-500 text-sm mt-1">
+                <div
+                  v-if="erro('quantidade_viaturas_empregadas')"
+                  class="text-red-500 text-sm mt-1"
+                >
                   {{ erro('quantidade_viaturas_empregadas') }}
                 </div>
               </div>
@@ -534,38 +704,62 @@ const erro = (campo) => {
 
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">
-                A Operação está vinculada a qual Unidade? <span class="text-red-500">*</span>
+                A Operação está vinculada a qual Unidade?
+                <span class="text-red-500">*</span>
               </label>
               <select
                 v-model="form.vinculada_unidade"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                :class="erro('vinculada_unidade') ? 'border-red-500' : 'border-gray-300'"
+                :class="
+                  erro('vinculada_unidade')
+                    ? 'border-red-500'
+                    : 'border-gray-300'
+                "
               >
                 <option value="">Selecione...</option>
-                <option v-for="unidade in opcoes.unidades" :key="unidade" :value="unidade">
+                <option
+                  v-for="unidade in opcoes.unidades"
+                  :key="unidade"
+                  :value="unidade"
+                >
                   {{ unidade }}
                 </option>
               </select>
-              <div v-if="erro('vinculada_unidade')" class="text-red-500 text-sm mt-1">
+              <div
+                v-if="erro('vinculada_unidade')"
+                class="text-red-500 text-sm mt-1"
+              >
                 {{ erro('vinculada_unidade') }}
               </div>
             </div>
 
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">
-                A Operação está vinculada a qual Unidade Especializada? <span class="text-red-500">*</span>
+                A Operação está vinculada a qual Unidade Especializada?
+                <span class="text-red-500">*</span>
               </label>
               <select
                 v-model="form.vinculada_unidade_especializada"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                :class="erro('vinculada_unidade_especializada') ? 'border-red-500' : 'border-gray-300'"
+                :class="
+                  erro('vinculada_unidade_especializada')
+                    ? 'border-red-500'
+                    : 'border-gray-300'
+                "
               >
                 <option value="">Selecione...</option>
-                <option v-for="(label, value) in opcoes.unidades_especializadas" :key="value" :value="value">
+                <option
+                  v-for="(label, value) in opcoes.unidades_especializadas"
+                  :key="value"
+                  :value="value"
+                >
                   {{ label }}
                 </option>
               </select>
-              <div v-if="erro('vinculada_unidade_especializada')" class="text-red-500 text-sm mt-1">
+              <div
+                v-if="erro('vinculada_unidade_especializada')"
+                class="text-red-500 text-sm mt-1"
+              >
                 {{ erro('vinculada_unidade_especializada') }}
               </div>
             </div>
@@ -573,35 +767,55 @@ const erro = (campo) => {
             <!-- Campo condicional -->
             <div v-if="mostrarOutraUnidade">
               <label class="block text-sm font-medium text-gray-700 mb-2">
-                Especifique a Unidade Policial <span class="text-red-500">*</span>
+                Especifique a Unidade Policial
+                <span class="text-red-500">*</span>
               </label>
               <input
                 v-model="form.outra_unidade_policial"
                 type="text"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                :class="erro('outra_unidade_policial') ? 'border-red-500' : 'border-gray-300'"
+                :class="
+                  erro('outra_unidade_policial')
+                    ? 'border-red-500'
+                    : 'border-gray-300'
+                "
                 placeholder="Informe o nome da unidade policial"
               />
-              <div v-if="erro('outra_unidade_policial')" class="text-red-500 text-sm mt-1">
+              <div
+                v-if="erro('outra_unidade_policial')"
+                class="text-red-500 text-sm mt-1"
+              >
                 {{ erro('outra_unidade_policial') }}
               </div>
             </div>
 
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">
-                A Operação está vinculada a qual Delegacia Seccional? <span class="text-red-500">*</span>
+                A Operação está vinculada a qual Delegacia Seccional?
+                <span class="text-red-500">*</span>
               </label>
               <select
                 v-model="form.vinculada_delegacia_seccional"
                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                :class="erro('vinculada_delegacia_seccional') ? 'border-red-500' : 'border-gray-300'"
+                :class="
+                  erro('vinculada_delegacia_seccional')
+                    ? 'border-red-500'
+                    : 'border-gray-300'
+                "
               >
                 <option value="">Selecione...</option>
-                <option v-for="delegacia in opcoes.delegacias" :key="delegacia" :value="delegacia">
+                <option
+                  v-for="delegacia in opcoes.delegacias"
+                  :key="delegacia"
+                  :value="delegacia"
+                >
                   {{ delegacia }}
                 </option>
               </select>
-              <div v-if="erro('vinculada_delegacia_seccional')" class="text-red-500 text-sm mt-1">
+              <div
+                v-if="erro('vinculada_delegacia_seccional')"
+                class="text-red-500 text-sm mt-1"
+              >
                 {{ erro('vinculada_delegacia_seccional') }}
               </div>
             </div>
@@ -618,7 +832,8 @@ const erro = (campo) => {
                 Especifique a Solicitação (Opcional)
               </label>
               <p class="text-sm text-gray-500 mb-2">
-                Servidores, formatação da equipe, recursos especiais, lanches e outros
+                Servidores, formatação da equipe, recursos especiais, lanches e
+                outros
               </p>
               <textarea
                 v-model="form.solicitacao_apoio_diop"
@@ -632,7 +847,8 @@ const erro = (campo) => {
             <div class="bg-gray-100 border border-gray-200 rounded-lg p-4 mt-6">
               <h3 class="font-semibold text-gray-900 mb-2">✓ Revisão Final</h3>
               <p class="text-sm text-gray-700">
-                Revise todas as informações antes de salvar. Após o envio, você poderá gerar o PDF da operação.
+                Revise todas as informações antes de salvar. Após o envio, você
+                poderá gerar o PDF da operação.
               </p>
             </div>
           </div>

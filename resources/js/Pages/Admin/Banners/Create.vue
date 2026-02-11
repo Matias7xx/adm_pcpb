@@ -47,7 +47,13 @@ const handleImageSelect = event => {
 };
 
 const validateImage = file => {
-  const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+  const validTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/jpg',
+    'image/gif',
+    'image/webp',
+  ];
   if (!validTypes.includes(file.type)) {
     alert('Formato de imagem inválido. Use JPEG, PNG, GIF ou WebP.');
     return false;
@@ -100,7 +106,11 @@ const submit = () => {
         />
       </SectionTitleLineWithButton>
 
-      <NotificationBar v-if="form.hasErrors" color="danger" :icon="mdiAlertBoxOutline">
+      <NotificationBar
+        v-if="form.hasErrors"
+        color="danger"
+        :icon="mdiAlertBoxOutline"
+      >
         Por favor, corrija os erros no formulário
       </NotificationBar>
 
@@ -149,14 +159,27 @@ const submit = () => {
                 @click="removeImage"
                 class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition shadow-lg"
               >
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
 
             <!-- Input file -->
-            <div v-else class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-gray-400 dark:hover:border-gray-500 transition">
+            <div
+              v-else
+              class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-gray-400 dark:hover:border-gray-500 transition"
+            >
               <input
                 ref="fileInputRef"
                 type="file"
@@ -169,7 +192,11 @@ const submit = () => {
                 @click="openFileDialog"
                 class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               >
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  class="w-5 h-5 mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path :d="mdiUpload" />
                 </svg>
                 Selecionar Imagem

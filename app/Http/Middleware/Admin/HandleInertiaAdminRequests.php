@@ -31,18 +31,20 @@ class HandleInertiaAdminRequests extends Middleware
    */
   public function share(Request $request): array
   {
-      return [
-          ...parent::share($request),
-          'navigation' => [
-              'menu' => Menu::getMenuTree('admin', false, true),
-              'breadcrumbs' => $this->getBreadcrumbs($request),
-          ],
-          'flash' => [
-              'message' => fn () => $request->session()->get('message'),
-              'error' => fn () => $request->session()->get('error'),
-              'destaques_cheios' => fn () => $request->session()->get('destaques_cheios'),
-          ],
-      ];
+    return [
+      ...parent::share($request),
+      'navigation' => [
+        'menu' => Menu::getMenuTree('admin', false, true),
+        'breadcrumbs' => $this->getBreadcrumbs($request),
+      ],
+      'flash' => [
+        'message' => fn() => $request->session()->get('message'),
+        'error' => fn() => $request->session()->get('error'),
+        'destaques_cheios' => fn() => $request
+          ->session()
+          ->get('destaques_cheios'),
+      ],
+    ];
   }
 
   protected function getBreadcrumbs(Request $request)

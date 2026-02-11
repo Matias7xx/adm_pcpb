@@ -9,12 +9,12 @@ const props = defineProps({
   estatisticas: Object,
 });
 
-const formatarData = (data) => {
+const formatarData = data => {
   if (!data) return '';
   return new Date(data).toLocaleDateString('pt-BR');
 };
 
-const formatarValor = (valor) => {
+const formatarValor = valor => {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
@@ -22,12 +22,16 @@ const formatarValor = (valor) => {
 };
 
 const excluirResultado = () => {
-  if (confirm('Tem certeza que deseja excluir este resultado? Esta ação não pode ser desfeita.')) {
+  if (
+    confirm(
+      'Tem certeza que deseja excluir este resultado? Esta ação não pode ser desfeita.'
+    )
+  ) {
     router.delete(route('resultados-operacao.destroy', resultado.id));
   }
 };
 
-const getUnidadeEspecializadaNome = (codigo) => {
+const getUnidadeEspecializadaNome = codigo => {
   const unidades = {
     DAV: 'DAV (Acidente de Veículos)',
     DCCPAT: 'DCCPAT (Patrimônio)',
@@ -39,7 +43,8 @@ const getUnidadeEspecializadaNome = (codigo) => {
     DECC: 'DECC (Crimes Cibernéticos)',
     DECCOR: 'DECCOR (Combate a Corrupção)',
     DECCOT: 'DECCOT (Ordem Tributária)',
-    DECHRADI: 'DECHRADI (Homofóbicos, Racismo e Delitos de Intolerância Religiosa)',
+    DECHRADI:
+      'DECHRADI (Homofóbicos, Racismo e Delitos de Intolerância Religiosa)',
     DECON: 'DECON (Consumidor)',
     DESARME: 'DESARME',
     DHE: 'DHE (Homicídios e Entorpecentes)',
@@ -63,7 +68,9 @@ const getUnidadeEspecializadaNome = (codigo) => {
 <template>
   <div>
     <Head>
-      <title>Resultado da Operação - {{ resultado.operacao.nome_operacao }}</title>
+      <title>
+        Resultado da Operação - {{ resultado.operacao.nome_operacao }}
+      </title>
     </Head>
 
     <SiteNavbar />
@@ -88,7 +95,12 @@ const getUnidadeEspecializadaNome = (codigo) => {
                 target="_blank"
                 class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
               >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -115,48 +127,88 @@ const getUnidadeEspecializadaNome = (codigo) => {
 
           <!-- Resumo Estatístico -->
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t">
-            <div class="text-center bg-gray-100 p-4 rounded-lg border border-gray-300">
-              <p class="text-3xl font-bold text-gray-800">{{ estatisticas.total_prisoes }}</p>
+            <div
+              class="text-center bg-gray-100 p-4 rounded-lg border border-gray-300"
+            >
+              <p class="text-3xl font-bold text-gray-800">
+                {{ estatisticas.total_prisoes }}
+              </p>
               <p class="text-sm text-gray-600 mt-1">Prisões Totais</p>
             </div>
-            <div class="text-center bg-gray-100 p-4 rounded-lg border border-gray-300">
-              <p class="text-3xl font-bold text-gray-800">{{ estatisticas.quantidade_armas }}</p>
+            <div
+              class="text-center bg-gray-100 p-4 rounded-lg border border-gray-300"
+            >
+              <p class="text-3xl font-bold text-gray-800">
+                {{ estatisticas.quantidade_armas }}
+              </p>
               <p class="text-sm text-gray-600 mt-1">Armas Apreendidas</p>
             </div>
-            <div class="text-center bg-gray-100 p-4 rounded-lg border border-gray-300">
-              <p class="text-3xl font-bold text-gray-800">{{ estatisticas.taxa_exito }}%</p>
+            <div
+              class="text-center bg-gray-100 p-4 rounded-lg border border-gray-300"
+            >
+              <p class="text-3xl font-bold text-gray-800">
+                {{ estatisticas.taxa_exito }}%
+              </p>
               <p class="text-sm text-gray-600 mt-1">Taxa de Êxito</p>
             </div>
-            <div class="text-center bg-gray-100 p-4 rounded-lg border border-gray-300">
-              <p class="text-3xl font-bold text-gray-800">{{ formatarValor(estatisticas.valores_dinheiro) }}</p>
+            <div
+              class="text-center bg-gray-100 p-4 rounded-lg border border-gray-300"
+            >
+              <p class="text-3xl font-bold text-gray-800">
+                {{ formatarValor(estatisticas.valores_dinheiro) }}
+              </p>
               <p class="text-sm text-gray-600 mt-1">Valores Apreendidos</p>
             </div>
           </div>
         </div>
-        
+
         <!-- Card 1: Identificação da Operação -->
         <div class="bg-white shadow rounded-lg p-6 mb-6 border border-gray-200">
-          <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2 flex items-center gap-2">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <h2
+            class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2 flex items-center gap-2"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
             Dados da Operação Cadastrada
           </h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Nome da Operação</label>
-              <p class="text-gray-900 font-medium mt-1">{{ resultado.operacao.nome_operacao }}</p>
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Nome da Operação</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ resultado.operacao.nome_operacao }}
+              </p>
             </div>
 
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Data da Deflagração</label>
-              <p class="text-gray-900 font-medium mt-1">{{ formatarData(resultado.operacao.data_operacao) }}</p>
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Data da Deflagração</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ formatarData(resultado.operacao.data_operacao) }}
+              </p>
             </div>
 
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Unidade Responsável</label>
-              <p class="text-gray-900 font-medium mt-1">{{ resultado.unidade_policial_responsavel }}</p>
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Unidade Responsável</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ resultado.unidade_policial_responsavel }}
+              </p>
             </div>
 
             <!-- <div class="bg-gray-50 p-3 rounded border border-gray-200">
@@ -172,41 +224,76 @@ const getUnidadeEspecializadaNome = (codigo) => {
             </div> -->
 
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Policial Civil Responsável pelo preenchimento</label>
-              <p class="text-gray-900 font-medium mt-1">{{ resultado.policial_responsavel_nome }}</p>
-              <p class="text-xs text-gray-600 mt-1">Mat: {{ resultado.policial_responsavel_matricula }}</p>
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Policial Civil Responsável pelo preenchimento</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ resultado.policial_responsavel_nome }}
+              </p>
+              <p class="text-xs text-gray-600 mt-1">
+                Mat: {{ resultado.policial_responsavel_matricula }}
+              </p>
             </div>
 
             <!-- Autoridade Responsável -->
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Autoridade Policial Responsável</label>
-              <p class="text-gray-900 font-medium mt-1">{{ resultado.autoridade_responsavel_nome }}</p>
-              <p class="text-xs text-gray-600 mt-1">Mat: {{ resultado.autoridade_responsavel_matricula }}</p>
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Autoridade Policial Responsável</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ resultado.autoridade_responsavel_nome }}
+              </p>
+              <p class="text-xs text-gray-600 mt-1">
+                Mat: {{ resultado.autoridade_responsavel_matricula }}
+              </p>
             </div>
 
-            <div v-if="resultado.numero_processo_pje" class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Número do Processo PJE</label>
-              <p class="text-gray-900 font-medium mt-1">{{ resultado.numero_processo_pje }}</p>
+            <div
+              v-if="resultado.numero_processo_pje"
+              class="bg-gray-50 p-3 rounded border border-gray-200"
+            >
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Número do Processo PJE</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ resultado.numero_processo_pje }}
+              </p>
             </div>
 
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Origem da Operação</label>
-              <p class="text-gray-900 font-medium mt-1">{{ resultado.operacao.origem_operacao }}</p>
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Origem da Operação</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ resultado.operacao.origem_operacao }}
+              </p>
             </div>
 
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">UF Responsável</label>
-              <p class="text-gray-900 font-medium mt-1">{{ resultado.operacao.uf_responsavel }}</p>
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >UF Responsável</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ resultado.operacao.uf_responsavel }}
+              </p>
             </div>
 
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Local Briefing</label>
-              <p class="text-gray-900 font-medium mt-1">{{ resultado.operacao.local_briefing }}</p>
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Local Briefing</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ resultado.operacao.local_briefing }}
+              </p>
             </div>
 
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Horário Briefing</label>
-              <p class="text-gray-900 font-medium mt-1">{{ resultado.operacao.horario_briefing }}</p>
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Horário Briefing</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ resultado.operacao.horario_briefing }}
+              </p>
             </div>
           </div>
         </div>
@@ -218,57 +305,97 @@ const getUnidadeEspecializadaNome = (codigo) => {
           </h2>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-gray-50 p-3 rounded border border-gray-200 text-center">
-              <p class="text-2xl font-bold text-gray-800">{{ resultado.operacao.quantidade_total_alvos }}</p>
+            <div
+              class="bg-gray-50 p-3 rounded border border-gray-200 text-center"
+            >
+              <p class="text-2xl font-bold text-gray-800">
+                {{ resultado.operacao.quantidade_total_alvos }}
+              </p>
               <p class="text-xs text-gray-600 mt-1">Total de Alvos</p>
             </div>
 
-            <div class="bg-gray-50 p-3 rounded border border-gray-200 text-center">
-              <p class="text-2xl font-bold text-gray-800">{{ resultado.operacao.quantidade_mandados_prisao }}</p>
+            <div
+              class="bg-gray-50 p-3 rounded border border-gray-200 text-center"
+            >
+              <p class="text-2xl font-bold text-gray-800">
+                {{ resultado.operacao.quantidade_mandados_prisao }}
+              </p>
               <p class="text-xs text-gray-600 mt-1">Mandados de Prisão</p>
             </div>
 
-            <div class="bg-gray-50 p-3 rounded border border-gray-200 text-center">
-              <p class="text-2xl font-bold text-gray-800">{{ resultado.operacao.quantidade_mandados_busca_apreensao }}</p>
+            <div
+              class="bg-gray-50 p-3 rounded border border-gray-200 text-center"
+            >
+              <p class="text-2xl font-bold text-gray-800">
+                {{ resultado.operacao.quantidade_mandados_busca_apreensao }}
+              </p>
               <p class="text-xs text-gray-600 mt-1">Mandados de Busca</p>
             </div>
 
-            <div class="bg-gray-50 p-3 rounded border border-gray-200 text-center">
-              <p class="text-2xl font-bold text-gray-800">{{ resultado.operacao.quantidade_mandados_busca_apreensao_infrator }}</p>
-              <p class="text-xs text-gray-600 mt-1">Mandados de Busca (Infrator)</p>
+            <div
+              class="bg-gray-50 p-3 rounded border border-gray-200 text-center"
+            >
+              <p class="text-2xl font-bold text-gray-800">
+                {{
+                  resultado.operacao
+                    .quantidade_mandados_busca_apreensao_infrator
+                }}
+              </p>
+              <p class="text-xs text-gray-600 mt-1">
+                Mandados de Busca (Infrator)
+              </p>
             </div>
 
-            <div class="bg-gray-50 p-3 rounded border border-gray-200 text-center">
-              <p class="text-2xl font-bold text-gray-800">{{ resultado.operacao.quantidade_alvos_outros_estados }}</p>
+            <div
+              class="bg-gray-50 p-3 rounded border border-gray-200 text-center"
+            >
+              <p class="text-2xl font-bold text-gray-800">
+                {{ resultado.operacao.quantidade_alvos_outros_estados }}
+              </p>
               <p class="text-xs text-gray-600 mt-1">Alvos em Outros Estados</p>
             </div>
 
-            <div class="bg-gray-50 p-3 rounded border border-gray-200 text-center">
-              <p class="text-2xl font-bold text-gray-800">{{ resultado.operacao.quantidade_policiais_empregados }}</p>
+            <div
+              class="bg-gray-50 p-3 rounded border border-gray-200 text-center"
+            >
+              <p class="text-2xl font-bold text-gray-800">
+                {{ resultado.operacao.quantidade_policiais_empregados }}
+              </p>
               <p class="text-xs text-gray-600 mt-1">Policiais Empregados</p>
             </div>
 
-            <div class="bg-gray-50 p-3 rounded border border-gray-200 text-center">
-              <p class="text-2xl font-bold text-gray-800">{{ resultado.operacao.quantidade_viaturas_empregadas }}</p>
+            <div
+              class="bg-gray-50 p-3 rounded border border-gray-200 text-center"
+            >
+              <p class="text-2xl font-bold text-gray-800">
+                {{ resultado.operacao.quantidade_viaturas_empregadas }}
+              </p>
               <p class="text-xs text-gray-600 mt-1">Viaturas Empregadas</p>
             </div>
           </div>
 
           <div class="mt-4 pt-4 border-t">
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Cidades Alvo</label>
-              <p class="text-gray-900 mt-1">{{ resultado.operacao.cidades_alvo }}</p>
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Cidades Alvo</label
+              >
+              <p class="text-gray-900 mt-1">
+                {{ resultado.operacao.cidades_alvo }}
+              </p>
             </div>
 
             <div class="bg-gray-50 p-3 rounded border border-gray-200 mt-3">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Crimes Investigados</label>
-              <p class="text-gray-900 mt-1">{{ resultado.operacao.crimes_investigados }}</p>
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Crimes Investigados</label
+              >
+              <p class="text-gray-900 mt-1">
+                {{ resultado.operacao.crimes_investigados }}
+              </p>
             </div>
           </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
           <!-- Mandados e Taxa de Êxito -->
           <div class="bg-white shadow rounded-lg p-6 border border-gray-200">
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
@@ -286,26 +413,38 @@ const getUnidadeEspecializadaNome = (codigo) => {
               <tbody class="divide-y">
                 <tr class="bg-gray-50">
                   <td class="py-2 text-sm text-gray-900">Mandados de Prisão</td>
-                  <td class="py-2 text-center text-sm font-semibold text-gray-800">
+                  <td
+                    class="py-2 text-center text-sm font-semibold text-gray-800"
+                  >
                     {{ estatisticas.mandados_prisao_cumpridos }}
                   </td>
-                  <td class="py-2 text-center text-sm font-semibold text-gray-600">
+                  <td
+                    class="py-2 text-center text-sm font-semibold text-gray-600"
+                  >
                     {{ estatisticas.mandados_prisao_nao_cumpridos }}
                   </td>
                 </tr>
                 <tr>
                   <td class="py-2 text-sm text-gray-900">Mandados de Busca</td>
-                  <td class="py-2 text-center text-sm font-semibold text-gray-800">
+                  <td
+                    class="py-2 text-center text-sm font-semibold text-gray-800"
+                  >
                     {{ estatisticas.mandados_busca_cumpridos }}
                   </td>
                   <td class="py-2 text-center text-sm text-gray-600">-</td>
                 </tr>
                 <tr class="bg-gray-50">
-                  <td class="py-2 text-sm text-gray-900">Mandados de Busca (Infrator)</td>
-                  <td class="py-2 text-center text-sm font-semibold text-gray-800">
+                  <td class="py-2 text-sm text-gray-900">
+                    Mandados de Busca (Infrator)
+                  </td>
+                  <td
+                    class="py-2 text-center text-sm font-semibold text-gray-800"
+                  >
                     {{ estatisticas.mandados_busca_infrator_cumpridos }}
                   </td>
-                  <td class="py-2 text-center text-sm font-semibold text-gray-600">
+                  <td
+                    class="py-2 text-center text-sm font-semibold text-gray-600"
+                  >
                     {{ estatisticas.mandados_busca_infrator_nao_cumpridos }}
                   </td>
                 </tr>
@@ -322,9 +461,15 @@ const getUnidadeEspecializadaNome = (codigo) => {
             </table>
 
             <div class="mt-4 pt-4 border-t">
-              <div class="flex justify-between items-center bg-gray-100 p-3 rounded border border-gray-300">
-                <span class="text-sm font-medium text-gray-700">Taxa de Êxito:</span>
-                <span class="text-2xl font-bold text-gray-800">{{ estatisticas.taxa_exito }}%</span>
+              <div
+                class="flex justify-between items-center bg-gray-100 p-3 rounded border border-gray-300"
+              >
+                <span class="text-sm font-medium text-gray-700"
+                  >Taxa de Êxito:</span
+                >
+                <span class="text-2xl font-bold text-gray-800"
+                  >{{ estatisticas.taxa_exito }}%</span
+                >
               </div>
             </div>
           </div>
@@ -337,7 +482,10 @@ const getUnidadeEspecializadaNome = (codigo) => {
 
             <div class="bg-gray-50 border border-gray-300 rounded-lg p-4">
               <p class="text-gray-900 whitespace-pre-line text-sm">
-                {{ resultado.mandados_prisao_cumpridos_detalhes || 'Nenhum detalhe informado' }}
+                {{
+                  resultado.mandados_prisao_cumpridos_detalhes ||
+                  'Nenhum detalhe informado'
+                }}
               </p>
             </div>
           </div>
@@ -348,9 +496,15 @@ const getUnidadeEspecializadaNome = (codigo) => {
               Prisões em Flagrante
             </h2>
 
-            <div class="text-center py-6 bg-gray-100 rounded-lg border border-gray-300">
-              <p class="text-5xl font-bold text-gray-800">{{ estatisticas.prisoes_flagrante }}</p>
-              <p class="text-sm text-gray-600 mt-2">Prisões realizadas em flagrante delito</p>
+            <div
+              class="text-center py-6 bg-gray-100 rounded-lg border border-gray-300"
+            >
+              <p class="text-5xl font-bold text-gray-800">
+                {{ estatisticas.prisoes_flagrante }}
+              </p>
+              <p class="text-sm text-gray-600 mt-2">
+                Prisões realizadas em flagrante delito
+              </p>
             </div>
           </div>
 
@@ -362,27 +516,46 @@ const getUnidadeEspecializadaNome = (codigo) => {
 
             <div class="space-y-3">
               <div class="bg-gray-100 p-4 rounded-lg border border-gray-300">
-                <label class="text-sm font-medium text-gray-600">Quantidade</label>
-                <p class="text-3xl font-bold text-gray-800 mt-1">{{ resultado.quantidade_armas_apreendidas }}</p>
-              </div>
-
-              <div>
-                <label class="text-sm font-medium text-gray-600">Tipos de Armas</label>
-                <p 
-                  class="text-gray-900 mt-1 font-medium"
-                  :class="Array.isArray(resultado.tipo_arma_apreendida) && resultado.tipo_arma_apreendida.includes('NENHUMA') ? 'text-gray-500' : ''"
+                <label class="text-sm font-medium text-gray-600"
+                  >Quantidade</label
                 >
-                  {{ Array.isArray(resultado.tipo_arma_apreendida) && resultado.tipo_arma_apreendida.length > 0 
-                     ? resultado.tipo_arma_apreendida.join(', ') 
-                     : 'Não informado' }}
+                <p class="text-3xl font-bold text-gray-800 mt-1">
+                  {{ resultado.quantidade_armas_apreendidas }}
                 </p>
               </div>
 
               <div>
-                <label class="text-sm font-medium text-gray-600">Detalhes</label>
+                <label class="text-sm font-medium text-gray-600"
+                  >Tipos de Armas</label
+                >
+                <p
+                  class="text-gray-900 mt-1 font-medium"
+                  :class="
+                    Array.isArray(resultado.tipo_arma_apreendida) &&
+                    resultado.tipo_arma_apreendida.includes('NENHUMA')
+                      ? 'text-gray-500'
+                      : ''
+                  "
+                >
+                  {{
+                    Array.isArray(resultado.tipo_arma_apreendida) &&
+                    resultado.tipo_arma_apreendida.length > 0
+                      ? resultado.tipo_arma_apreendida.join(', ')
+                      : 'Não informado'
+                  }}
+                </p>
+              </div>
+
+              <div>
+                <label class="text-sm font-medium text-gray-600"
+                  >Detalhes</label
+                >
                 <div class="bg-gray-50 border border-gray-300 rounded p-3 mt-1">
                   <p class="text-gray-900 whitespace-pre-line text-sm">
-                    {{ resultado.detalhes_armas_apreendidas || 'Nenhum detalhe informado' }}
+                    {{
+                      resultado.detalhes_armas_apreendidas ||
+                      'Nenhum detalhe informado'
+                    }}
                   </p>
                 </div>
               </div>
@@ -390,14 +563,18 @@ const getUnidadeEspecializadaNome = (codigo) => {
           </div>
 
           <!-- Munições -->
-          <div class="bg-white shadow rounded-lg p-6 lg:col-span-2 border border-gray-200">
+          <div
+            class="bg-white shadow rounded-lg p-6 lg:col-span-2 border border-gray-200"
+          >
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
               Munições Apreendidas
             </h2>
 
             <div class="bg-gray-50 border border-gray-300 rounded-lg p-4">
               <p class="text-gray-900 whitespace-pre-line text-sm">
-                {{ resultado.municoes_apreendidas || 'Nenhuma munição apreendida' }}
+                {{
+                  resultado.municoes_apreendidas || 'Nenhuma munição apreendida'
+                }}
               </p>
             </div>
           </div>
@@ -413,20 +590,38 @@ const getUnidadeEspecializadaNome = (codigo) => {
                 <label class="text-sm font-medium text-gray-600">Tipos</label>
                 <p
                   class="text-xl font-semibold mt-1 px-3 py-2 rounded border"
-                  :class="Array.isArray(resultado.entorpecente_apreendido) && resultado.entorpecente_apreendido.includes('NENHUM') 
-                    ? 'bg-gray-100 text-gray-500 border-gray-300' 
-                    : 'bg-gray-100 text-gray-800 border-gray-300'"
+                  :class="
+                    Array.isArray(resultado.entorpecente_apreendido) &&
+                    resultado.entorpecente_apreendido.includes('NENHUM')
+                      ? 'bg-gray-100 text-gray-500 border-gray-300'
+                      : 'bg-gray-100 text-gray-800 border-gray-300'
+                  "
                 >
-                  {{ Array.isArray(resultado.entorpecente_apreendido) && resultado.entorpecente_apreendido.length > 0 
-                     ? resultado.entorpecente_apreendido.join(', ') 
-                     : 'Não informado' }}
+                  {{
+                    Array.isArray(resultado.entorpecente_apreendido) &&
+                    resultado.entorpecente_apreendido.length > 0
+                      ? resultado.entorpecente_apreendido.join(', ')
+                      : 'Não informado'
+                  }}
                 </p>
               </div>
 
-              <div v-if="Array.isArray(resultado.entorpecente_apreendido) && resultado.detalhes_entorpecentes && !resultado.entorpecente_apreendido.includes('NENHUM')">
-                <label class="text-sm font-medium text-gray-600">Detalhes (Peso/Quantidade)</label>
-                <div class="bg-gray-50 border border-gray-300 rounded-lg p-4 mt-2">
-                  <p class="text-gray-900 whitespace-pre-line text-sm">{{ resultado.detalhes_entorpecentes }}</p>
+              <div
+                v-if="
+                  Array.isArray(resultado.entorpecente_apreendido) &&
+                  resultado.detalhes_entorpecentes &&
+                  !resultado.entorpecente_apreendido.includes('NENHUM')
+                "
+              >
+                <label class="text-sm font-medium text-gray-600"
+                  >Detalhes (Peso/Quantidade)</label
+                >
+                <div
+                  class="bg-gray-50 border border-gray-300 rounded-lg p-4 mt-2"
+                >
+                  <p class="text-gray-900 whitespace-pre-line text-sm">
+                    {{ resultado.detalhes_entorpecentes }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -438,46 +633,66 @@ const getUnidadeEspecializadaNome = (codigo) => {
               Valores em Dinheiro
             </h2>
 
-            <div class="text-center py-6 bg-gray-100 rounded-lg border border-gray-300">
-              <p class="text-4xl font-bold text-gray-800">{{ formatarValor(resultado.valores_dinheiro) }}</p>
-              <p class="text-sm text-gray-600 mt-2">Total apreendido em espécie</p>
+            <div
+              class="text-center py-6 bg-gray-100 rounded-lg border border-gray-300"
+            >
+              <p class="text-4xl font-bold text-gray-800">
+                {{ formatarValor(resultado.valores_dinheiro) }}
+              </p>
+              <p class="text-sm text-gray-600 mt-2">
+                Total apreendido em espécie
+              </p>
             </div>
           </div>
 
           <!-- Veículos -->
-          <div class="bg-white shadow rounded-lg p-6 lg:col-span-2 border border-gray-200">
+          <div
+            class="bg-white shadow rounded-lg p-6 lg:col-span-2 border border-gray-200"
+          >
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
               Veículos Apreendidos
             </h2>
 
             <div class="bg-gray-50 border border-gray-300 rounded-lg p-4">
               <p class="text-gray-900 whitespace-pre-line text-sm">
-                {{ resultado.veiculos_apreendidos || 'Nenhum veículo apreendido' }}
+                {{
+                  resultado.veiculos_apreendidos || 'Nenhum veículo apreendido'
+                }}
               </p>
             </div>
           </div>
 
           <!-- Demais Objetos -->
-          <div class="bg-white shadow rounded-lg p-6 lg:col-span-2 border border-gray-200">
+          <div
+            class="bg-white shadow rounded-lg p-6 lg:col-span-2 border border-gray-200"
+          >
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
               Demais Objetos Apreendidos
             </h2>
 
             <div class="bg-gray-50 border border-gray-300 rounded-lg p-4">
               <p class="text-gray-900 whitespace-pre-line text-sm">
-                {{ resultado.demais_objetos_apreendidos || 'Nenhum objeto apreendido' }}
+                {{
+                  resultado.demais_objetos_apreendidos ||
+                  'Nenhum objeto apreendido'
+                }}
               </p>
             </div>
           </div>
 
           <!-- Outras Informações -->
-          <div v-if="resultado.outras_informacoes" class="bg-white shadow rounded-lg p-6 lg:col-span-2 border border-gray-200">
+          <div
+            v-if="resultado.outras_informacoes"
+            class="bg-white shadow rounded-lg p-6 lg:col-span-2 border border-gray-200"
+          >
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
               Outras Informações
             </h2>
 
             <div class="bg-gray-50 border border-gray-300 rounded-lg p-4">
-              <p class="text-gray-900 whitespace-pre-line text-sm">{{ resultado.outras_informacoes }}</p>
+              <p class="text-gray-900 whitespace-pre-line text-sm">
+                {{ resultado.outras_informacoes }}
+              </p>
             </div>
           </div>
         </div>
@@ -499,5 +714,4 @@ const getUnidadeEspecializadaNome = (codigo) => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -188,11 +188,7 @@ onMounted(async () => {
         class="skeleton-grid"
         :class="{ 'single-item': newsItems.length === 1 }"
       >
-        <div
-          v-for="i in 2"
-          :key="`skeleton-${i}`"
-          class="skeleton-card-simple"
-        >
+        <div v-for="i in 2" :key="`skeleton-${i}`" class="skeleton-card-simple">
           <div class="skeleton-shimmer"></div>
         </div>
       </div>
@@ -212,10 +208,7 @@ onMounted(async () => {
           <hr class="flex-1 border-t border-gray-300" />
         </div>
       </div> -->
-      <div
-        class="news-grid"
-        :class="{ 'single-item': newsItems.length === 1 }"
-      >
+      <div class="news-grid" :class="{ 'single-item': newsItems.length === 1 }">
         <a
           v-for="(item, index) in newsItems"
           :key="item.id"
