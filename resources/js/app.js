@@ -11,7 +11,7 @@ import Toast from './Pages/Components/Toast.vue';
 import FlashMessage from './Pages/Components/FlashMessage.vue';
 import CKEditor from '@ckeditor/ckeditor5-vue'; // Correção aqui
 
-const appName = import.meta.env.VITE_APP_NAME || 'ACADEPOL';
+const appName = import.meta.env.VITE_APP_NAME || 'PCPB';
 
 const pinia = createPinia();
 

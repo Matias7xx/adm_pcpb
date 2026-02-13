@@ -1,20 +1,16 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3'
-import { ref } from 'vue'
-import {
-  mdiArrowLeftBoldOutline,
-  mdiContentSave,
-  mdiTruck,
-} from '@mdi/js'
-import LayoutAuthenticated from '@/Layouts/Admin/LayoutAuthenticated.vue'
-import SectionMain from '@/Components/SectionMain.vue'
-import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue'
-import CardBox from '@/Components/CardBox.vue'
-import FormField from '@/Components/FormField.vue'
-import FormControl from '@/Components/FormControl.vue'
-import BaseButton from '@/Components/BaseButton.vue'
-import BaseButtons from '@/Components/BaseButtons.vue'
-import NotificationBar from '@/Components/NotificationBar.vue'
+import { Head, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { mdiArrowLeftBoldOutline, mdiContentSave, mdiTruck } from '@mdi/js';
+import LayoutAuthenticated from '@/Layouts/Admin/LayoutAuthenticated.vue';
+import SectionMain from '@/Components/SectionMain.vue';
+import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue';
+import CardBox from '@/Components/CardBox.vue';
+import FormField from '@/Components/FormField.vue';
+import FormControl from '@/Components/FormControl.vue';
+import BaseButton from '@/Components/BaseButton.vue';
+import BaseButtons from '@/Components/BaseButtons.vue';
+import NotificationBar from '@/Components/NotificationBar.vue';
 
 const form = useForm({
   titulo: '',
@@ -23,30 +19,30 @@ const form = useForm({
   dias_exibicao: 15,
   data_publicacao: new Date().toISOString().split('T')[0],
   ativo: true,
-})
+});
 
-const arquivoNome = ref('')
+const arquivoNome = ref('');
 
-const handleFileChange = (event) => {
-  const file = event.target.files[0]
+const handleFileChange = event => {
+  const file = event.target.files[0];
   if (file) {
-    form.arquivo = file
-    arquivoNome.value = file.name
+    form.arquivo = file;
+    arquivoNome.value = file.name;
   }
-}
+};
 
 const submit = () => {
   form.post(route('admin.veiculo.store'), {
     forceFormData: true,
     preserveScroll: true,
-  })
-}
+  });
+};
 </script>
 
 <template>
   <LayoutAuthenticated>
     <Head title="Adicionar Lista de Veículos" />
-    
+
     <SectionMain>
       <SectionTitleLineWithButton
         :icon="mdiTruck"
@@ -69,11 +65,21 @@ const submit = () => {
 
       <!-- Informação sobre o documento -->
       <CardBox class="mb-6">
-        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div
+          class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4"
+        >
           <div class="flex items-start">
             <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 text-blue-600 dark:text-blue-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clip-rule="evenodd"
+                />
               </svg>
             </div>
             <div class="ml-3">
@@ -81,8 +87,14 @@ const submit = () => {
                 Sobre o sistema de expiração
               </h3>
               <div class="mt-2 text-sm text-blue-700 dark:text-blue-300">
-                <p>O documento ficará visível ao público pelo período definido em "Dias de Exibição".</p>
-                <p class="mt-1">Após esse período, o documento não será mais exibido automaticamente.</p>
+                <p>
+                  O documento ficará visível ao público pelo período definido em
+                  "Dias de Exibição".
+                </p>
+                <p class="mt-1">
+                  Após esse período, o documento não será mais exibido
+                  automaticamente.
+                </p>
               </div>
             </div>
           </div>
@@ -122,13 +134,28 @@ const submit = () => {
           required
         >
           <div class="flex flex-col space-y-2">
-            <label class="flex items-center justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none dark:bg-slate-800 dark:border-gray-600 dark:hover:border-gray-500">
+            <label
+              class="flex items-center justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none dark:bg-slate-800 dark:border-gray-600 dark:hover:border-gray-500"
+            >
               <span class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-6 h-6 text-gray-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
                 </svg>
                 <span class="font-medium text-gray-600">
-                  {{ arquivoNome || 'Clique para selecionar ou arraste o arquivo' }}
+                  {{
+                    arquivoNome || 'Clique para selecionar ou arraste o arquivo'
+                  }}
                 </span>
               </span>
               <input
@@ -139,7 +166,9 @@ const submit = () => {
                 required
               />
             </label>
-            <p v-if="form.errors.arquivo" class="text-red-600 text-sm">{{ form.errors.arquivo }}</p>
+            <p v-if="form.errors.arquivo" class="text-red-600 text-sm">
+              {{ form.errors.arquivo }}
+            </p>
           </div>
         </FormField>
 

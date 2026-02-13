@@ -1,17 +1,27 @@
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3'
-import { ref, computed, watch } from 'vue'
+import { Head, Link, router } from '@inertiajs/vue3';
+import { ref, computed, watch } from 'vue';
 import LayoutAuthenticated from '@/Layouts/Admin/LayoutAuthenticated.vue';
-import SectionMain from '@/Components/SectionMain.vue'
-import CardBox from '@/Components/CardBox.vue'
-import BaseLevel from '@/Components/BaseLevel.vue'
-import BaseButtons from '@/Components/BaseButtons.vue'
-import BaseButton from '@/Components/BaseButton.vue'
-import FormControl from '@/Components/FormControl.vue'
+import SectionMain from '@/Components/SectionMain.vue';
+import CardBox from '@/Components/CardBox.vue';
+import BaseLevel from '@/Components/BaseLevel.vue';
+import BaseButtons from '@/Components/BaseButtons.vue';
+import BaseButton from '@/Components/BaseButton.vue';
+import FormControl from '@/Components/FormControl.vue';
 import Pagination from '@/Components/Admin/Pagination.vue';
 import Sort from '@/Components/Admin/Sort.vue';
-import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue'
-import { mdiPlus, mdiPencil, mdiTrashCan, mdiEye, mdiDownload, mdiToggleSwitch, mdiToggleSwitchOff, mdiMagnify, mdiClose } from '@mdi/js'
+import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue';
+import {
+  mdiPlus,
+  mdiPencil,
+  mdiTrashCan,
+  mdiEye,
+  mdiDownload,
+  mdiToggleSwitch,
+  mdiToggleSwitchOff,
+  mdiMagnify,
+  mdiClose,
+} from '@mdi/js';
 
 const props = defineProps({
   veiculos: {
@@ -26,24 +36,24 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
-})
+});
 
-const search = ref(props.filters.search || '')
-const status = ref(props.filters.status || '')
-const tipo = ref(props.filters.tipo || '')
-const isFiltering = ref(false)
+const search = ref(props.filters.search || '');
+const status = ref(props.filters.status || '');
+const tipo = ref(props.filters.tipo || '');
+const isFiltering = ref(false);
 
 // Debounce para o campo de busca
-let searchTimeout = null
+let searchTimeout = null;
 watch(search, () => {
-  clearTimeout(searchTimeout)
+  clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
-    filtrar()
-  }, 500)
-})
+    filtrar();
+  }, 500);
+});
 
 const filtrar = () => {
-  isFiltering.value = true
+  isFiltering.value = true;
   router.get(
     route('admin.veiculo.index'),
     {
@@ -55,76 +65,80 @@ const filtrar = () => {
       preserveState: true,
       preserveScroll: true,
       onFinish: () => {
-        isFiltering.value = false
-      }
+        isFiltering.value = false;
+      },
     }
-  )
-}
+  );
+};
 
 const limparFiltros = () => {
-  search.value = ''
-  status.value = ''
-  tipo.value = ''
-  filtrar()
-}
+  search.value = '';
+  status.value = '';
+  tipo.value = '';
+  filtrar();
+};
 
-const removerFiltro = (filtro) => {
-  if (filtro === 'search') search.value = ''
-  if (filtro === 'status') status.value = ''
-  if (filtro === 'tipo') tipo.value = ''
-  filtrar()
-}
+const removerFiltro = filtro => {
+  if (filtro === 'search') search.value = '';
+  if (filtro === 'status') status.value = '';
+  if (filtro === 'tipo') tipo.value = '';
+  filtrar();
+};
 
-const deletarVeiculo = (id) => {
+const deletarVeiculo = id => {
   if (confirm('Tem certeza que deseja remover esta lista de veículos?')) {
-    router.delete(route('admin.veiculo.destroy', id))
+    router.delete(route('admin.veiculo.destroy', id));
   }
-}
+};
 
-const toggleAtivo = (id) => {
-  router.patch(route('admin.veiculo.toggle-ativo', id), {}, {
-    preserveState: true,
-    preserveScroll: true,
-  })
-}
+const toggleAtivo = id => {
+  router.patch(
+    route('admin.veiculo.toggle-ativo', id),
+    {},
+    {
+      preserveState: true,
+      preserveScroll: true,
+    }
+  );
+};
 
-const getStatusBadge = (veiculo) => {
+const getStatusBadge = veiculo => {
   if (veiculo.status_display && veiculo.status_display.color) {
     const colorMap = {
-      'slate': 'bg-slate-500',
-      'blue': 'bg-blue-600',
-      'red': 'bg-red-500',
-      'yellow': 'bg-yellow-500',
-      'green': 'bg-green-500'
-    }
+      slate: 'bg-slate-500',
+      blue: 'bg-blue-600',
+      red: 'bg-red-500',
+      yellow: 'bg-yellow-500',
+      green: 'bg-green-500',
+    };
     return {
       color: colorMap[veiculo.status_display.color] || 'bg-gray-500',
-      text: veiculo.status_display.text
-    }
-  } 
-}
+      text: veiculo.status_display.text,
+    };
+  }
+};
 
-const getStatusLabel = (statusValue) => {
+const getStatusLabel = statusValue => {
   const labels = {
     // 'validos': 'Válidos',
-    'ativos': 'Ativos',
-    'inativos': 'Inativos',
+    ativos: 'Ativos',
+    inativos: 'Inativos',
     // 'expirados': 'Expirados'
-  }
-  return labels[statusValue] || statusValue
-}
+  };
+  return labels[statusValue] || statusValue;
+};
 
-const getTipoLabel = (tipoValue) => {
+const getTipoLabel = tipoValue => {
   const labels = {
-    'pdf': 'PDF',
-    'excel': 'Excel'
-  }
-  return labels[tipoValue] || tipoValue
-}
+    pdf: 'PDF',
+    excel: 'Excel',
+  };
+  return labels[tipoValue] || tipoValue;
+};
 
 const temFiltrosAtivos = computed(() => {
-  return !!(search.value || status.value || tipo.value)
-})
+  return !!(search.value || status.value || tipo.value);
+});
 </script>
 
 <template>
@@ -152,13 +166,34 @@ const temFiltrosAtivos = computed(() => {
       <CardBox v-if="veiculos.total > 0" class="mb-4">
         <div class="flex items-center justify-between flex-wrap gap-3">
           <p class="text-sm text-gray-600 dark:text-gray-400">
-            Exibindo <strong>{{ veiculos.from }}</strong> - <strong>{{ veiculos.to }}</strong> de <strong>{{ veiculos.total }}</strong> resultados
+            Exibindo <strong>{{ veiculos.from }}</strong> -
+            <strong>{{ veiculos.to }}</strong> de
+            <strong>{{ veiculos.total }}</strong> resultados
           </p>
-          
-          <div v-if="isFiltering" class="flex items-center gap-2 text-sm text-blue-600">
-            <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+
+          <div
+            v-if="isFiltering"
+            class="flex items-center gap-2 text-sm text-blue-600"
+          >
+            <svg
+              class="animate-spin h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
             </svg>
             <span>Filtrando...</span>
           </div>
@@ -168,13 +203,18 @@ const temFiltrosAtivos = computed(() => {
       <!-- Filtros Ativos (Badges) -->
       <CardBox v-if="temFiltrosAtivos" class="mb-4">
         <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Filtros ativos:</span>
-          
-          <span v-if="search" class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300"
+            >Filtros ativos:</span
+          >
+
+          <span
+            v-if="search"
+            class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm"
+          >
             <mdi-icon :path="mdiMagnify" size="14" />
             Busca: "{{ search }}"
-            <button 
-              @click="removerFiltro('search')" 
+            <button
+              @click="removerFiltro('search')"
               class="hover:text-blue-900 dark:hover:text-blue-100"
               title="Remover filtro"
             >
@@ -182,10 +222,13 @@ const temFiltrosAtivos = computed(() => {
             </button>
           </span>
 
-          <span v-if="status" class="inline-flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">
+          <span
+            v-if="status"
+            class="inline-flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm"
+          >
             Status: {{ getStatusLabel(status) }}
-            <button 
-              @click="removerFiltro('status')" 
+            <button
+              @click="removerFiltro('status')"
               class="hover:text-green-900 dark:hover:text-green-100"
               title="Remover filtro"
             >
@@ -193,10 +236,13 @@ const temFiltrosAtivos = computed(() => {
             </button>
           </span>
 
-          <span v-if="tipo" class="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">
+          <span
+            v-if="tipo"
+            class="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm"
+          >
             Tipo: {{ getTipoLabel(tipo) }}
-            <button 
-              @click="removerFiltro('tipo')" 
+            <button
+              @click="removerFiltro('tipo')"
               class="hover:text-purple-900 dark:hover:text-purple-100"
               title="Remover filtro"
             >
@@ -223,7 +269,7 @@ const temFiltrosAtivos = computed(() => {
               placeholder="Buscar título ou descrição"
               :icon="mdiMagnify"
             />
-            
+
             <select
               v-model="status"
               @change="filtrar"
@@ -281,8 +327,14 @@ const temFiltrosAtivos = computed(() => {
             <tr v-if="veiculos.data.length === 0">
               <td colspan="8" class="text-center py-8 text-gray-500">
                 <div class="flex flex-col items-center gap-2">
-                  <mdi-icon :path="mdiMagnify" size="48" class="text-gray-400" />
-                  <p v-if="temFiltrosAtivos" class="font-medium">Nenhum resultado encontrado</p>
+                  <mdi-icon
+                    :path="mdiMagnify"
+                    size="48"
+                    class="text-gray-400"
+                  />
+                  <p v-if="temFiltrosAtivos" class="font-medium">
+                    Nenhum resultado encontrado
+                  </p>
                   <p v-else>Nenhuma lista de veículos cadastrada</p>
                   <BaseButton
                     v-if="temFiltrosAtivos"
@@ -313,7 +365,9 @@ const temFiltrosAtivos = computed(() => {
               </td>
 
               <td data-label="Tipo">
-                <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                <span
+                  class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                >
                   {{ veiculo.tipo_arquivo.toUpperCase() }}
                 </span>
               </td>
@@ -326,20 +380,30 @@ const temFiltrosAtivos = computed(() => {
 
               <td data-label="Publicação">
                 <span class="text-sm">
-                  {{ new Date(veiculo.data_publicacao).toLocaleDateString('pt-BR') }}
+                  {{
+                    new Date(veiculo.data_publicacao).toLocaleDateString(
+                      'pt-BR'
+                    )
+                  }}
                 </span>
               </td>
 
               <td data-label="Expiração">
                 <div class="flex flex-col">
                   <span class="text-sm">
-                    {{ new Date(veiculo.data_expiracao).toLocaleDateString('pt-BR') }}
+                    {{
+                      new Date(veiculo.data_expiracao).toLocaleDateString(
+                        'pt-BR'
+                      )
+                    }}
                   </span>
-                  <span 
+                  <span
                     v-if="!veiculo.expirado && veiculo.dias_restantes <= 5"
                     class="text-xs text-orange-600 dark:text-orange-400"
                   >
-                    {{ veiculo.dias_restantes }} {{ veiculo.dias_restantes === 1 ? 'dia' : 'dias' }} restantes
+                    {{ veiculo.dias_restantes }}
+                    {{ veiculo.dias_restantes === 1 ? 'dia' : 'dias' }}
+                    restantes
                   </span>
                 </div>
               </td>
@@ -349,7 +413,7 @@ const temFiltrosAtivos = computed(() => {
                 <span
                   :class="[
                     'px-2 py-1 text-xs rounded-full text-white',
-                    getStatusBadge(veiculo).color
+                    getStatusBadge(veiculo).color,
                   ]"
                 >
                   {{ getStatusBadge(veiculo).text }}
@@ -358,12 +422,21 @@ const temFiltrosAtivos = computed(() => {
 
               <td data-label="Downloads">
                 <div class="flex items-center space-x-2">
-                  <span class="text-sm font-medium">{{ veiculo.downloads }}</span>
-                  <mdi-icon :path="mdiDownload" size="16" class="text-gray-400" />
+                  <span class="text-sm font-medium">{{
+                    veiculo.downloads
+                  }}</span>
+                  <mdi-icon
+                    :path="mdiDownload"
+                    size="16"
+                    class="text-gray-400"
+                  />
                 </div>
               </td>
 
-              <td v-if="can.edit || can.delete" class="before:hidden lg:w-1 whitespace-nowrap">
+              <td
+                v-if="can.edit || can.delete"
+                class="before:hidden lg:w-1 whitespace-nowrap"
+              >
                 <BaseButtons type="justify-start lg:justify-end" no-wrap>
                   <BaseButton
                     v-if="can.edit"

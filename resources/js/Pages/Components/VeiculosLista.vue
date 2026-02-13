@@ -1,44 +1,46 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
-const veiculos = ref([])
-const loading = ref(true)
-const error = ref(null)
+const veiculos = ref([]);
+const loading = ref(true);
+const error = ref(null);
 
 onMounted(async () => {
-  await carregarVeiculos()
-})
+  await carregarVeiculos();
+});
 
 const carregarVeiculos = async () => {
   try {
-    loading.value = true
-    const response = await axios.get('/api/veiculos')
-    veiculos.value = response.data
+    loading.value = true;
+    const response = await axios.get('/api/veiculos');
+    veiculos.value = response.data;
   } catch (err) {
-    console.error('Erro ao carregar veículos:', err)
-    error.value = 'Não foi possível carregar os documentos.'
+    console.error('Erro ao carregar veículos:', err);
+    error.value = 'Não foi possível carregar os documentos.';
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
-const getStatusBadge = (veiculo) => {
+const getStatusBadge = veiculo => {
   if (veiculo.status_display && veiculo.status_display.type) {
     const colorMap = {
-      'inativo': 'bg-slate-100 border-slate-300 text-slate-700',
-      'leilao': 'bg-blue-50 border-blue-300 text-blue-700',
-      'critico': 'bg-red-50 border-red-300 text-red-700',
-      'proximo': 'bg-yellow-50 border-yellow-300 text-yellow-700',
-      'disponivel': 'bg-green-50 border-green-300 text-green-700'
-    }
-    
+      inativo: 'bg-slate-100 border-slate-300 text-slate-700',
+      leilao: 'bg-blue-50 border-blue-300 text-blue-700',
+      critico: 'bg-red-50 border-red-300 text-red-700',
+      proximo: 'bg-yellow-50 border-yellow-300 text-yellow-700',
+      disponivel: 'bg-green-50 border-green-300 text-green-700',
+    };
+
     return {
-      color: colorMap[veiculo.status_display.type] || 'bg-slate-100 border-slate-300 text-slate-600',
-      text: veiculo.status_display.text
-    }
+      color:
+        colorMap[veiculo.status_display.type] ||
+        'bg-slate-100 border-slate-300 text-slate-600',
+      text: veiculo.status_display.text,
+    };
   }
-}
+};
 </script>
 
 <template>
@@ -46,9 +48,13 @@ const getStatusBadge = (veiculo) => {
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
       <!-- Header -->
       <div class="mb-8 sm:mb-10">
-        <h1 class="section-title">Publicação de Relação de Veículos Apreendidos</h1>
+        <h1 class="section-title">
+          Publicação de Relação de Veículos Apreendidos
+        </h1>
         <p class="section-subtitle">
-          Consulte os documentos oficiais contendo a relação de veículos apreendidos. Após o prazo legal, os veículos poderão ser destinados a leilão público.
+          Consulte os documentos oficiais contendo a relação de veículos
+          apreendidos. Após o prazo legal, os veículos poderão ser destinados a
+          leilão público.
         </p>
       </div>
 
@@ -65,12 +71,23 @@ const getStatusBadge = (veiculo) => {
 
       <!-- Error State -->
       <div v-else-if="error" class="error-container" role="alert">
-        <svg class="error-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+        <svg
+          class="error-icon"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+          />
         </svg>
         <p class="error-text">{{ error }}</p>
-        <button 
-          @click="carregarVeiculos" 
+        <button
+          @click="carregarVeiculos"
           class="btn-retry"
           aria-label="Tentar carregar novamente"
         >
@@ -80,8 +97,19 @@ const getStatusBadge = (veiculo) => {
 
       <!-- Empty State -->
       <div v-else-if="veiculos.length === 0" class="empty-container">
-        <svg class="empty-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+        <svg
+          class="empty-icon"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+          />
         </svg>
         <p class="empty-text">Nenhum documento disponível no momento</p>
         <p class="empty-subtext">Novos documentos serão publicados em breve</p>
@@ -115,8 +143,12 @@ const getStatusBadge = (veiculo) => {
                   <!-- Título e Status -->
                   <div class="min-w-0 flex-1">
                     <h3 class="mobile-title">{{ veiculo.titulo }}</h3>
-                    <div 
-                      :class="['status-badge', 'border', getStatusBadge(veiculo).color]"
+                    <div
+                      :class="[
+                        'status-badge',
+                        'border',
+                        getStatusBadge(veiculo).color,
+                      ]"
                       role="status"
                       :aria-label="`Status: ${getStatusBadge(veiculo).text}`"
                     >
@@ -138,7 +170,9 @@ const getStatusBadge = (veiculo) => {
                 </div>
                 <div class="info-row">
                   <span class="info-label">Tamanho:</span>
-                  <span class="info-value">{{ veiculo.tamanho_formatado }}</span>
+                  <span class="info-value">{{
+                    veiculo.tamanho_formatado
+                  }}</span>
                 </div>
               </div>
 
@@ -152,8 +186,19 @@ const getStatusBadge = (veiculo) => {
                   class="btn btn-secondary"
                   :aria-label="`Visualizar documento ${veiculo.titulo}`"
                 >
-                  <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                  <svg
+                    class="btn-icon"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                    />
                   </svg>
                   Visualizar
                 </a>
@@ -164,8 +209,19 @@ const getStatusBadge = (veiculo) => {
                   class="btn btn-primary"
                   :aria-label="`Baixar documento ${veiculo.titulo}`"
                 >
-                  <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                  <svg
+                    class="btn-icon"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                    />
                   </svg>
                   Download
                 </a>
@@ -176,7 +232,9 @@ const getStatusBadge = (veiculo) => {
             <div class="desktop-row hidden lg:grid">
               <!-- Documento -->
               <div class="row-cell" role="cell">
-                <span class="desktop-title" :title="veiculo.titulo">{{ veiculo.titulo }}</span>
+                <span class="desktop-title" :title="veiculo.titulo">{{
+                  veiculo.titulo
+                }}</span>
               </div>
 
               <!-- Publicação -->
@@ -195,13 +253,19 @@ const getStatusBadge = (veiculo) => {
 
               <!-- Tamanho -->
               <div class="row-cell" role="cell">
-                <span class="desktop-text">{{ veiculo.tamanho_formatado }}</span>
+                <span class="desktop-text">{{
+                  veiculo.tamanho_formatado
+                }}</span>
               </div>
 
               <!-- Status -->
               <div class="row-cell" role="cell">
-                <div 
-                  :class="['status-badge-desktop', 'border', getStatusBadge(veiculo).color]"
+                <div
+                  :class="[
+                    'status-badge-desktop',
+                    'border',
+                    getStatusBadge(veiculo).color,
+                  ]"
                   role="status"
                   :aria-label="`Status: ${getStatusBadge(veiculo).text}`"
                 >
@@ -220,8 +284,19 @@ const getStatusBadge = (veiculo) => {
                   :aria-label="`Visualizar documento ${veiculo.titulo}`"
                   title="Visualizar documento"
                 >
-                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                    />
                   </svg>
                 </a>
 
@@ -232,8 +307,19 @@ const getStatusBadge = (veiculo) => {
                   :aria-label="`Baixar documento ${veiculo.titulo}`"
                   title="Baixar documento"
                 >
-                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                    />
                   </svg>
                 </a>
               </div>

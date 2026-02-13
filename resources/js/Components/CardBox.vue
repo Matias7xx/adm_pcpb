@@ -2,7 +2,6 @@
 import { mdiCog } from '@mdi/js';
 import { computed, useSlots } from 'vue';
 import BaseIcon from '@/Components/BaseIcon.vue';
-import imgUrl from '@/src/assets/logo-acadepol.png';
 
 const props = defineProps({
   title: {
