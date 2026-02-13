@@ -13,8 +13,8 @@ import Footer from '../Components/Footer.vue';
 <template>
   <LayoutGuest>
     <Head title="Carteira de Identidade Nacional" />
-    <SiteNavbar />
     <Header />
+    <SiteNavbar />
     <SectionFullScreen
       v-slot="{ cardClass }"
       bg="white"

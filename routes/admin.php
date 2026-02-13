@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\OcupacaoController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\VeiculoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -169,6 +170,18 @@ Route::group([
         Route::post('/{visitante}/checkin', [VisitanteController::class, 'checkin'])->name('visitante.checkin');
         Route::post('/{visitante}/checkout', [VisitanteController::class, 'checkout'])->name('visitante.checkout');
     });
+
+         /*
+        |--------------------------------------------------------------------------
+        | Gerenciamento de Veículos Apreendidos
+        |--------------------------------------------------------------------------
+        */
+
+        Route::resource('veiculo', VeiculoController::class);
+        Route::post('veiculo/atualizar-ordem', [VeiculoController::class, 'atualizarOrdem'])
+            ->name('veiculo.atualizar-ordem');
+        Route::patch('veiculo/{veiculo}/toggle-ativo', [VeiculoController::class, 'toggleAtivo'])
+            ->name('veiculo.toggle-ativo');
 
     /*
     |--------------------------------------------------------------------------

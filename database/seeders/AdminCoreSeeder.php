@@ -84,7 +84,11 @@ class AdminCoreSeeder extends Seeder
             'banner list',
             'banner create',
             'banner edit',
-            'banner delete'
+            'banner delete',
+            'veiculo list',
+            'veiculo create',
+            'veiculo edit',
+            'veiculo delete'
         ];
 
         foreach ($permissions as $permission) {
@@ -245,6 +249,13 @@ class AdminCoreSeeder extends Seeder
                 'enabled' => 1,
                 'weight' => 13,
                 'icon' => 'M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z' // Image/photo icon
+            ],
+            [
+                'name' => 'Veículos',
+                'uri' => '/<admin>/veiculo',
+                'enabled' => 1,
+                'weight' => 14,
+                'icon' => 'M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M19.5,9.5L21.46,12H17V9.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M20,8H17V4H3C1.89,4 1,4.89 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8Z', // Ícone de caminhão/veículo
             ],
             [
                 'name' => 'Fale Conosco',

@@ -139,6 +139,18 @@ Breadcrumbs::resource('admin.contato', 'Mensagens de Contato');
 Breadcrumbs::resource('admin.requerimentos', 'Requerimentos');
 Breadcrumbs::resource('admin.banners', 'Banners');
 
+Breadcrumbs::resource('admin.veiculo', 'Veículos Apreendidos');
+
+Breadcrumbs::for('admin.veiculo.atualizar-ordem', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.veiculo.index');
+    $trail->push('Atualizar Ordem');
+});
+
+Breadcrumbs::for('admin.veiculo.toggle-ativo', function (BreadcrumbTrail $trail, $veiculo) {
+    $trail->parent('admin.veiculo.show', $veiculo);
+    $trail->push('Alterar Status');
+});
+
 // Para a rota admin.index
 Breadcrumbs::for('admin.index', function (BreadcrumbTrail $trail) {
     $trail->push('Dashboard', route('admin.dashboard'));

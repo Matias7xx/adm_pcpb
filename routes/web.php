@@ -23,6 +23,7 @@ use App\Http\Controllers\VideoPublicController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\OperacaoController;
 use App\Http\Controllers\ResultadoOperacaoController;
+use App\Http\Controllers\VeiculoPublicoController;
 
 /* URL::forceScheme(env('HTTP_SCHEMA'));
 URL::forceRootUrl(env('APP_URL')); */
@@ -179,6 +180,15 @@ Route::controller(VisitanteController::class)->prefix('visitante')->name('visita
     Route::post('/reserva', 'store')->name('store');
     Route::get('/confirmacao', 'confirmacao')->name('confirmacao');
 });
+
+Route::get('/api/veiculos', [VeiculoPublicoController::class, 'index'])->name('veiculos.api');
+Route::get('/veiculos/{veiculo}/preview', [VeiculoPublicoController::class, 'preview'])
+    ->name('veiculos.preview');
+Route::get('/veiculos/{veiculo}/download', [VeiculoPublicoController::class, 'download'])->name('veiculos.download');
+
+Route::get('/veiculos-apreendidos', function () {
+    return Inertia::render('VeiculosApreendidos');
+})->name('veiculos.publico');
 
 /*
 |--------------------------------------------------------------------------

@@ -385,8 +385,8 @@ const erro = campo => {
       <title>Cadastrar Resultado da Operação (Debriefing)</title>
     </Head>
 
-    <SiteNavbar />
     <Header />
+    <SiteNavbar />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
       <Link

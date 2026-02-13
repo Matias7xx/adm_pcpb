@@ -104,8 +104,9 @@ const maisAcessados = ref([
   },
   {
     id: 3,
-    titulo: 'Veículos',
-    link: 'https://paraibadigital.pb.gov.br/14acb242-aee5-4abd-b57b-2f93d584c7dd',
+    titulo: 'Veículos Apreendidos',
+    link: '/veiculos-apreendidos',
+    external: false,
   },
   {
     id: 4,
@@ -125,7 +126,7 @@ const maisAcessados = ref([
   {
     id: 7,
     titulo: 'Concurso Público',
-    link: 'https://www.policiacivil.pb.gov.br/ingresso_e_promocao/concurso-publico',
+    link: '/concursos',
   },
 ]);
 
