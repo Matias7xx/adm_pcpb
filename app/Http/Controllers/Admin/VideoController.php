@@ -22,8 +22,8 @@ class VideoController extends Controller
 
     if (request()->has('search')) {
       $videos
-        ->where('titulo', 'Like', '%' . request()->input('search') . '%')
-        ->orWhere('descricao', 'Like', '%' . request()->input('search') . '%');
+        ->where('titulo', 'ILIKE', '%' . request()->input('search') . '%')
+        ->orWhere('descricao', 'ILIKE', '%' . request()->input('search') . '%');
     }
 
     if (request()->query('sort')) {

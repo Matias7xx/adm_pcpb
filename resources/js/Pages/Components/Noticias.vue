@@ -163,7 +163,7 @@ onUnmounted(() => {
 <template>
   <section class="w-full" aria-labelledby="noticias-titulo">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-6 md:mb-8 lg:mb-12">
+      <div v-if="noticias.length > 0" class="mb-6 md:mb-8 lg:mb-12">
         <div class="flex items-center gap-4">
           <hr class="flex-1 border-t border-gray-300" />
           <h2
@@ -196,7 +196,7 @@ onUnmounted(() => {
             :key="noticia.id"
             class="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 flex flex-col h-full"
           >
-            <div class="aspect-video relative overflow-hidden flex-shrink-0">
+            <!-- <div class="aspect-video relative overflow-hidden flex-shrink-0">
               <img
                 v-if="noticia.imagem"
                 :src="noticia.imagem"
@@ -209,7 +209,7 @@ onUnmounted(() => {
               >
                 Sem imagem
               </div>
-            </div>
+            </div> -->
 
             <div class="p-5 flex flex-col flex-1">
               <div class="flex-1">

@@ -64,7 +64,7 @@ const submit = () => {
       </NotificationBar>
 
       <!-- Informação sobre o documento -->
-      <CardBox class="mb-6">
+      <!-- <CardBox class="mb-6">
         <div
           class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4"
         >
@@ -99,7 +99,7 @@ const submit = () => {
             </div>
           </div>
         </div>
-      </CardBox>
+      </CardBox> -->
 
       <CardBox is-form @submit.prevent="submit">
         <FormField

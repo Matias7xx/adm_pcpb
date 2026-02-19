@@ -177,11 +177,11 @@ Route::group([
         |--------------------------------------------------------------------------
         */
 
-        Route::resource('veiculo', VeiculoController::class);
         Route::post('veiculo/atualizar-ordem', [VeiculoController::class, 'atualizarOrdem'])
             ->name('veiculo.atualizar-ordem');
         Route::patch('veiculo/{veiculo}/toggle-ativo', [VeiculoController::class, 'toggleAtivo'])
             ->name('veiculo.toggle-ativo');
+        Route::resource('veiculo', VeiculoController::class);
 
     /*
     |--------------------------------------------------------------------------
@@ -224,9 +224,9 @@ Route::group([
     Route::resource('noticias', NoticiaController::class);
 
     // Vídeos Institucionais
-    Route::resource('videos', VideoController::class)->names('video');
     Route::post('videos/atualizar-ordem', [VideoController::class, 'atualizarOrdem'])->name('video.atualizar-ordem');
     Route::patch('videos/{video}/toggle-ativo', [VideoController::class, 'toggleAtivo'])->name('video.toggle-ativo');
+    Route::resource('videos', VideoController::class)->names('video');
 
      /*
     |--------------------------------------------------------------------------
@@ -234,9 +234,9 @@ Route::group([
     |--------------------------------------------------------------------------
     */
 
-    Route::resource('banners', BannerController::class);
-        Route::post('banners/{banner}/toggle-ativo', [BannerController::class, 'toggleAtivo'])
+    Route::post('banners/{banner}/toggle-ativo', [BannerController::class, 'toggleAtivo'])
             ->name('banners.toggleAtivo');
+    Route::resource('banners', BannerController::class);
 
     /*
     |--------------------------------------------------------------------------

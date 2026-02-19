@@ -36,10 +36,12 @@ class UserController extends Controller
     $users = new User()->newQuery();
 
     if (request()->has('search')) {
-      $users
-        ->where('name', 'Like', '%' . request()->input('search') . '%')
-        ->orWhere('matricula', 'Like', '%' . request()->input('search') . '%')
-        ->orWhere('email', 'Like', '%' . request()->input('search') . '%');
+      $search = request()->input('search');
+      $users->where(function ($q) use ($search) {
+        $q->where('name', 'ILIKE', "%{$search}%")
+          ->orWhere('matricula', 'ILIKE', "%{$search}%")
+          ->orWhere('email', 'ILIKE', "%{$search}%");
+      });
     }
 
     if (request()->query('sort')) {

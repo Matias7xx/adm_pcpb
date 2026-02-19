@@ -405,7 +405,7 @@ onUnmounted(() => {
             :key="noticia.id"
             class="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 flex flex-col h-full"
           >
-            <div
+            <!-- <div
               class="aspect-video relative overflow-hidden flex-shrink-0 bg-gray-50"
             >
               <img
@@ -427,7 +427,7 @@ onUnmounted(() => {
               >
                 Destaque
               </div>
-            </div>
+            </div> -->
 
             <div class="p-5 flex flex-col flex-1">
               <div class="flex-1">
@@ -479,12 +479,12 @@ onUnmounted(() => {
           <h3 class="text-xl font-semibold text-gray-900 mb-2">
             Nenhuma notícia encontrada
           </h3>
-          <button
+          <!-- <button
             @click="clearSearch"
             class="mt-4 px-6 py-2 bg-[#bea55a] text-white rounded-lg hover:bg-[#a38d49]"
           >
             Limpar busca
-          </button>
+          </button> -->
         </div>
 
         <div

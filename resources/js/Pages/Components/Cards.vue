@@ -152,7 +152,7 @@ const outros = ref([
   {
     id: 4,
     titulo: 'Diário Oficial',
-    link: 'https://acadepol.pb.gov.br/',
+    link: 'https://auniao.pb.gov.br/doe',
     external: true,
   },
   {

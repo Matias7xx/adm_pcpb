@@ -122,7 +122,8 @@ Route::get('/concursos', function () {
     return Inertia::render('Concursos');
 })->name('concursos');
 
-Route::get('/banners', [BannerController::class, 'index']);
+Route::get('/banners', [BannerController::class, 'index'])
+    ->name('banners');
 
 /*
 |--------------------------------------------------------------------------

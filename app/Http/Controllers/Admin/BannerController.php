@@ -26,12 +26,8 @@ class BannerController extends Controller
       if (!empty($searchTerm)) {
         $banners->where(function ($query) use ($searchTerm) {
           $query
-            ->whereRaw('LOWER(titulo) LIKE ?', [
-              '%' . strtolower($searchTerm) . '%',
-            ])
-            ->orWhereRaw('LOWER(descricao) LIKE ?', [
-              '%' . strtolower($searchTerm) . '%',
-            ]);
+            ->where('titulo', 'ILIKE', "%{$searchTerm}%")
+            ->orWhere('descricao', 'ILIKE', "%{$searchTerm}%");
         });
       }
     }

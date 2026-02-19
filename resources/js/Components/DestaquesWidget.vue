@@ -100,15 +100,6 @@ watch(
     <!-- Cabeçalho -->
     <div class="flex items-center justify-between mb-4">
       <div class="flex items-center space-x-3">
-        <div class="bg-amber-500 p-2 rounded-lg">
-          <svg
-            class="w-6 h-6 text-white"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path :d="mdiStar" />
-          </svg>
-        </div>
         <div>
           <h3 class="text-lg font-bold text-gray-800">
             Notícias em Destaque na Home
@@ -180,7 +171,7 @@ watch(
           class="absolute top-2 left-2 z-10 px-3 py-1 rounded-full text-xs font-bold"
           :class="
             destaquesOrdenados[0]
-              ? 'bg-amber-500 text-white'
+              ? 'bg-yellow-600 text-white'
               : 'bg-gray-200 text-gray-500'
           "
         >
@@ -277,7 +268,7 @@ watch(
           class="absolute top-2 left-2 z-10 px-3 py-1 rounded-full text-xs font-bold"
           :class="
             destaquesOrdenados[1]
-              ? 'bg-amber-500 text-white'
+              ? 'bg-yellow-600 text-white'
               : 'bg-gray-200 text-gray-500'
           "
         >

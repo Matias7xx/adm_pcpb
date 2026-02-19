@@ -21,8 +21,8 @@ class NoticiaController extends Controller
     $noticias = Noticia::query()
       ->when(request('search'), function ($query, $search) {
         $query
-          ->where('titulo', 'like', "%{$search}%")
-          ->orWhere('descricao_curta', 'like', "%{$search}%");
+          ->where('titulo', 'ILIKE', "%{$search}%")
+          ->orWhere('descricao_curta', 'ILIKE', "%{$search}%");
       })
       ->when(request('status'), function ($query, $status) {
         $query->where('status', $status);
