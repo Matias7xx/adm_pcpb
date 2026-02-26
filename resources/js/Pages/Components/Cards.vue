@@ -164,7 +164,7 @@ const outros = ref([
   {
     id: 6,
     titulo: 'PJe - Processo Judicial Eletrônico',
-    link: 'https://www.policiacivil.pb.gov.br/links-uteis/pje-1',
+    link: 'https://www.tjpb.jus.br/pje',
     external: true,
   },
   {
