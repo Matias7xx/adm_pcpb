@@ -10,7 +10,7 @@ import {
   mdiAlertCircleOutline,
   mdiCheckCircleOutline,
   mdiAlertOutline,
-  mdiInformationOutline
+  mdiInformationOutline,
 } from '@mdi/js';
 import LayoutAuthenticated from '@/Layouts/Admin/LayoutAuthenticated.vue';
 import SectionMain from '@/Components/SectionMain.vue';

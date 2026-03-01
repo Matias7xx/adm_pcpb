@@ -216,7 +216,9 @@ class Veiculo extends Model
    */
   public function incrementarDownloads()
   {
-    $this->increment('downloads');
+    static::withoutEvents(function () {
+      $this->increment('downloads');
+    });
   }
 
   /**

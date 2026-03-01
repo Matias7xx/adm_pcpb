@@ -62,7 +62,9 @@ class Noticia extends Model
    */
   public function incrementarVisualizacoes()
   {
-    $this->increment('visualizacoes');
+    static::withoutEvents(function () {
+      $this->increment('visualizacoes');
+    });
     return $this;
   }
 

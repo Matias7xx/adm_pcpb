@@ -66,7 +66,14 @@ const submitEdit = () => {
   form.telefone = form.telefone ? form.telefone.replace(/\D/g, '') : '';
 
   // Enviar formulário - Correto: usando props.user.id em vez de user.id
-  form.put(route('admin.user.update', props.user.id));
+  form
+    .transform(data => ({
+      ...data,
+      // Converte string vazia para null, assim o backend trata como nullable
+      password: data.password || null,
+      password_confirmation: data.password_confirmation || null,
+    }))
+    .put(route('admin.user.update', props.user.id));
 };
 </script>
 
@@ -278,6 +285,7 @@ const submitEdit = () => {
             type="password"
             placeholder="Informe a Senha"
             :error="form.errors.password"
+            autocomplete="new-password"
           >
             <div class="text-red-400 text-sm" v-if="form.errors.password">
               {{ form.errors.password }}
@@ -295,6 +303,7 @@ const submitEdit = () => {
             type="password"
             placeholder="Confirme a Senha"
             :error="form.errors.password"
+            autocomplete="new-password"
           >
             <div class="text-red-400 text-sm" v-if="form.errors.password">
               {{ form.errors.password }}

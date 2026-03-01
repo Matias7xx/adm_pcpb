@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Noticia;
+use App\Models\NoticiaView;
 use App\Helpers\UploadHelper;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -260,7 +261,16 @@ class NoticiaController extends Controller
       $sessionKey = 'viewed_noticia_' . $noticia->id;
 
       if (!session()->has($sessionKey)) {
+        // Incrementa o contador total
         $noticia->incrementarVisualizacoes();
+
+        // Grava o log para histórico por período
+        NoticiaView::create([
+          'noticia_id' => $noticia->id,
+          'session_id' => session()->getId(),
+          'viewed_at' => now(),
+        ]);
+
         session()->put($sessionKey, true);
       }
     } catch (\Exception $e) {

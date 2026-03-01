@@ -8,12 +8,17 @@ import {
   LinearScale,
   CategoryScale,
   Tooltip,
+  Legend,
 } from 'chart.js';
 
 const props = defineProps({
   data: {
     type: Object,
     required: true,
+  },
+  options: {
+    type: Object,
+    default: () => ({}),
   },
 });
 
@@ -27,30 +32,37 @@ Chart.register(
   LineController,
   LinearScale,
   CategoryScale,
-  Tooltip
+  Tooltip,
+  Legend
 );
+
+const defaultOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    y: {
+      display: false,
+    },
+    x: {
+      display: true,
+    },
+  },
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
+};
+
+const mergedOptions = computed(() => {
+  return Object.keys(props.options).length > 0 ? props.options : defaultOptions;
+});
 
 onMounted(() => {
   chart = new Chart(root.value, {
     type: 'line',
     data: props.data,
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          display: false,
-        },
-        x: {
-          display: true,
-        },
-      },
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
-    },
+    options: mergedOptions.value,
   });
 });
 
