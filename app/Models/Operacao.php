@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\Auditable;
 
 class Operacao extends Model
 {
-  use HasFactory;
+  use HasFactory, Auditable;
+
+  protected string $auditModulo = 'operacao';
+  protected string $auditLabel = 'nome_operacao';
 
   protected $table = 'operacoes';
 

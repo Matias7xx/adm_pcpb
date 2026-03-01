@@ -24,6 +24,7 @@ use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\OcupacaoController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\VeiculoController;
+use App\Http\Controllers\Admin\AuditLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -295,5 +296,9 @@ Route::group([
         // API para atualização em tempo real
         Route::get('/api', [OcupacaoController::class, 'apiIndex'])->name('api.index');
     });
+
+    Route::get('audit-logs',       [AuditLogController::class, 'index'])->name('audit-logs.index');
+    Route::get('audit-logs/{auditLog}', [AuditLogController::class, 'show'])->name('audit-logs.show');
+
 
 });

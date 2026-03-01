@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\Auditable;
 
 class ResultadoOperacao extends Model
 {
-  use HasFactory;
+  use HasFactory, Auditable;
+
+  protected string $auditModulo = 'resultado_operacao';
+  protected string $auditLabel = 'operacao_id';
 
   protected $table = 'resultados_operacao';
 

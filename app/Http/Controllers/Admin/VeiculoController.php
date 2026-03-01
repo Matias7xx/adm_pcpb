@@ -19,6 +19,8 @@ class VeiculoController extends Controller
    */
   public function index(Request $request)
   {
+    $this->authorize('adminViewAny', Veiculo::class);
+
     // Validar parâmetros de entrada
     $request->validate([
       'search' => 'nullable|string|max:255',
@@ -72,9 +74,9 @@ class VeiculoController extends Controller
       'veiculos' => $veiculos,
       'filters' => $request->only(['search', 'status', 'tipo']),
       'can' => [
-        'create' => auth()->user()->can('create', Veiculo::class),
-        'edit' => auth()->user()->can('update', Veiculo::class),
-        'delete' => auth()->user()->can('delete', Veiculo::class),
+        'create' => auth()->user()->can('adminCreate', Veiculo::class),
+        'edit' => auth()->user()->can('adminUpdate', Veiculo::class),
+        'delete' => auth()->user()->can('adminDelete', Veiculo::class),
       ],
     ]);
   }
@@ -84,6 +86,8 @@ class VeiculoController extends Controller
    */
   public function create()
   {
+    $this->authorize('adminCreate', Veiculo::class);
+
     return Inertia::render('Admin/Veiculo/Create');
   }
 
@@ -92,6 +96,8 @@ class VeiculoController extends Controller
    */
   public function store(Request $request)
   {
+    $this->authorize('adminCreate', Veiculo::class);
+
     $validator = Validator::make(
       $request->all(),
       [
@@ -198,6 +204,8 @@ class VeiculoController extends Controller
    */
   public function show(Veiculo $veiculo)
   {
+    $this->authorize('adminView', $veiculo);
+
     return Inertia::render('Admin/Veiculo/Show', [
       'veiculo' => $veiculo,
     ]);
@@ -208,6 +216,8 @@ class VeiculoController extends Controller
    */
   public function edit(Veiculo $veiculo)
   {
+    $this->authorize('adminUpdate', $veiculo);
+
     return Inertia::render('Admin/Veiculo/Edit', [
       'veiculo' => $veiculo,
     ]);
@@ -218,6 +228,8 @@ class VeiculoController extends Controller
    */
   public function update(Request $request, Veiculo $veiculo)
   {
+    $this->authorize('adminUpdate', $veiculo);
+
     $validator = Validator::make(
       $request->all(),
       [
@@ -332,6 +344,8 @@ class VeiculoController extends Controller
    */
   public function destroy(Veiculo $veiculo)
   {
+    $this->authorize('adminDelete', $veiculo);
+
     try {
       $veiculo->delete();
 
@@ -367,6 +381,8 @@ class VeiculoController extends Controller
    */
   public function atualizarOrdem(Request $request)
   {
+    $this->authorize('adminUpdate', Veiculo::class);
+
     $validator = Validator::make($request->all(), [
       'veiculos' => 'required|array',
       'veiculos.*.id' => 'required|exists:veiculos,id',
@@ -427,6 +443,7 @@ class VeiculoController extends Controller
    */
   public function toggleAtivo(Veiculo $veiculo)
   {
+    $this->authorize('adminUpdate', $veiculo);
     try {
       $novoStatus = !$veiculo->ativo;
       $veiculo->update(['ativo' => $novoStatus]);

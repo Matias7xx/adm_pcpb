@@ -7,10 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use App\Traits\Auditable;
 
 class Veiculo extends Model
 {
-  use HasFactory, SoftDeletes;
+  use HasFactory, SoftDeletes, Auditable;
+
+  protected string $auditModulo = 'veiculo';
+  protected string $auditLabel = 'titulo';
+  protected array $auditExclude = ['downloads'];
 
   protected $fillable = [
     'titulo',

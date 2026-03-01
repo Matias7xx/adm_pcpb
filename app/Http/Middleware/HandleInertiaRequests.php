@@ -81,7 +81,7 @@ class HandleInertiaRequests extends Middleware
     if ($user->roles) {
       $roles = json_decode($user->roles, true) ?: [];
       $hasAdminRole = collect($roles)->contains(function ($role) {
-        return in_array($role['name'] ?? '', ['admin', 'super-admin']);
+        return in_array($role['name'] ?? '', ['admin', 'super-admin', 'diop']);
       });
       if ($hasAdminRole) {
         return true;

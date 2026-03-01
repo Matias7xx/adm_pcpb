@@ -4,10 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Auditable;
 
 class Video extends Model
 {
-  use HasFactory;
+  use HasFactory, Auditable;
+
+  protected string $auditModulo = 'video';
+  protected string $auditLabel = 'titulo';
+  protected array $auditExclude = ['visualizacoes'];
 
   protected $fillable = [
     'titulo',

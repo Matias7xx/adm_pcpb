@@ -88,235 +88,203 @@ class AdminCoreSeeder extends Seeder
             'veiculo list',
             'veiculo create',
             'veiculo edit',
-            'veiculo delete'
+            'veiculo delete',
+            'audit_log list',
         ];
 
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);
         }
 
-        $role1 = Role::create(['name' => 'super-admin']);
-        // gets all permissions via Gate::before rule; see AuthServiceProvider
+        // super-admin: acesso total via Gate::before (AuthServiceProvider)
+        $roleSuperAdmin = Role::create(['name' => 'super-admin']);
 
-        $role2 = Role::create(['name' => 'admin']);
+        // admin: todas as permissões
+        $roleAdmin = Role::create(['name' => 'admin']);
         foreach ($permissions as $permission) {
-            $role2->givePermissionTo($permission);
+            $roleAdmin->givePermissionTo($permission);
         }
 
-        // create roles and assign existing permissions
-        $role3 = Role::create(['name' => 'servidor']);
-        /* $role3->givePermissionTo('admin user'); */ //Permissão de super usuário para o Servidor
-
-        $role4 = Role::create(['name' => 'aluno']);
-
+        // servidor: apenas permissões de listagem
+        $roleServidor = Role::create(['name' => 'servidor']);
         foreach ($permissions as $permission) {
             if (Str::contains($permission, 'list')) {
-                $role3->givePermissionTo($permission);
+                $roleServidor->givePermissionTo($permission);
             }
         }
 
+        // diop: acesso admin + somente veículos
+        $roleDiop = Role::create(['name' => 'diop']);
+        $roleDiop->givePermissionTo([
+            'admin user',
+            'veiculo list',
+            'veiculo create',
+            'veiculo edit',
+            'veiculo delete',
+        ]);
+
         // create demo users
         $user = \App\Models\User::factory()->create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@example.com',
-            'matricula' => '0000000'
+            'name'      => 'Super Admin',
+            'email'     => 'superadmin@example.com',
+            'matricula' => '0000000',
         ]);
-        $user->assignRole($role1);
+        $user->assignRole($roleSuperAdmin);
 
         $user = \App\Models\User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'matricula' => '0000001'
+            'name'      => 'Admin User',
+            'email'     => 'admin@example.com',
+            'matricula' => '0000001',
         ]);
-        $user->assignRole($role2);
+        $user->assignRole($roleAdmin);
 
         $user = \App\Models\User::factory()->create([
-            'name' => 'Example User',
-            'email' => 'test@example.com',
-            'matricula' => '0000002'
+            'name'      => 'Example User',
+            'email'     => 'test@example.com',
+            'matricula' => '0000002',
         ]);
-        $user->assignRole($role3);
+        $user->assignRole($roleServidor);
 
-        // create menu
+        // ─── Menu Admin ───────────────────────────────────────────────────────
+        // Regra: roles = null → visível para qualquer admin autenticado (incluindo diop)
+        //        roles = JSON → visível apenas para as roles listadas
+        //
+        // Diop vê: Dashboard e Veículos (ambos com roles = null)
+        // Admin vê: tudo exceto Logs de Auditoria
+        // Super-admin vê: tudo
+
+        $apenasAdmins    = json_encode([['name' => 'super-admin'], ['name' => 'admin']]);
+        $apenasSuperAdmin = json_encode([['name' => 'super-admin']]);
+
         $menu = Menu::create([
-            'name' => 'Admin',
+            'name'         => 'Admin',
             'machine_name' => 'admin',
-            'description' => 'Admin Menu',
+            'description'  => 'Admin Menu',
         ]);
 
-        // create servidores menu
+        $menu->menuItems()->createMany([
+            [
+                // null = sem restrição de role → diop também vê
+                'name'    => 'Dashboard',
+                'uri'     => '/<admin>',
+                'enabled' => 1,
+                'weight'  => 0,
+                'icon'    => 'M13 9V3H21V9H13M13 21H21V11H13M3 21H11V15H3M3 13H11V3H3V13Z',
+                'roles'   => null,
+            ],
+            [
+                'name'    => 'Funções',
+                'uri'     => '/<admin>/role',
+                'enabled' => 1,
+                'weight'  => 1,
+                'icon'    => 'M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7A2,2 0 0,1 14,9A2,2 0 0,1 12,11A2,2 0 0,1 10,9A2,2 0 0,1 12,7M12,14C13.25,14 15.42,14.57 16,15.56V18.18L12,21L8,18.18V15.56C8.58,14.57 10.75,14 12,14Z',
+                'roles'   => $apenasSuperAdmin,
+            ],
+            [
+                'name'    => 'Usuários',
+                'uri'     => '/<admin>/user',
+                'enabled' => 1,
+                'weight'  => 2,
+                'icon'    => 'M16 17V19H2V17S2 13 9 13 16 17 16 17M12.5 7.5A3.5 3.5 0 1 0 9 11A3.5 3.5 0 0 0 12.5 7.5M15.94 13A5.32 5.32 0 0 1 18 17V19H22V17S22 13.37 15.94 13M15 4A3.39 3.39 0 0 0 13.07 4.59A5 5 0 0 1 13.07 10.41A3.39 3.39 0 0 0 15 11A3.5 3.5 0 0 0 15 4Z',
+                'roles'   => $apenasSuperAdmin,
+            ],
+            [
+                'name'    => 'Notícias',
+                'uri'     => '/<admin>/noticias',
+                'enabled' => 1,
+                'weight'  => 3,
+                'icon'    => 'M20,3H4A2,2 0 0,0 2,5V19A2,2 0 0,0 4,21H20A2,2 0 0,0 22,19V5A2,2 0 0,0 20,3M20,19H4V5H20V19M6,7H18V9H6V7M6,11H18V13H6V11M6,15H13V17H6V15Z',
+                'roles'   => $apenasAdmins,
+            ],
+            [
+                'name'    => 'Vídeos',
+                'uri'     => '/<admin>/videos',
+                'enabled' => 1,
+                'weight'  => 4,
+                'icon'    => 'M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z',
+                'roles'   => $apenasAdmins,
+            ],
+            [
+                'name'    => 'Banners',
+                'uri'     => '/<admin>/banners',
+                'enabled' => 1,
+                'weight'  => 5,
+                'icon'    => 'M21,3H3A2,2 0 0,0 1,5V19A2,2 0 0,0 3,21H21A2,2 0 0,0 23,19V5A2,2 0 0,0 21,3M21,19H3V5H21V19M5,7H11V13H5V7M13,7H19V9H13V7M13,11H19V13H13V11M5,15H19V17H5V15Z',
+                'roles'   => $apenasAdmins,
+            ],
+            [
+                // null = sem restrição de role → diop também vê
+                'name'    => 'Veículos',
+                'uri'     => '/<admin>/veiculo',
+                'enabled' => 1,
+                'weight'  => 6,
+                'icon'    => 'M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M19.5,9.5L21.46,12H17V9.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M20,8H17V4H3C1.89,4 1,4.89 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8Z',
+                'roles'   => null,
+            ],
+            [
+                'name'    => 'Logs',
+                'uri'     => '/<admin>/audit-logs',
+                'enabled' => 1,
+                'weight'  => 99,
+                'icon'    => 'M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z',
+                'roles'   => $apenasSuperAdmin,
+            ],
+        ]);
+
+        // ─── Menu Servidor ────────────────────────────────────────────────────
         $servidorMenu = Menu::create([
-            'name' => 'Servidor',
+            'name'         => 'Servidor',
             'machine_name' => 'servidor',
-            'description' => 'Servidor Menu',
+            'description'  => 'Servidor Menu',
         ]);
 
-        $menu_items = [
+        $servidorMenu->menuItems()->createMany([
             [
-                'name' => 'Dashboard',
-                'uri' => '/<admin>',
+                'name'    => 'Meus Cursos',
+                'uri'     => '/<servidor>',
                 'enabled' => 1,
-                'weight' => 0,
-                'icon' => 'M13 9V3H21V9H13M13 21H21V11H13M3 21H11V15H3M3 13H11V3H3V13Z', // Dashboard grid icon
+                'weight'  => 0,
+                'icon'    => 'M13,3V9H21V3M13,21H21V11H13M3,21H11V15H3M3,13H11V3H3V13Z',
             ],
-            /* [
-                'name' => 'Permissões',
-                'uri' => '/<admin>/permission',
-                'enabled' => 1,
-                'weight' => 1,
-                'icon' => 'M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1Z', // Shield with check
-            ], */
-            [
-                'name' => 'Funções',
-                'uri' => '/<admin>/role',
-                'enabled' => 1,
-                'weight' => 1,
-                'icon' => 'M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7A2,2 0 0,1 14,9A2,2 0 0,1 12,11A2,2 0 0,1 10,9A2,2 0 0,1 12,7M12,14C13.25,14 15.42,14.57 16,15.56V18.18L12,21L8,18.18V15.56C8.58,14.57 10.75,14 12,14Z',
-            ],
-            [
-                'name' => 'Usuários',
-                'uri' => '/<admin>/user',
-                'enabled' => 1,
-                'weight' => 2,
-                'icon' => 'M16 17V19H2V17S2 13 9 13 16 17 16 17M12.5 7.5A3.5 3.5 0 1 0 9 11A3.5 3.5 0 0 0 12.5 7.5M15.94 13A5.32 5.32 0 0 1 18 17V19H22V17S22 13.37 15.94 13M15 4A3.39 3.39 0 0 0 13.07 4.59A5 5 0 0 1 13.07 10.41A3.39 3.39 0 0 0 15 11A3.5 3.5 0 0 0 15 4Z', // Multiple users
-            ],
-            /* [
-                'name' => 'Menus',
-                'uri' => '/<admin>/menu',
-                'enabled' => 1,
-                'weight' => 4,
-                'icon' => 'M3 6H21V8H3V6M3 11H21V13H3V11M3 16H21V18H3V16Z', // Hamburger menu lines
-            ], */
-            /* [
-                'name' => 'Categorias',
-                'uri' => '/<admin>/category/type',
-                'enabled' => 1,
-                'weight' => 5,
-                'icon' => 'M22 11V3H11V5H5V3H2V11H5V9H8V19H22V11M8 9V5H11V9H8M20 19H10V11H20V19Z', // Layers/stack
-            ], */
-            /* [
-                'name' => 'Mídia',
-                'uri' => '/<admin>/media',
-                'enabled' => 1,
-                'weight' => 6,
-                'icon' => 'M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3M19 19H5V5H19V19M13.96 12.29L11.21 15.83L9.25 13.47L6.5 17H17.5L13.96 12.29Z', // Image with photo icon
-            ], */
-            // [
-            //     'name' => 'Cursos',
-            //     'uri' => '/<admin>/cursos',
-            //     'enabled' => 1,
-            //     'weight' => 7,
-            //     'icon' => 'M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z', // Graduation cap
-            // ],
-            // [
-            //     'name' => 'Diretores',
-            //     'uri' => '/<admin>/directors',
-            //     'enabled' => 1,
-            //     'weight' => 8,
-            //     'icon' => 'M9 11.5A2.5 2.5 0 1 0 6.5 9A2.5 2.5 0 0 0 9 11.5M9 8.5A2.5 2.5 0 1 0 6.5 6A2.5 2.5 0 0 0 9 8.5M9 13.75C6.66 13.75 2 14.92 2 17.25V19H16V17.25C16 14.92 11.34 13.75 9 13.75M14 19H22V17.25C22 15.36 18.66 14.25 17 14.25C16.57 14.25 16 14.43 15.41 14.63A5.26 5.26 0 0 1 16.5 16A5.52 5.52 0 0 1 16.24 17.5H14Z', // User with leader badge
-            // ],
-            // [
-            //     'name' => 'Alojamento',
-            //     'uri' => '/<admin>/alojamento',
-            //     'enabled' => 1,
-            //     'weight' => 9,
-            //     'icon' => 'M19,7H11V14H3V5H1V20H3V17H21V20H23V11A4,4 0 0,0 19,7M7,13A3,3 0 0,0 4,10A3,3 0 0,0 1,13A3,3 0 0,0 4,16A3,3 0 0,0 7,13Z'
-            // ],
-            // [
-            //     'name' => 'Requerimentos',
-            //     'uri' => '/<admin>/requerimentos',
-            //     'enabled' => 1,
-            //     'weight' => 10,
-            //     'icon' => 'M22,8V16A2,2 0 0,1 20,18H4A2,2 0 0,1 2,16V8C2,7.27 2.39,6.64 2.97,6.24L12,12.64L21,6.24C21.61,6.64 22,7.27 22,8M2,6V6L12,12L22,6V6A2,2 0 0,0 20,4H4A2,2 0 0,0 2,6Z',
-            // ],
-            [
-                'name' => 'Notícias',
-                'uri' => '/<admin>/noticias',
-                'enabled' => 1,
-                'weight' => 3,
-                'icon' => 'M4,6H2V20A2,2 0 0,0 4,22H18A2,2 0 0,0 20,20V18H4V6M20,2H8A2,2 0 0,0 6,4V16H18V4H20A2,2 0 0,0 22,2V14A2,2 0 0,0 20,12V2M16,5H10V11H16V5M9,5H8V8H9V5M9,9H8V11H9V9M8,12H16V13H8V12Z'
-            ],
-            [
-                'name' => 'Vídeos',
-                'uri' => '/<admin>/videos',
-                'enabled' => 1,
-                'weight' => 4,
-                'icon' => 'M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z'
-            ],
-            [
-                'name' => 'Banners',
-                'uri' => '/<admin>/banners',
-                'enabled' => 1,
-                'weight' => 5,
-                'icon' => 'M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z' // Image/photo icon
-            ],
-            [
-                'name' => 'Veículos',
-                'uri' => '/<admin>/veiculo',
-                'enabled' => 1,
-                'weight' => 6,
-                'icon' => 'M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M19.5,9.5L21.46,12H17V9.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M20,8H17V4H3C1.89,4 1,4.89 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8Z', // Ícone de caminhão/veículo
-            ],
-            // [
-            //     'name' => 'Fale Conosco',
-            //     'uri' => '/<admin>/contato',
-            //     'enabled' => 1,
-            //     'weight' => 14,
-            //     'icon' => 'M4,2A2,2 0 0,0 2,4V16A2,2 0 0,0 4,18H8L12,22L16,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2H4M12,6A2,2 0 0,1 14,8A2,2 0 0,1 12,10A2,2 0 0,1 10,8A2,2 0 0,1 12,6M12,11C13.11,11 15,11.66 15,12.5V14H9V12.5C9,11.66 10.89,11 12,11Z'
-            // ],
-        ];
+        ]);
 
-        $menu->menuItems()->createMany($menu_items);
-
-        $servidorMenu_items = [
-            [
-                'name' => 'Meus Cursos',
-                'uri' => '/<servidor>',
-                'enabled' => 1,
-                'weight' => 0,
-                'icon' => 'M13,3V9H21V3M13,21H21V11H13M3,21H11V15H3M3,13H11V3H3V13Z',
-            ],
-        ];
-
-        $servidorMenu->menuItems()->createMany($servidorMenu_items);
-
-        // create category type
+        // ─── Category Types ───────────────────────────────────────────────────
         CategoryType::create([
-            'name' => 'Categoria',
+            'name'         => 'Categoria',
             'machine_name' => 'category',
-            'description' => 'Main Category',
+            'description'  => 'Main Category',
         ]);
 
         CategoryType::create([
-            'name' => 'Tag',
+            'name'         => 'Tag',
             'machine_name' => 'tag',
-            'description' => 'Site Tags',
-            'is_flat' => true,
+            'description'  => 'Site Tags',
+            'is_flat'      => true,
         ]);
 
         CategoryType::create([
-            'name' => 'Admin Tag',
+            'name'         => 'Admin Tag',
             'machine_name' => 'admin_tag',
-            'description' => 'Admin Tags',
-            'is_flat' => true,
+            'description'  => 'Admin Tags',
+            'is_flat'      => true,
         ]);
 
         $forumCategoryType = CategoryType::create([
-            'name' => 'Fórum Categoria',
+            'name'         => 'Fórum Categoria',
             'machine_name' => 'forum_category',
-            'description' => 'Forum Category',
+            'description'  => 'Forum Category',
         ]);
 
         $forumCategoryType->categories()->create([
-            'name' => 'Geral',
+            'name'        => 'Geral',
             'description' => 'Fórum Geral',
         ]);
 
         CategoryType::create([
-            'name' => 'Forum Tag',
+            'name'         => 'Forum Tag',
             'machine_name' => 'forum_tag',
-            'description' => 'Forum Tags',
-            'is_flat' => true,
+            'description'  => 'Forum Tags',
+            'is_flat'      => true,
         ]);
     }
 }
