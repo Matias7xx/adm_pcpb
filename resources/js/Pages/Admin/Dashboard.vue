@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import {
   mdiNewspaper,
@@ -75,6 +75,12 @@ const chartOptions = {
   },
 };
 
+const page = usePage();
+const canCreateNoticia = computed(() => {
+  const roles = page.props.auth?.user?.roles ?? [];
+  return !roles.some(r => (r.name ?? r) === 'diop');
+});
+
 const mesAtual = computed(() => {
   const mes = new Date().toLocaleDateString('pt-BR', {
     month: 'long',
@@ -96,6 +102,7 @@ const mesAtual = computed(() => {
           main
         >
           <BaseButton
+            v-if="canCreateNoticia"
             :route-name="route('admin.noticias.create')"
             :icon="mdiPlus"
             label="Nova Notícia"
