@@ -10,7 +10,7 @@
       @click="handleButtonClick"
       class="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-black-300 hover:bg-[#a38e4d] transition-colors duration-200"
     >
-      Serviços
+      Sistemas
       <svg
         class="-mr-1 size-5 text-black-400 transition-transform duration-200"
         :class="{ 'rotate-180': isOpen }"
@@ -45,6 +45,8 @@
             v-for="(item, index) in menuItems"
             :key="index"
             :href="item.href"
+            :target="item.href.startsWith('http') ? '_blank' : '_self'"
+            rel="noopener noreferrer"
             @click="closeDropdown"
             class="block px-3 py-2 text-sm text-black hover:text-[#bea55a] rounded-md font-medium hover:bg-gray-100 transition-colors duration-200"
           >
@@ -121,8 +123,13 @@ const handleEscapeKey = event => {
 };
 
 const menuItems = [
-  { text: 'Requerimentos', href: '/requerimentos/novo' },
-  { text: 'Reservar Alojamento', href: '/alojamento/escolha-tipo' },
+  { text: 'SPP', href: 'https://appseds.pb.gov.br/spp/system/login.jsf' },
+  { text: 'Lince', href: 'https://lince.pc.pb.gov.br/login' },
+  { text: 'RIP', href: 'https://rip.apps.pc.pb.gov.br/#/' },
+  { text: 'Ficha Funcional', href: 'https://fichafuncional.apps.pc.pb.gov.br/login' },
+  { text: 'Recursos Humanos', href: 'https://sistemas.pc.pb.gov.br/rh/template/index.php' },
+  { text: 'Help Desk', href: 'https://helpdesk.apps.pc.pb.gov.br/login' },
+  { text: 'Outros', href: 'https://sistemas.pc.pb.gov.br/' },
   /* { text: 'Agendamentos', href: '#' } */
 ];
 

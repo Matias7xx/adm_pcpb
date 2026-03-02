@@ -188,7 +188,7 @@ const submit = () => {
 
           <FormField
             label="Dias de Exibição"
-            help="Por quantos dias ficará visível (geralmente 15 dias)"
+            help="Por quantos dias ficará válido (geralmente 15 dias)"
             required
           >
             <FormControl
