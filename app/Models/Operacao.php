@@ -26,6 +26,7 @@ class Operacao extends Model
     'autoridade_responsavel_matricula',
     'origem_operacao',
     'uf_responsavel',
+    'ufs_alvo_outros_estados',
     'data_operacao',
     'local_briefing',
     'horario_briefing',
@@ -47,6 +48,7 @@ class Operacao extends Model
 
   protected $casts = [
     'data_operacao' => 'date',
+    'ufs_alvo_outros_estados' => 'array',
     'quantidade_total_alvos' => 'integer',
     'quantidade_mandados_prisao' => 'integer',
     'quantidade_mandados_busca_apreensao' => 'integer',
@@ -130,6 +132,25 @@ class Operacao extends Model
   }
 
   /**
+   * Accessor: UFs do alvo formatadas para exibição
+   */
+  public function getUfsAlvoFormatadaAttribute(): string
+  {
+    if (empty($this->ufs_alvo_outros_estados)) {
+      return '';
+    }
+    return implode(', ', $this->ufs_alvo_outros_estados);
+  }
+
+  /**
+   * Verifica se a origem é "Alvo em Outro Estado"
+   */
+  public function isAlvoEmOutroEstado(): bool
+  {
+    return $this->origem_operacao === 'Alvo em outro Estado';
+  }
+
+  /**
    * Retorna array com estatísticas da operação
    */
   public function getEstatisticas()
@@ -156,6 +177,7 @@ class Operacao extends Model
       'Nacional' => 'Nacional (Ministério da Justiça e Segurança Pública)',
       'Estadual' => 'Estadual (Investigação da PCPB)',
       'Apoio a outro Estado' => 'Apoio a outro Estado',
+      'Alvo em outro Estado' => 'Alvo em outro Estado',
     ];
   }
 

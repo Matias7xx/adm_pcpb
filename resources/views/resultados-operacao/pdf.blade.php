@@ -216,11 +216,11 @@
 
     <div class="secao">
         <div class="secao-titulo">IDENTIFICAÇÃO DA OPERAÇÃO</div>
-        
+
         <div class="destaque">
             <div class="campo">
                 <span class="campo-label">Nome da Operação:</span>
-                <span class="campo-valor">{{ $operacao->nome_operacao }}</span>
+                <span class="campo-valor" style="font-size: 14px; font-weight: bold;">{{ $operacao->nome_operacao }}</span>
             </div>
         </div>
 
@@ -239,12 +239,85 @@
             </div>
         </div>
 
-        @if($resultado->numero_processo_pje)
-        <div class="campo">
-            <span class="campo-label">Número do Processo PJE:</span>
-            <span class="campo-valor">{{ $resultado->numero_processo_pje }}</span>
+        <div class="grid-2col">
+            <div class="grid-col">
+                <div class="campo">
+                    <span class="campo-label">Origem da Operação:</span>
+                    <span class="campo-valor">{{ $operacao->origem_operacao }}</span>
+                </div>
+            </div>
+            <div class="grid-col">
+                <div class="campo">
+                    <span class="campo-label">UF Responsável:</span>
+                    <span class="campo-valor">{{ $operacao->uf_responsavel }}</span>
+                </div>
+            </div>
+        </div>
+
+        {{-- UFs do Alvo — só aparece quando origem = "Alvo em Outro Estado" --}}
+        @if($operacao->origem_operacao === 'Alvo em outro Estado' && !empty($operacao->ufs_alvo_outros_estados))
+        <div class="campo" style="margin-top: 6px; background: #dbeafe; padding: 8px 10px; border-radius: 4px; border-left: 4px solid #3b82f6;">
+            <span class="campo-label" style="color: #1d4ed8;">Estado(s) e Quantidade de Alvos por Estado:</span>
+            <span class="campo-valor" style="font-weight: bold; color: #1e40af;">
+                @foreach($operacao->ufs_alvo_outros_estados as $uf => $qtd){{ $uf }} ({{ $qtd }} {{ $qtd == 1 ? 'alvo' : 'alvos' }}){{ !$loop->last ? ', ' : '' }}@endforeach
+            </span>
         </div>
         @endif
+
+        <div class="grid-2col" style="margin-top: 8px;">
+            <div class="grid-col">
+                <div class="campo">
+                    <span class="campo-label">Vinculada à:</span>
+                    <span class="campo-valor">{{ $operacao->vinculada_unidade }}</span>
+                </div>
+            </div>
+            <div class="grid-col">
+                <div class="campo">
+                    <span class="campo-label">Unidade Executora:</span>
+                    <span class="campo-valor">{{ $operacao->vinculada_unidade_especializada }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2col">
+            <div class="grid-col">
+                <div class="campo">
+                    <span class="campo-label">Delegacia Seccional:</span>
+                    <span class="campo-valor">{{ $operacao->vinculada_delegacia_seccional }}</span>
+                </div>
+            </div>
+            <div class="grid-col">
+                <div class="campo">
+                    <span class="campo-label">Número do Processo PJE:</span>
+                    <span class="campo-valor">{{ $resultado->numero_processo_pje ?: '—' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2col">
+            <div class="grid-col">
+                <div class="campo">
+                    <span class="campo-label">Local do Briefing:</span>
+                    <span class="campo-valor">{{ $operacao->local_briefing }}</span>
+                </div>
+            </div>
+            <div class="grid-col">
+                <div class="campo">
+                    <span class="campo-label">Horário do Briefing:</span>
+                    <span class="campo-valor">{{ $operacao->horario_briefing_formatado ?: $operacao->horario_briefing }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="campo">
+            <span class="campo-label">Cidades Alvo:</span>
+            <span class="campo-valor">{{ $operacao->cidades_alvo }}</span>
+        </div>
+
+        <div class="campo">
+            <span class="campo-label">Crimes Investigados:</span>
+            <span class="campo-valor">{{ $operacao->crimes_investigados }}</span>
+        </div>
     </div>
 
     <div class="secao">
@@ -272,31 +345,78 @@
     </div>
 
     <div class="secao">
+        <div class="secao-titulo">NÚMEROS DA OPERAÇÃO PLANEJADA</div>
+
+        <div style="display: table; width: 100%;">
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 25%; padding: 5px;">
+                    <div class="estatistica-box">
+                        <div class="estatistica-valor">{{ $operacao->quantidade_total_alvos }}</div>
+                        <div class="estatistica-label">TOTAL DE ALVOS</div>
+                        @if($operacao->origem_operacao === 'Alvo em outro Estado' && !empty($operacao->ufs_alvo_outros_estados))
+                        <div style="margin-top: 6px; border-top: 1px solid #ccc; padding-top: 4px;">
+                            @foreach($operacao->ufs_alvo_outros_estados as $uf => $qtd)
+                            <div style="display: flex; justify-content: space-between; font-size: 10px; color: #1e40af; font-weight: bold; padding: 1px 0;">
+                                <span>{{ $uf }}</span><span>{{ $qtd }}</span>
+                            </div>
+                            @endforeach
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                <div style="display: table-cell; width: 25%; padding: 5px;">
+                    <div class="estatistica-box">
+                        <div class="estatistica-valor">{{ $operacao->quantidade_policiais_empregados }}</div>
+                        <div class="estatistica-label">POLICIAIS EMPREGADOS</div>
+                    </div>
+                </div>
+                <div style="display: table-cell; width: 25%; padding: 5px;">
+                    <div class="estatistica-box">
+                        <div class="estatistica-valor">{{ $operacao->quantidade_viaturas_empregadas }}</div>
+                        <div class="estatistica-label">VIATURAS EMPREGADAS</div>
+                    </div>
+                </div>
+                <div style="display: table-cell; width: 25%; padding: 5px;">
+                    <div class="estatistica-box">
+                        <div class="estatistica-valor">{{ $operacao->quantidade_alvos_outros_estados }}</div>
+                        <div class="estatistica-label">ALVOS EM OUTROS ESTADOS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="secao">
         <div class="secao-titulo">MANDADOS E TAXA DE ÊXITO</div>
         
         <table class="tabela">
             <tr>
                 <th>Tipo de Mandado</th>
-                <th style="text-align: center; width: 100px;">Cumpridos</th>
-                <th style="text-align: center; width: 100px;">Não Cumpridos</th>
+                <th style="text-align: center; width: 90px;">Previstos</th>
+                <th style="text-align: center; width: 90px;">Cumpridos</th>
+                <th style="text-align: center; width: 90px;">Não Cumpridos</th>
             </tr>
             <tr>
                 <td>Mandados de Prisão</td>
+                <td style="text-align: center; color: #555;">{{ $operacao->quantidade_mandados_prisao }}</td>
                 <td style="text-align: center; font-weight: bold; color: #28a745;">{{ $estatisticas['mandados_prisao_cumpridos'] }}</td>
                 <td style="text-align: center; font-weight: bold; color: #dc3545;">{{ $estatisticas['mandados_prisao_nao_cumpridos'] }}</td>
             </tr>
             <tr>
                 <td>Mandados de Busca e Apreensão</td>
+                <td style="text-align: center; color: #555;">{{ $operacao->quantidade_mandados_busca_apreensao }}</td>
                 <td style="text-align: center; font-weight: bold; color: #28a745;">{{ $estatisticas['mandados_busca_cumpridos'] }}</td>
-                <td style="text-align: center;">-</td>
+                <td style="text-align: center;">—</td>
             </tr>
             <tr>
                 <td>Mandados de Busca e Apreensão de Infrator</td>
+                <td style="text-align: center; color: #555;">{{ $operacao->quantidade_mandados_busca_apreensao_infrator }}</td>
                 <td style="text-align: center; font-weight: bold; color: #28a745;">{{ $estatisticas['mandados_busca_infrator_cumpridos'] }}</td>
                 <td style="text-align: center; font-weight: bold; color: #dc3545;">{{ $estatisticas['mandados_busca_infrator_nao_cumpridos'] }}</td>
             </tr>
             <tr style="background-color: #ddd;">
                 <td><strong>TOTAL</strong></td>
+                <td style="text-align: center; font-weight: bold; color: #333;">{{ $operacao->total_mandados }}</td>
                 <td style="text-align: center; font-weight: bold; color: #155724;">{{ $estatisticas['total_mandados_cumpridos'] }}</td>
                 <td style="text-align: center; font-weight: bold; color: #721c24;">{{ $estatisticas['total_mandados_nao_cumpridos'] }}</td>
             </tr>
@@ -309,7 +429,7 @@
         </div>
     </div>
 
-    @if($resultado->mandados_prisao_cumpridos_detalhes)
+    @if($resultado->mandados_prisao_cumpridos_detalhes && strtoupper(trim($resultado->mandados_prisao_cumpridos_detalhes)) !== 'N/A')
     <div class="secao">
         <div class="secao-titulo">DETALHES DOS PRESOS</div>
         
@@ -353,7 +473,7 @@
         </div>
         @endif
 
-        @if($resultado->detalhes_armas_apreendidas)
+        @if($resultado->detalhes_armas_apreendidas && strtoupper(trim($resultado->detalhes_armas_apreendidas)) !== 'N/A')
         <div class="campo">
             <span class="campo-label">Detalhes das Armas:</span>
             <div class="destaque">
@@ -362,7 +482,7 @@
         </div>
         @endif
 
-        @if($resultado->municoes_apreendidas)
+        @if($resultado->municoes_apreendidas && strtoupper(trim($resultado->municoes_apreendidas)) !== 'N/A')
         <div class="campo">
             <span class="campo-label">Munições Apreendidas:</span>
             <div class="destaque">
@@ -438,10 +558,20 @@
     @endif
 
     <div class="assinatura">
-        <p>_____________________________________</p>
-        <p style="margin-top: 5px; font-weight: bold;">{{ $resultado->autoridade_responsavel_nome }}</p>
-        <p>Autoridade Policial Responsável</p>
-        <p style="margin-top: 5px; font-size: 10px;">Matrícula: {{ $resultado->autoridade_responsavel_matricula }}</p>
+        <div style="display: table; width: 100%; margin-top: 50px;">
+            <div style="display: table-cell; width: 50%; text-align: center; padding: 0 20px;">
+                <p>_____________________________________</p>
+                <p style="margin-top: 5px; font-weight: bold;">{{ $resultado->autoridade_responsavel_nome }}</p>
+                <p>Autoridade Policial Responsável</p>
+                <p style="margin-top: 3px; font-size: 10px;">Matrícula: {{ $resultado->autoridade_responsavel_matricula }}</p>
+            </div>
+            <div style="display: table-cell; width: 50%; text-align: center; padding: 0 20px;">
+                <p>_____________________________________</p>
+                <p style="margin-top: 5px; font-weight: bold;">{{ $resultado->policial_responsavel_nome }}</p>
+                <p>Policial Civil Responsável pelo Preenchimento</p>
+                <p style="margin-top: 3px; font-size: 10px;">Matrícula: {{ $resultado->policial_responsavel_matricula }}</p>
+            </div>
+        </div>
     </div>
 
     <div class="rodape">

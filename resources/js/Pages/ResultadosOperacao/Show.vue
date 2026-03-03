@@ -90,6 +90,25 @@ const getUnidadeEspecializadaNome = codigo => {
               </p>
             </div>
             <div class="flex gap-2">
+              <Link
+                :href="route('resultados-operacao.edit', resultado.id)"
+                class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-900 transition-colors flex items-center gap-2"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+                Editar
+              </Link>
               <a
                 :href="route('resultados-operacao.pdf', resultado.id)"
                 target="_blank"
@@ -211,18 +230,6 @@ const getUnidadeEspecializadaNome = codigo => {
               </p>
             </div>
 
-            <!-- <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Autoridade (Informada no Cadastro Operação)</label>
-              <p class="text-gray-900 font-medium mt-1">{{ resultado.operacao.autoridade_responsavel_nome }}</p>
-              <p class="text-xs text-gray-600 mt-1">Mat: {{ resultado.operacao.autoridade_responsavel_matricula }}</p>
-            </div> -->
-
-            <!-- <div class="bg-gray-50 p-3 rounded border border-gray-200">
-              <label class="text-xs font-semibold text-gray-700 uppercase">Policial Responsável (Cadastro da Operação)</label>
-              <p class="text-gray-900 font-medium mt-1">{{ resultado.operacao.policial_responsavel_nome }}</p>
-              <p class="text-xs text-gray-600 mt-1">Mat: {{ resultado.operacao.policial_responsavel_matricula }}</p>
-            </div> -->
-
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
               <label class="text-xs font-semibold text-gray-700 uppercase"
                 >Policial Civil Responsável pelo preenchimento</label
@@ -235,7 +242,6 @@ const getUnidadeEspecializadaNome = codigo => {
               </p>
             </div>
 
-            <!-- Autoridade Responsável -->
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
               <label class="text-xs font-semibold text-gray-700 uppercase"
                 >Autoridade Policial Responsável</label
@@ -278,6 +284,65 @@ const getUnidadeEspecializadaNome = codigo => {
               </p>
             </div>
 
+            <!-- UFs do Alvo — só aparece quando origem = "Alvo em Outro Estado" -->
+            <div
+              v-if="
+                resultado.operacao.origem_operacao === 'Alvo em outro Estado' &&
+                resultado.operacao.ufs_alvo_outros_estados &&
+                Object.keys(resultado.operacao.ufs_alvo_outros_estados).length
+              "
+              class="bg-blue-50 p-3 rounded border border-blue-200 md:col-span-2 lg:col-span-3"
+            >
+              <label class="text-xs font-semibold text-blue-700 uppercase"
+                >Estado(s) do(s) Alvo(s)</label
+              >
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span
+                  v-for="(qtd, uf) in resultado.operacao
+                    .ufs_alvo_outros_estados"
+                  :key="uf"
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-300"
+                >
+                  {{ uf }}
+                  <span
+                    class="bg-blue-200 text-blue-900 px-1.5 py-0.5 rounded-full text-xs"
+                    >{{ qtd }} {{ qtd === 1 ? 'alvo' : 'alvos' }}</span
+                  >
+                </span>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 p-3 rounded border border-gray-200">
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Vinculada à</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ resultado.operacao.vinculada_unidade }}
+              </p>
+            </div>
+
+            <div class="bg-gray-50 p-3 rounded border border-gray-200">
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Unidade Executora</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{
+                  getUnidadeEspecializadaNome(
+                    resultado.operacao.vinculada_unidade_especializada
+                  )
+                }}
+              </p>
+            </div>
+
+            <div class="bg-gray-50 p-3 rounded border border-gray-200">
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Delegacia Seccional</label
+              >
+              <p class="text-gray-900 font-medium mt-1">
+                {{ resultado.operacao.vinculada_delegacia_seccional }}
+              </p>
+            </div>
+
             <div class="bg-gray-50 p-3 rounded border border-gray-200">
               <label class="text-xs font-semibold text-gray-700 uppercase"
                 >Local Briefing</label
@@ -293,6 +358,28 @@ const getUnidadeEspecializadaNome = codigo => {
               >
               <p class="text-gray-900 font-medium mt-1">
                 {{ resultado.operacao.horario_briefing }}
+              </p>
+            </div>
+
+            <div
+              class="bg-gray-50 p-3 rounded border border-gray-200 md:col-span-2 lg:col-span-3"
+            >
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Cidades Alvo</label
+              >
+              <p class="text-gray-900 mt-1 text-sm">
+                {{ resultado.operacao.cidades_alvo }}
+              </p>
+            </div>
+
+            <div
+              class="bg-gray-50 p-3 rounded border border-gray-200 md:col-span-2 lg:col-span-3"
+            >
+              <label class="text-xs font-semibold text-gray-700 uppercase"
+                >Crimes Investigados</label
+              >
+              <p class="text-gray-900 mt-1 text-sm">
+                {{ resultado.operacao.crimes_investigados }}
               </p>
             </div>
           </div>
@@ -312,6 +399,26 @@ const getUnidadeEspecializadaNome = codigo => {
                 {{ resultado.operacao.quantidade_total_alvos }}
               </p>
               <p class="text-xs text-gray-600 mt-1">Total de Alvos</p>
+              <!-- Detalhamento por estado quando origem = Alvo em outro Estado -->
+              <div
+                v-if="
+                  resultado.operacao.origem_operacao ===
+                    'Alvo em outro Estado' &&
+                  resultado.operacao.ufs_alvo_outros_estados &&
+                  Object.keys(resultado.operacao.ufs_alvo_outros_estados).length
+                "
+                class="mt-2 space-y-1"
+              >
+                <div
+                  v-for="(qtd, uf) in resultado.operacao
+                    .ufs_alvo_outros_estados"
+                  :key="uf"
+                  class="flex justify-between text-xs px-1.5 py-0.5 bg-blue-50 rounded border border-blue-200"
+                >
+                  <span class="font-semibold text-blue-800">{{ uf }}</span>
+                  <span class="text-blue-700">{{ qtd }}</span>
+                </div>
+              </div>
             </div>
 
             <div
@@ -528,22 +635,30 @@ const getUnidadeEspecializadaNome = codigo => {
                 <label class="text-sm font-medium text-gray-600"
                   >Tipos de Armas</label
                 >
-                <p
-                  class="text-gray-900 mt-1 font-medium"
-                  :class="
-                    Array.isArray(resultado.tipo_arma_apreendida) &&
-                    resultado.tipo_arma_apreendida.includes('NENHUMA')
-                      ? 'text-gray-500'
-                      : ''
-                  "
-                >
-                  {{
-                    Array.isArray(resultado.tipo_arma_apreendida) &&
-                    resultado.tipo_arma_apreendida.length > 0
-                      ? resultado.tipo_arma_apreendida.join(', ')
-                      : 'Não informado'
-                  }}
-                </p>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <template
+                    v-if="
+                      Array.isArray(resultado.tipo_arma_apreendida) &&
+                      resultado.tipo_arma_apreendida.length > 0
+                    "
+                  >
+                    <span
+                      v-for="tipo in resultado.tipo_arma_apreendida"
+                      :key="tipo"
+                      class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold"
+                      :class="
+                        tipo === 'NENHUMA' || tipo === 'PREJUDICADO'
+                          ? 'bg-gray-100 text-gray-500 border border-gray-300'
+                          : 'bg-red-100 text-red-800 border border-red-300'
+                      "
+                    >
+                      {{ tipo }}
+                    </span>
+                  </template>
+                  <span v-else class="text-gray-500 text-sm"
+                    >Não informado</span
+                  >
+                </div>
               </div>
 
               <div>
@@ -588,22 +703,30 @@ const getUnidadeEspecializadaNome = codigo => {
             <div class="space-y-3">
               <div>
                 <label class="text-sm font-medium text-gray-600">Tipos</label>
-                <p
-                  class="text-xl font-semibold mt-1 px-3 py-2 rounded border"
-                  :class="
-                    Array.isArray(resultado.entorpecente_apreendido) &&
-                    resultado.entorpecente_apreendido.includes('NENHUM')
-                      ? 'bg-gray-100 text-gray-500 border-gray-300'
-                      : 'bg-gray-100 text-gray-800 border-gray-300'
-                  "
-                >
-                  {{
-                    Array.isArray(resultado.entorpecente_apreendido) &&
-                    resultado.entorpecente_apreendido.length > 0
-                      ? resultado.entorpecente_apreendido.join(', ')
-                      : 'Não informado'
-                  }}
-                </p>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <template
+                    v-if="
+                      Array.isArray(resultado.entorpecente_apreendido) &&
+                      resultado.entorpecente_apreendido.length > 0
+                    "
+                  >
+                    <span
+                      v-for="tipo in resultado.entorpecente_apreendido"
+                      :key="tipo"
+                      class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold"
+                      :class="
+                        tipo === 'NENHUM'
+                          ? 'bg-gray-100 text-gray-500 border border-gray-300'
+                          : 'bg-orange-100 text-orange-800 border border-orange-300'
+                      "
+                    >
+                      {{ tipo }}
+                    </span>
+                  </template>
+                  <span v-else class="text-gray-500 text-sm"
+                    >Não informado</span
+                  >
+                </div>
               </div>
 
               <div
@@ -697,14 +820,34 @@ const getUnidadeEspecializadaNome = codigo => {
           </div>
         </div>
 
-        <!-- Ações -->
+        <!-- Rodapé: data de cadastro + exclusão -->
         <div class="bg-white shadow rounded-lg p-6 mt-6 border border-gray-200">
-          <div class="flex justify-center items-center">
-            <div class="text-sm text-gray-600">
-              <p>
-                Resultado cadastrado em {{ formatarData(resultado.created_at) }}
-              </p>
-            </div>
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-500">
+              Resultado cadastrado em
+              <span class="font-medium text-gray-700">{{
+                formatarData(resultado.created_at)
+              }}</span>
+            </p>
+            <!-- <button
+              @click="excluirResultado"
+              class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 text-sm"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+              Excluir Resultado
+            </button> -->
           </div>
         </div>
       </div>

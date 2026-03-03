@@ -12,6 +12,44 @@ const props = defineProps({
 });
 
 const isEdit = true;
+const isAlvoEmOutroEstado = computed(
+  () => form.origem_operacao === 'Alvo em outro Estado'
+);
+
+// UF alvo com quantidade
+const ufAlvoSelecionada = ref('');
+const ufAlvoQuantidade = ref(1);
+
+const ufsDisponiveis = computed(() =>
+  Object.keys(props.opcoes?.ufs || {}).filter(
+    uf =>
+      uf !== form.uf_responsavel &&
+      !Object.keys(form.ufs_alvo_outros_estados).includes(uf)
+  )
+);
+
+const adicionarUfAlvo = () => {
+  if (!ufAlvoSelecionada.value || ufAlvoQuantidade.value < 1) return;
+  form.ufs_alvo_outros_estados = {
+    ...form.ufs_alvo_outros_estados,
+    [ufAlvoSelecionada.value]: ufAlvoQuantidade.value,
+  };
+  form.quantidade_alvos_outros_estados = Object.values(
+    form.ufs_alvo_outros_estados
+  ).reduce((acc, v) => acc + Number(v), 0);
+  ufAlvoSelecionada.value = '';
+  ufAlvoQuantidade.value = 1;
+};
+
+const removerUfAlvo = uf => {
+  const novo = { ...form.ufs_alvo_outros_estados };
+  delete novo[uf];
+  form.ufs_alvo_outros_estados = novo;
+  form.quantidade_alvos_outros_estados = Object.values(novo).reduce(
+    (acc, v) => acc + Number(v),
+    0
+  );
+};
 
 const form = useForm({
   nome_operacao: props.operacao.nome_operacao,
@@ -20,7 +58,8 @@ const form = useForm({
     props.operacao.autoridade_responsavel_matricula,
   origem_operacao: props.operacao.origem_operacao,
   uf_responsavel: props.operacao.uf_responsavel,
-  data_operacao: props.operacao.data_operacao,
+  ufs_alvo_outros_estados: props.operacao?.ufs_alvo_outros_estados || {},
+  data_operacao: props.operacao.data_operacao?.substring(0, 10) || '',
   local_briefing: props.operacao.local_briefing,
   horario_briefing: props.operacao.horario_briefing?.substring(0, 5) || '',
   quantidade_total_alvos: props.operacao.quantidade_total_alvos,
@@ -73,6 +112,12 @@ const validarEtapa = etapa => {
       erros.cidades_alvo = 'As cidades alvo são obrigatórias.';
     if (!form.crimes_investigados?.trim())
       erros.crimes_investigados = 'Os crimes investigados são obrigatórios.';
+    if (
+      form.origem_operacao === 'Alvo em outro Estado' &&
+      Object.keys(form.ufs_alvo_outros_estados).length === 0
+    )
+      erros.ufs_alvo_outros_estados =
+        'Adicione ao menos um estado com a quantidade de alvos.';
   }
 
   if (etapa === 2) {
@@ -339,6 +384,7 @@ const erro = campo => {
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- Origem da Operação -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                   Origem da Operação <span class="text-red-500">*</span>
@@ -361,6 +407,13 @@ const erro = campo => {
                     {{ label }}
                   </option>
                 </select>
+                <p
+                  v-if="form.origem_operacao === 'Alvo em outro Estado'"
+                  class="mt-1 text-xs text-blue-600"
+                >
+                  A PCPB é responsável pela operação, mas o alvo está em
+                  outro(s) estado(s).
+                </p>
                 <div
                   v-if="erro('origem_operacao')"
                   class="text-red-500 text-sm mt-1"
@@ -369,9 +422,11 @@ const erro = campo => {
                 </div>
               </div>
 
+              <!-- UF Responsável pela Operação (sempre visível) -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                  UF Responsável <span class="text-red-500">*</span>
+                  UF Responsável pela Operação
+                  <span class="text-red-500">*</span>
                 </label>
                 <select
                   v-model="form.uf_responsavel"
@@ -395,6 +450,96 @@ const erro = campo => {
                   class="text-red-500 text-sm mt-1"
                 >
                   {{ erro('uf_responsavel') }}
+                </div>
+              </div>
+
+              <!-- UFs do Alvo — aparece SOMENTE quando origem = "Alvo em outro Estado" -->
+              <div
+                v-if="form.origem_operacao === 'Alvo em outro Estado'"
+                class="md:col-span-3 border border-blue-200 bg-blue-50 rounded-lg p-4"
+              >
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Estado(s) e Quantidade de Alvos por Estado
+                  <span class="text-red-500">*</span>
+                </label>
+
+                <!-- Linha de adição -->
+                <div class="flex gap-2 mb-3">
+                  <select
+                    v-model="ufAlvoSelecionada"
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white"
+                  >
+                    <option value="">Selecione o estado...</option>
+                    <option v-for="uf in ufsDisponiveis" :key="uf" :value="uf">
+                      {{ uf }} — {{ opcoes.ufs[uf] }}
+                    </option>
+                  </select>
+                  <input
+                    v-model.number="ufAlvoQuantidade"
+                    type="number"
+                    min="1"
+                    placeholder="Qtd"
+                    class="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  />
+                  <button
+                    type="button"
+                    @click="adicionarUfAlvo"
+                    :disabled="!ufAlvoSelecionada || ufAlvoQuantidade < 1"
+                    class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    + Adicionar
+                  </button>
+                </div>
+
+                <!-- Lista de UFs adicionadas -->
+                <div
+                  v-if="Object.keys(form.ufs_alvo_outros_estados).length > 0"
+                  class="space-y-2 mb-2"
+                >
+                  <div
+                    v-for="(qtd, uf) in form.ufs_alvo_outros_estados"
+                    :key="uf"
+                    class="flex items-center justify-between bg-white border border-blue-200 rounded-lg px-3 py-2"
+                  >
+                    <div class="flex items-center gap-3">
+                      <span class="font-bold text-blue-800 text-sm">{{
+                        uf
+                      }}</span>
+                      <span class="text-gray-600 text-sm">{{
+                        opcoes.ufs[uf]
+                      }}</span>
+                      <span
+                        class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-0.5 rounded-full border border-blue-300"
+                      >
+                        {{ qtd }} {{ qtd === 1 ? 'alvo' : 'alvos' }}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      @click="removerUfAlvo(uf)"
+                      class="text-red-500 hover:text-red-700 text-xs font-medium"
+                    >
+                      Remover
+                    </button>
+                  </div>
+                  <div class="flex justify-end pt-1">
+                    <span class="text-sm text-gray-600">
+                      Total fora da PB:
+                      <strong class="text-gray-900">{{
+                        form.quantidade_alvos_outros_estados
+                      }}</strong>
+                    </span>
+                  </div>
+                </div>
+                <p v-else class="text-sm text-gray-400 italic">
+                  Nenhum estado adicionado ainda.
+                </p>
+
+                <div
+                  v-if="erro('ufs_alvo_outros_estados')"
+                  class="text-red-500 text-sm mt-2"
+                >
+                  {{ erro('ufs_alvo_outros_estados') }}
                 </div>
               </div>
 
@@ -628,7 +773,9 @@ const erro = campo => {
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                   Alvos em Outros Estados <span class="text-red-500">*</span>
                 </label>
+                <!-- Quando "Alvo em outro Estado": calculado automaticamente pelas UFs cadastradas -->
                 <input
+                  v-if="form.origem_operacao !== 'Alvo em outro Estado'"
                   v-model.number="form.quantidade_alvos_outros_estados"
                   type="number"
                   min="0"
@@ -639,6 +786,15 @@ const erro = campo => {
                       : 'border-gray-300'
                   "
                 />
+                <div
+                  v-else
+                  class="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 font-medium"
+                >
+                  {{ form.quantidade_alvos_outros_estados }}
+                  <span class="text-xs text-gray-400 ml-1"
+                    >(calculado automaticamente)</span
+                  >
+                </div>
                 <div
                   v-if="erro('quantidade_alvos_outros_estados')"
                   class="text-red-500 text-sm mt-1"
@@ -832,9 +988,10 @@ const erro = campo => {
                 Especifique a Solicitação (Opcional)
               </label>
               <p class="text-sm text-gray-500 mb-2">
-                Servidores, formatação da equipe, recursos especiais, lanches e
-                outros
+                Servidores, composição da equipe, recursos especiais, apoio logístico, entre
+                outros.
               </p>
+              <p class="text-sm text-gray-500 mb-2">Obs.: Em caso de alvo do sexo feminino, informar a necessidade de policial do sexo feminino.</p>
               <textarea
                 v-model="form.solicitacao_apoio_diop"
                 rows="5"
@@ -859,7 +1016,7 @@ const erro = campo => {
               v-if="etapaAtual > 1"
               type="button"
               @click="voltarEtapa"
-              class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+              class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
               ← Voltar
             </button>
@@ -870,13 +1027,12 @@ const erro = campo => {
                 v-if="etapaAtual < totalEtapas"
                 type="button"
                 @click="proximaEtapa"
-                class="px-6 py-2 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors"
+                class="px-6 py-3 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors"
               >
                 Próxima →
               </button>
 
               <button
-                v-if="etapaAtual === totalEtapas"
                 type="submit"
                 :disabled="form.processing"
                 class="px-6 py-2 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"

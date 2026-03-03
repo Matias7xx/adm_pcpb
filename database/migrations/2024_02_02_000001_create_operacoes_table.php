@@ -26,8 +26,9 @@ return new class extends Migration
             $table->string('autoridade_responsavel_matricula');
             
             // Origem e localização
-            $table->enum('origem_operacao', ['Nacional', 'Estadual', 'Apoio a outro Estado']);
+            $table->enum('origem_operacao', ['Nacional', 'Estadual', 'Apoio a outro Estado', 'Alvo em outro Estado']);
             $table->string('uf_responsavel', 2); // UF
+            $table->jsonb('ufs_alvo_outros_estados')->nullable();
             $table->date('data_operacao');
             
             // Briefing
@@ -112,6 +113,7 @@ return new class extends Migration
             $table->index('vinculada_unidade_especializada');
             $table->index('vinculada_delegacia_seccional');
             $table->index(['unidade_policial_responsavel', 'data_operacao']); // Índice composto
+            $table->rawIndex('ufs_alvo_outros_estados', 'idx_operacoes_ufs_jsonb', 'gin');
         });
     }
 

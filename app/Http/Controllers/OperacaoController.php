@@ -67,6 +67,12 @@ class OperacaoController extends Controller
       });
     }
 
+    if ($request->filled('uf_alvo')) {
+      // Para objeto JSON {"RN": 2, "PE": 1}, o operador ? do PostgreSQL
+      // verifica se a chave existe. No PDO, ? precisa ser escapado como ??.
+      $query->whereRaw('ufs_alvo_outros_estados ?? ?', [$request->uf_alvo]);
+    }
+
     $operacoes = $query->paginate(10);
 
     return Inertia::render('Operacoes/Index', [
@@ -76,6 +82,7 @@ class OperacaoController extends Controller
         'data_fim',
         'origem',
         'busca',
+        'uf_alvo',
       ]),
     ]);
   }

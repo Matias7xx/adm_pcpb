@@ -126,9 +126,13 @@ watch(
   }
 );
 
+// Retorna o objeto completo da operação selecionada
 const operacaoSelecionada = computed(() => {
-  if (!form.operacao_id) return null;
-  return props.operacao;
+  if (props.operacao) return props.operacao;
+  if (!form.operacao_id || !props.operacoesDisponiveis) return null;
+  return (
+    props.operacoesDisponiveis.find(op => op.id === form.operacao_id) || null
+  );
 });
 
 const formatarData = data => {
@@ -313,32 +317,17 @@ const voltarEtapa = () => {
 };
 
 const submit = () => {
-  console.log('=== INICIANDO SUBMIT ===');
-  console.log('Etapa atual:', etapaAtual.value);
-  console.log('Dados do form:', form.data());
-
-  // Validar a etapa atual antes de enviar
   const erros = validarEtapa(etapaAtual.value);
   errorsEtapa.value = erros;
 
-  console.log('Erros de validação:', erros);
-  console.log('Total de erros:', Object.keys(erros).length);
-
-  // Se houver erros, não enviar
-  if (Object.keys(erros).length > 0) {
-    console.warn('SUBMIT BLOQUEADO - Há erros de validação!');
-    // Scroll para o primeiro erro
-    const primeiroErro = Object.keys(erros)[0];
-    console.log('Primeiro erro:', primeiroErro, '-', erros[primeiroErro]);
-    return;
-  }
+  if (Object.keys(erros).length > 0) return;
 
   // Garantir que matrícula seja string antes de enviar
   form.autoridade_responsavel_matricula = String(
     form.autoridade_responsavel_matricula || ''
   );
 
-  // GARANTIR que quando NÃO houve armas, os campos estejam preenchidos
+  // Garantir que quando não houve armas, os campos estejam preenchidos
   if (
     houveApreensaoArmas.value === false ||
     form.tipo_arma_apreendida.includes('NENHUMA')
@@ -347,30 +336,10 @@ const submit = () => {
     form.quantidade_armas_apreendidas = 0;
     form.detalhes_armas_apreendidas = 'N/A';
     form.municoes_apreendidas = 'N/A';
-    console.log('Sem armas - Campos preenchidos com N/A');
   }
-
-  console.log('Validação OK - Enviando para o servidor...');
-  console.log(
-    'Matrícula (string):',
-    form.autoridade_responsavel_matricula,
-    typeof form.autoridade_responsavel_matricula
-  );
-  console.log('Tipo arma:', form.tipo_arma_apreendida);
-  console.log('Detalhes armas:', form.detalhes_armas_apreendidas);
-  console.log('Munições:', form.municoes_apreendidas);
 
   form.post(route('resultados-operacao.store'), {
     preserveScroll: true,
-    onSuccess: () => {
-      console.log('Sucesso!');
-    },
-    onError: errors => {
-      console.error('Erros do servidor:', errors);
-    },
-    onFinish: () => {
-      console.log('=== SUBMIT FINALIZADO ===');
-    },
   });
 };
 
@@ -501,63 +470,171 @@ const erro = campo => {
 
               <!-- Dados da Operação (Readonly) -->
               <div
-                v-if="operacaoSelecionada || operacao"
+                v-if="operacaoSelecionada || props.operacao"
                 class="bg-gray-50 border-2 border-gray-200 rounded-lg p-6"
               >
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">
                   Dados da Operação Cadastrada
                 </h3>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div
+                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                >
+                  <!-- Nome -->
                   <div class="bg-white p-3 rounded border border-gray-200">
-                    <label
-                      class="text-xs font-semibold text-gray-700 uppercase"
-                    >
-                      Nome da Operação</label
-                    >
-                    <p class="text-gray-900 font-medium mt-1">
-                      {{ operacao?.nome_operacao || 'Carregando...' }}
-                    </p>
-                  </div>
-
-                  <div class="bg-white p-3 rounded border border-gray-200">
-                    <label
-                      class="text-xs font-semibold text-gray-700 uppercase"
-                    >
-                      Data da Deflagração</label
+                    <label class="text-xs font-semibold text-gray-700 uppercase"
+                      >Nome da Operação</label
                     >
                     <p class="text-gray-900 font-medium mt-1">
                       {{
-                        operacao?.data_operacao_formatada ||
-                        formatarData(operacao?.data_operacao) ||
-                        'Carregando...'
+                        (operacaoSelecionada || props.operacao)
+                          ?.nome_operacao || '—'
                       }}
                     </p>
                   </div>
 
+                  <!-- Data -->
                   <div class="bg-white p-3 rounded border border-gray-200">
-                    <label
-                      class="text-xs font-semibold text-gray-700 uppercase"
-                    >
-                      Unidade Solicitante/Executora Vinculada à</label
-                    >
-                    <p class="text-gray-900 font-medium mt-1">
-                      {{ operacao?.vinculada_unidade || 'Carregando...' }}
-                    </p>
-                  </div>
-
-                  <div class="bg-white p-3 rounded border border-gray-200">
-                    <label
-                      class="text-xs font-semibold text-gray-700 uppercase"
-                    >
-                      Unidade Solicitante/Executora</label
+                    <label class="text-xs font-semibold text-gray-700 uppercase"
+                      >Data da Deflagração</label
                     >
                     <p class="text-gray-900 font-medium mt-1">
                       {{
-                        operacao?.vinculada_unidade_especializada ||
-                        'Carregando...'
+                        (operacaoSelecionada || props.operacao)
+                          ?.data_operacao_formatada ||
+                        formatarData(
+                          (operacaoSelecionada || props.operacao)?.data_operacao
+                        ) ||
+                        '—'
                       }}
                     </p>
+                  </div>
+
+                  <!-- Origem -->
+                  <div class="bg-white p-3 rounded border border-gray-200">
+                    <label class="text-xs font-semibold text-gray-700 uppercase"
+                      >Origem</label
+                    >
+                    <p class="text-gray-900 font-medium mt-1">
+                      {{
+                        (operacaoSelecionada || props.operacao)
+                          ?.origem_operacao || '—'
+                      }}
+                    </p>
+                  </div>
+
+                  <!-- UF -->
+                  <div class="bg-white p-3 rounded border border-gray-200">
+                    <label class="text-xs font-semibold text-gray-700 uppercase"
+                      >UF Responsável</label
+                    >
+                    <p class="text-gray-900 font-medium mt-1">
+                      {{
+                        (operacaoSelecionada || props.operacao)
+                          ?.uf_responsavel || '—'
+                      }}
+                    </p>
+                  </div>
+
+                  <!-- Vinculada à -->
+                  <div class="bg-white p-3 rounded border border-gray-200">
+                    <label class="text-xs font-semibold text-gray-700 uppercase"
+                      >Vinculada à</label
+                    >
+                    <p class="text-gray-900 font-medium mt-1">
+                      {{
+                        (operacaoSelecionada || props.operacao)
+                          ?.vinculada_unidade || '—'
+                      }}
+                    </p>
+                  </div>
+
+                  <!-- Unidade Especializada -->
+                  <div class="bg-white p-3 rounded border border-gray-200">
+                    <label class="text-xs font-semibold text-gray-700 uppercase"
+                      >Unidade Executora</label
+                    >
+                    <p class="text-gray-900 font-medium mt-1">
+                      {{
+                        (operacaoSelecionada || props.operacao)
+                          ?.vinculada_unidade_especializada || '—'
+                      }}
+                    </p>
+                  </div>
+
+                  <!-- Cidades Alvo (span 2) -->
+                  <div
+                    class="bg-white p-3 rounded border border-gray-200 md:col-span-2"
+                  >
+                    <label class="text-xs font-semibold text-gray-700 uppercase"
+                      >Cidades Alvo</label
+                    >
+                    <p class="text-gray-900 mt-1 text-sm">
+                      {{
+                        (operacaoSelecionada || props.operacao)?.cidades_alvo ||
+                        '—'
+                      }}
+                    </p>
+                  </div>
+
+                  <!-- Crimes Investigados (span 2) -->
+                  <div
+                    class="bg-white p-3 rounded border border-gray-200 md:col-span-2"
+                  >
+                    <label class="text-xs font-semibold text-gray-700 uppercase"
+                      >Crimes Investigados</label
+                    >
+                    <p class="text-gray-900 mt-1 text-sm">
+                      {{
+                        (operacaoSelecionada || props.operacao)
+                          ?.crimes_investigados || '—'
+                      }}
+                    </p>
+                  </div>
+
+                  <!-- UFs do Alvo — só aparece quando origem = "Alvo em outro Estado" -->
+                  <div
+                    v-if="
+                      (operacaoSelecionada || props.operacao)
+                        ?.origem_operacao === 'Alvo em outro Estado' &&
+                      (operacaoSelecionada || props.operacao)
+                        ?.ufs_alvo_outros_estados &&
+                      Object.keys(
+                        (operacaoSelecionada || props.operacao)
+                          ?.ufs_alvo_outros_estados
+                      ).length
+                    "
+                    class="bg-blue-50 p-3 rounded border border-blue-200 md:col-span-3"
+                  >
+                    <div class="flex items-center justify-between mb-2">
+                      <label
+                        class="text-xs font-semibold text-blue-700 uppercase"
+                      >
+                        Estado(s) e Quantidade de Alvos por Estado
+                      </label>
+                      <span class="text-xs text-blue-600">
+                        Total fora da PB:
+                        <strong>{{
+                          (operacaoSelecionada || props.operacao)
+                            ?.quantidade_alvos_outros_estados
+                        }}</strong>
+                      </span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                      <span
+                        v-for="(qtd, uf) in (
+                          operacaoSelecionada || props.operacao
+                        )?.ufs_alvo_outros_estados"
+                        :key="uf"
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-300"
+                      >
+                        {{ uf }}
+                        <span
+                          class="bg-blue-200 text-blue-900 px-1.5 py-0.5 rounded-full text-xs"
+                          >{{ qtd }} {{ qtd === 1 ? 'alvo' : 'alvos' }}</span
+                        >
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

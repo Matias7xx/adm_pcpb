@@ -113,7 +113,21 @@ class ResultadoOperacaoController extends Controller
       ->map(function ($op) {
         return [
           'id' => $op->id,
-          'label' => $op->nome_operacao . ' - ' . $op->data_operacao_formatada,
+          'label' => $op->nome_operacao . ' — ' . $op->data_operacao_formatada,
+          'nome_operacao' => $op->nome_operacao,
+          'data_operacao' => $op->data_operacao,
+          'data_operacao_formatada' => $op->data_operacao_formatada,
+          'origem_operacao' => $op->origem_operacao,
+          'uf_responsavel' => $op->uf_responsavel,
+          'ufs_alvo_outros_estados' => $op->ufs_alvo_outros_estados,
+          'vinculada_unidade' => $op->vinculada_unidade,
+          'vinculada_unidade_especializada' =>
+            $op->vinculada_unidade_especializada,
+          'cidades_alvo' => $op->cidades_alvo,
+          'crimes_investigados' => $op->crimes_investigados,
+          'autoridade_responsavel_nome' => $op->autoridade_responsavel_nome,
+          'autoridade_responsavel_matricula' =>
+            $op->autoridade_responsavel_matricula,
         ];
       });
 

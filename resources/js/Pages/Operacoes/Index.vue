@@ -16,6 +16,7 @@ const filtrosBusca = ref({
   data_inicio: props.filtros?.data_inicio || '',
   data_fim: props.filtros?.data_fim || '',
   origem: props.filtros?.origem || '',
+  uf_alvo: props.filtros?.uf_alvo || '',
 });
 
 const aplicarFiltros = () => {
@@ -31,6 +32,7 @@ const limparFiltros = () => {
     data_inicio: '',
     data_fim: '',
     origem: '',
+    uf_alvo: '',
   };
   router.get(route('operacoes.index'));
 };
@@ -131,6 +133,57 @@ const getOrigemClass = origem => {
                   <option value="Estadual">Estadual</option>
                   <option value="Apoio a outro Estado">
                     Apoio a outro Estado
+                  </option>
+                  <option value="Alvo em outro Estado">
+                    Alvo em Outro Estado
+                  </option>
+                </select>
+              </div>
+
+              <!-- Filtro de UF — aparece só quando origem = "Alvo em Outro Estado" -->
+              <div v-if="filtrosBusca.origem === 'Alvo em outro Estado'">
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  UF do Alvo
+                </label>
+                <select
+                  v-model="filtrosBusca.uf_alvo"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                >
+                  <option value="">Todos os estados</option>
+                  <option
+                    v-for="uf in [
+                      'AC',
+                      'AL',
+                      'AP',
+                      'AM',
+                      'BA',
+                      'CE',
+                      'DF',
+                      'ES',
+                      'GO',
+                      'MA',
+                      'MT',
+                      'MS',
+                      'MG',
+                      'PA',
+                      'PB',
+                      'PR',
+                      'PE',
+                      'PI',
+                      'RJ',
+                      'RN',
+                      'RS',
+                      'RO',
+                      'RR',
+                      'SC',
+                      'SP',
+                      'SE',
+                      'TO',
+                    ]"
+                    :key="uf"
+                    :value="uf"
+                  >
+                    {{ uf }}
                   </option>
                 </select>
               </div>
@@ -236,12 +289,34 @@ const getOrigemClass = origem => {
                     }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <span
-                      :class="getOrigemClass(operacao.origem_operacao)"
-                      class="px-2 py-1 text-xs font-semibold rounded-full"
-                    >
-                      {{ operacao.origem_operacao }}
-                    </span>
+                    <div class="flex flex-col gap-1">
+                      <span
+                        :class="getOrigemClass(operacao.origem_operacao)"
+                        class="px-2 py-1 text-xs font-semibold rounded-full self-start"
+                      >
+                        {{ operacao.origem_operacao }}
+                      </span>
+                      <!-- Chips de UFs quando origem = "Alvo em outro Estado" -->
+                      <div
+                        v-if="
+                          operacao.origem_operacao === 'Alvo em outro Estado' &&
+                          operacao.ufs_alvo_outros_estados &&
+                          Object.keys(operacao.ufs_alvo_outros_estados).length
+                        "
+                        class="flex flex-wrap gap-1 mt-0.5"
+                      >
+                        <span
+                          v-for="(qtd, uf) in operacao.ufs_alvo_outros_estados"
+                          :key="uf"
+                          class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200"
+                        >
+                          {{ uf }}
+                          <span class="text-blue-500 font-normal">{{
+                            qtd
+                          }}</span>
+                        </span>
+                      </div>
+                    </div>
                   </td>
                   <td class="px-6 py-4 text-sm text-gray-900">
                     <div class="flex flex-col">

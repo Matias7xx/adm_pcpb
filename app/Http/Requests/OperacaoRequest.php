@@ -36,9 +36,26 @@ class OperacaoRequest extends FormRequest
       // Origem e localização
       'origem_operacao' => [
         'required',
-        Rule::in(['Nacional', 'Estadual', 'Apoio a outro Estado']),
+        Rule::in([
+          'Nacional',
+          'Estadual',
+          'Apoio a outro Estado',
+          'Alvo em outro Estado',
+        ]),
       ],
       'uf_responsavel' => ['required', 'string', 'size:2', 'uppercase'],
+
+      // Campo obrigatório APENAS quando origem = "Alvo em Outro Estado"
+      'ufs_alvo_outros_estados' => [
+        Rule::requiredIf(
+          fn() => $this->origem_operacao === 'Alvo em outro Estado',
+        ),
+        'nullable',
+        'array',
+        'min:1',
+      ],
+      'ufs_alvo_outros_estados.*' => ['integer', 'min:1'],
+
       'data_operacao' => $regrasData,
 
       // Briefing
@@ -172,6 +189,16 @@ class OperacaoRequest extends FormRequest
       'uf_responsavel.required' => 'A UF responsável é obrigatória.',
       'uf_responsavel.size' => 'A UF deve ter exatamente 2 caracteres.',
 
+      'ufs_alvo_outros_estados.required' =>
+        'Informe ao menos um estado onde o alvo se encontra.',
+      'ufs_alvo_outros_estados.array' =>
+        'Os estados do alvo devem ser uma lista.',
+      'ufs_alvo_outros_estados.min' =>
+        'Selecione ao menos um estado onde o alvo se encontra.',
+      'ufs_alvo_outros_estados.*.in' => 'Uma das UFs informadas é inválida.',
+      'ufs_alvo_outros_estados.*.size' =>
+        'Cada UF deve ter exatamente 2 caracteres.',
+
       'data_operacao.required' => 'A data da operação é obrigatória.',
       'data_operacao.date' => 'Data inválida.',
       'data_operacao.after_or_equal' =>
@@ -261,6 +288,11 @@ class OperacaoRequest extends FormRequest
       $this->merge([
         'uf_responsavel' => strtoupper($this->uf_responsavel),
       ]);
+    }
+
+    // Limpar o campo quando a origem não for "Alvo em Outro Estado"
+    if ($this->origem_operacao !== 'Alvo em outro Estado') {
+      $this->merge(['ufs_alvo_outros_estados' => null]);
     }
   }
 }

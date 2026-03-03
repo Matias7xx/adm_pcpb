@@ -186,6 +186,14 @@
                 </div>
             </div>
         </div>
+        @if($operacao->origem_operacao === 'Alvo em outro Estado' && !empty($operacao->ufs_alvo_outros_estados))
+        <div class="campo" style="margin-top: 6px; background: #eef4ff; padding: 6px 8px; border-radius: 4px; border-left: 3px solid #3b82f6;">
+            <span class="campo-label" style="color: #1d4ed8;">Estado(s) e Quantidade de Alvos por Estado:</span>
+            <span class="campo-valor" style="font-weight: bold; color: #1e40af;">
+                @foreach($operacao->ufs_alvo_outros_estados as $uf => $qtd){{ $uf }} ({{ $qtd }} {{ $qtd == 1 ? 'alvo' : 'alvos' }}){{ !$loop->last ? ', ' : '' }}@endforeach
+            </span>
+        </div>
+        @endif
     </div>
 
     <div class="secao">
@@ -300,7 +308,7 @@
     </div>
 
     <div class="secao">
-        <div class="secao-titulo">VINCULAÇÕES INSTITUCIONAIS</div>
+        <div class="secao-titulo">VINCULAÇÕES</div>
         
         <div class="campo">
             <span class="campo-label">Vinculada à Unidade:</span>
@@ -335,10 +343,20 @@
     @endif
 
     <div class="assinatura">
-        <p>_____________________________________</p>
-        <p style="margin-top: 5px; font-weight: bold;">{{ $operacao->autoridade_responsavel_nome }}</p>
-        <p>Autoridade Policial Responsável</p>
-        <p style="margin-top: 5px; font-size: 10px;">Matrícula: {{ $operacao->autoridade_responsavel_matricula }}</p>
+        <div style="display: table; width: 100%; margin-top: 50px;">
+            <div style="display: table-cell; width: 50%; text-align: center; padding: 0 20px;">
+                <p>_____________________________________</p>
+                <p style="margin-top: 5px; font-weight: bold;">{{ $operacao->autoridade_responsavel_nome }}</p>
+                <p>Autoridade Policial Responsável</p>
+                <p style="margin-top: 3px; font-size: 10px;">Matrícula: {{ $operacao->autoridade_responsavel_matricula }}</p>
+            </div>
+            <div style="display: table-cell; width: 50%; text-align: center; padding: 0 20px;">
+                <p>_____________________________________</p>
+                <p style="margin-top: 5px; font-weight: bold;">{{ $operacao->policial_responsavel_nome }}</p>
+                <p>Policial Civil Responsável pelo Preenchimento</p>
+                <p style="margin-top: 3px; font-size: 10px;">Matrícula: {{ $operacao->policial_responsavel_matricula }}</p>
+            </div>
+        </div>
     </div>
 
     <div class="rodape">

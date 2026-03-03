@@ -126,8 +126,14 @@ const menuItems = [
   { text: 'SPP', href: 'https://appseds.pb.gov.br/spp/system/login.jsf' },
   { text: 'Lince', href: 'https://lince.pc.pb.gov.br/login' },
   { text: 'RIP', href: 'https://rip.apps.pc.pb.gov.br/#/' },
-  { text: 'Ficha Funcional', href: 'https://fichafuncional.apps.pc.pb.gov.br/login' },
-  { text: 'Recursos Humanos', href: 'https://sistemas.pc.pb.gov.br/rh/template/index.php' },
+  {
+    text: 'Ficha Funcional',
+    href: 'https://fichafuncional.apps.pc.pb.gov.br/login',
+  },
+  {
+    text: 'Recursos Humanos',
+    href: 'https://sistemas.pc.pb.gov.br/rh/template/index.php',
+  },
   { text: 'Help Desk', href: 'https://helpdesk.apps.pc.pb.gov.br/login' },
   { text: 'Outros', href: 'https://sistemas.pc.pb.gov.br/' },
   /* { text: 'Agendamentos', href: '#' } */

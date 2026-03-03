@@ -108,9 +108,9 @@ const getUnidadeEspecializadaNome = codigo => {
           </div>
 
           <div class="flex gap-3">
-            <!-- <Link
+            <Link
               :href="route('operacoes.edit', operacao.id)"
-              class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors flex items-center gap-2"
+              class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-900 transition-colors flex items-center gap-2"
             >
               <svg
                 class="w-5 h-5"
@@ -126,7 +126,7 @@ const getUnidadeEspecializadaNome = codigo => {
                 />
               </svg>
               Editar
-            </Link> -->
+            </Link>
             <a
               :href="route('operacoes.pdf', operacao.id)"
               target="_blank"
@@ -272,6 +272,32 @@ const getUnidadeEspecializadaNome = codigo => {
                 >UF Responsável</label
               >
               <p class="text-gray-900 mt-1">{{ operacao.uf_responsavel }}</p>
+            </div>
+
+            <div
+              v-if="
+                operacao.origem_operacao === 'Alvo em outro Estado' &&
+                operacao.ufs_alvo_outros_estados &&
+                Object.keys(operacao.ufs_alvo_outros_estados).length
+              "
+              class="bg-blue-50 p-3 rounded border border-blue-200 md:col-span-2 lg:col-span-3"
+            >
+              <label class="text-xs font-semibold text-blue-700 uppercase">
+                Estado(s) do(s) Alvo(s)
+              </label>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span
+                  v-for="(qtd, uf) in operacao.ufs_alvo_outros_estados"
+                  :key="uf"
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-300"
+                >
+                  {{ uf }}
+                  <span
+                    class="bg-blue-200 text-blue-900 px-1.5 py-0.5 rounded-full text-xs"
+                    >{{ qtd }} {{ qtd === 1 ? 'alvo' : 'alvos' }}</span
+                  >
+                </span>
+              </div>
             </div>
 
             <div>

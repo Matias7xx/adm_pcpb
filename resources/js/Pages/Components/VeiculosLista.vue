@@ -50,10 +50,13 @@ const getStatusBadge = veiculo => {
       <div class="mb-8 sm:mb-10">
         <h1 class="section-title">
           <!-- Publicação de Relação de Veículos Apreendidos -->
-            EDITAL – Lista de Veículos Apreendidos não vinculados a inquérito policial ou processo judicial – prazo de 15 (quinze) dias
+          EDITAL – Lista de Veículos Apreendidos não vinculados a inquérito
+          policial ou processo judicial – prazo de 15 (quinze) dias
         </h1>
         <p class="section-subtitle">
-          Edital com prazo de 15 (quinze) dias para que proprietários ou possuidores de boa-fé requeiram a restituição de veículos apreendidos não vinculados a inquérito policial ou processo judicial.
+          Edital com prazo de 15 (quinze) dias para que proprietários ou
+          possuidores de boa-fé requeiram a restituição de veículos apreendidos
+          não vinculados a inquérito policial ou processo judicial.
         </p>
       </div>
 
