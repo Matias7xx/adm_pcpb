@@ -28,7 +28,8 @@ class UserFactory extends Factory
             'lotacao' => fake()->company(),
             'telefone' => fake()->numerify('###########'),
             'data_nascimento' => fake()->dateTimeBetween('-60 years', '-18 years')->format('Y-m-d'),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => '$2y$10$nR5/zSh2k4m48gEJjA9cwumTxvfxEXP5G6RSDE2bv89iSjz9M23uq', //X7#mK2@pLqR9!vNw
+            // 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ];
     }

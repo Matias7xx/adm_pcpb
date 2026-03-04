@@ -125,25 +125,25 @@ class AdminCoreSeeder extends Seeder
 
         // create demo users
         $user = \App\Models\User::factory()->create([
-            'name'      => 'Super Admin',
+            'name'      => 'Administrador',
             'email'     => 'superadmin@example.com',
-            'matricula' => '0000000',
+            'matricula' => '2781385',
         ]);
         $user->assignRole($roleSuperAdmin);
 
-        $user = \App\Models\User::factory()->create([
-            'name'      => 'Admin User',
-            'email'     => 'admin@example.com',
-            'matricula' => '0000001',
-        ]);
-        $user->assignRole($roleAdmin);
+        // $user = \App\Models\User::factory()->create([
+        //     'name'      => 'Admin User',
+        //     'email'     => 'admin@example.com',
+        //     'matricula' => '0000001',
+        // ]);
+        // $user->assignRole($roleAdmin);
 
-        $user = \App\Models\User::factory()->create([
-            'name'      => 'Example User',
-            'email'     => 'test@example.com',
-            'matricula' => '0000002',
-        ]);
-        $user->assignRole($roleServidor);
+        // $user = \App\Models\User::factory()->create([
+        //     'name'      => 'Example User',
+        //     'email'     => 'test@example.com',
+        //     'matricula' => '0000002',
+        // ]);
+        // $user->assignRole($roleServidor);
 
         // ─── Menu Admin ───────────────────────────────────────────────────────
         // Regra: roles = null → visível para qualquer admin autenticado (incluindo diop)

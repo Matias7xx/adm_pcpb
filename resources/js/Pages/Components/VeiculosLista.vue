@@ -45,7 +45,7 @@ const getStatusBadge = veiculo => {
 
 <template>
   <section class="veiculos-section">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-10">
       <!-- Header -->
       <div class="mb-8 sm:mb-10">
         <h1 class="section-title">
