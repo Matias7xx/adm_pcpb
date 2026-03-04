@@ -20,6 +20,8 @@ class ResultadoOperacaoRequest extends FormRequest
    */
   public function rules(): array
   {
+    $isEdicao = $this->isMethod('PUT') || $this->isMethod('PATCH');
+
     return [
       // ID da operação
       'operacao_id' => ['required', 'exists:operacoes,id'],
@@ -110,6 +112,14 @@ class ResultadoOperacaoRequest extends FormRequest
 
       // Outras informações (opcional)
       'outras_informacoes' => ['nullable', 'string'],
+
+      'justificativa_edicao' => [
+        Rule::requiredIf($isEdicao),
+        'nullable',
+        'string',
+        'min:10',
+        'max:1000',
+      ],
     ];
   }
 
@@ -211,6 +221,13 @@ class ResultadoOperacaoRequest extends FormRequest
 
       'demais_objetos_apreendidos.required' =>
         'Informe os objetos apreendidos ou "N/A" se não houver.',
+
+      'justificativa_edicao.required' =>
+        'A justificativa da alteração é obrigatória.',
+      'justificativa_edicao.min' =>
+        'A justificativa deve ter ao menos 10 caracteres.',
+      'justificativa_edicao.max' =>
+        'A justificativa não pode ultrapassar 1000 caracteres.',
     ];
   }
 }

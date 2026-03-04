@@ -20,6 +20,12 @@ use Illuminate\Support\Facades\Request;
  */
 trait Auditable
 {
+  /**
+   * Dados extras que serão mesclados em dados_novos no próximo evento de auditoria.
+   * Não é persistido no banco
+   */
+  public array $auditExtra = [];
+
   public static function bootAuditable(): void
   {
     static::created(function ($model) {
@@ -35,7 +41,7 @@ trait Auditable
       // Remover updated_at do diff pois não agrega valor
       unset($changes['updated_at']);
 
-      if (empty($changes)) {
+      if (empty($changes) && empty($model->auditExtra)) {
         return;
       }
 
@@ -45,12 +51,21 @@ trait Auditable
         ->except($exclude)
         ->except(AuditLog::CAMPOS_SENSIVEIS)
         ->toArray();
+
       $after = collect($changes)
         ->except($exclude)
         ->except(AuditLog::CAMPOS_SENSIVEIS)
         ->toArray();
 
+      // Mescla dados extras (ex: justificativa de edição) em dados_novos
+      if (!empty($model->auditExtra)) {
+        $after = array_merge($after, $model->auditExtra);
+      }
+
       $model->registrarAuditoria('editar', $before, $after);
+
+      // Limpa após uso
+      $model->auditExtra = [];
     });
 
     static::deleted(function ($model) {

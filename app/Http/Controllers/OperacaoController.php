@@ -173,7 +173,16 @@ class OperacaoController extends Controller
       abort(403, 'Você não tem permissão para editar esta operação.');
     }
 
-    $operacao->update($request->validated());
+    $dados = $request->validated();
+
+    // Extrai a justificativa — não persiste no modelo, vai para a auditoria
+    $justificativa = $dados['justificativa_edicao'];
+    unset($dados['justificativa_edicao']);
+
+    // Injeta no auditExtra para que a Auditable trait inclua no dados_novos do banco
+    $operacao->auditExtra = ['_justificativa_edicao' => $justificativa];
+
+    $operacao->update($dados);
 
     // Passar o ID explicitamente
     return redirect()

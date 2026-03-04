@@ -19,6 +19,10 @@ const houveApreensaoArmas = ref(
     !props.resultado.tipo_arma_apreendida.includes('NENHUMA')
 );
 
+const modalJustificativa = ref(false);
+const justificativaTexto = ref('');
+const justificativaErro = ref('');
+
 const form = useForm({
   operacao_id: props.resultado.operacao_id,
 
@@ -71,6 +75,7 @@ const form = useForm({
   veiculos_apreendidos: props.resultado.veiculos_apreendidos || '',
   demais_objetos_apreendidos: props.resultado.demais_objetos_apreendidos || '',
   outras_informacoes: props.resultado.outras_informacoes || '',
+  justificativa_edicao: '',
 });
 
 // Inicializar formatação do dinheiro
@@ -248,15 +253,26 @@ const voltarEtapa = () => {
   if (etapaAtual.value > 1) etapaAtual.value--;
 };
 
-const submit = () => {
+const abrirModalJustificativa = () => {
   const erros = validarEtapa(etapaAtual.value);
   errorsEtapa.value = erros;
   if (Object.keys(erros).length > 0) return;
+  justificativaTexto.value = '';
+  justificativaErro.value = '';
+  modalJustificativa.value = true;
+};
+
+const confirmarEdicao = () => {
+  if (justificativaTexto.value.trim().length < 10) {
+    justificativaErro.value =
+      'A justificativa deve ter ao menos 10 caracteres.';
+    return;
+  }
+  modalJustificativa.value = false;
 
   form.autoridade_responsavel_matricula = String(
     form.autoridade_responsavel_matricula || ''
   );
-
   if (
     !houveApreensaoArmas.value ||
     form.tipo_arma_apreendida.includes('NENHUMA')
@@ -266,16 +282,17 @@ const submit = () => {
     form.detalhes_armas_apreendidas = 'N/A';
     form.municoes_apreendidas = 'N/A';
   }
-
-  // valores_dinheiro_formatado é só máscara
   const { valores_dinheiro_formatado, ...dadosParaEnviar } = form.data();
 
   form
-    .transform(() => dadosParaEnviar)
+    .transform(() => ({
+      ...dadosParaEnviar,
+      justificativa_edicao: justificativaTexto.value.trim(),
+    }))
     .put(route('resultados-operacao.update', props.resultado.id), {
       preserveScroll: true,
       onError: () => {
-        // Se houver erros do servidor, volta para a etapa 1 para o usuário ver
+        modalJustificativa.value = false;
         etapaAtual.value = 1;
       },
     });
@@ -1103,49 +1120,109 @@ const erro = campo => form.errors[campo] || errorsEtapa.value[campo];
               <div v-else></div>
 
               <div class="flex items-center gap-3">
-              <button
-                v-if="etapaAtual < totalEtapas"
-                type="button"
-                @click="proximaEtapa"
-                class="px-6 py-3 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors"
-              >
-                Próximo →
-              </button>
-
-              <button
-                type="submit"
-                :disabled="form.processing"
-                class="px-6 py-3 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-              >
-                <svg
-                  v-if="form.processing"
-                  class="animate-spin h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
+                <button
+                  v-if="etapaAtual < totalEtapas"
+                  type="button"
+                  @click="proximaEtapa"
+                  class="px-6 py-3 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors"
                 >
-                  <circle
-                    class="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="4"
-                  ></circle>
-                  <path
-                    class="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                {{ form.processing ? 'Salvando...' : 'Salvar Alterações' }}
-              </button>
+                  Próximo →
+                </button>
+
+                <button
+                  type="button"
+                  @click="abrirModalJustificativa"
+                  :disabled="form.processing"
+                  class="px-6 py-3 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  <svg
+                    v-if="form.processing"
+                    class="animate-spin h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  {{ form.processing ? 'Salvando...' : 'Salvar Alterações' }}
+                </button>
               </div>
             </div>
           </div>
         </form>
       </div>
     </div>
+    <Teleport to="body">
+      <div
+        v-if="modalJustificativa"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+      >
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">
+                Justificativa da Alteração
+              </h3>
+              <p class="text-sm text-red-500">
+                Ficará registrada no histórico de auditoria.
+              </p>
+            </div>
+          </div>
 
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Por que você está realizando esta alteração?
+            <span class="text-red-500">*</span>
+          </label>
+          <textarea
+            v-model="justificativaTexto"
+            rows="4"
+            maxlength="1000"
+            placeholder="Descreva o motivo da alteração (mínimo 10 caracteres)..."
+            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#bea55a] focus:border-transparent resize-none"
+            :class="justificativaErro ? 'border-red-500' : 'border-gray-300'"
+          ></textarea>
+          <div class="flex justify-between items-center mt-1 mb-4">
+            <p v-if="justificativaErro" class="text-red-500 text-sm">
+              {{ justificativaErro }}
+            </p>
+            <p v-else class="text-gray-400 text-xs">Mínimo 10 caracteres</p>
+            <span class="text-gray-400 text-xs"
+              >{{ justificativaTexto.length }}/1000</span
+            >
+          </div>
+
+          <div class="flex justify-end gap-3">
+            <button
+              type="button"
+              @click="modalJustificativa = false"
+              class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              @click="confirmarEdicao"
+              :disabled="form.processing"
+              class="px-6 py-2 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors disabled:opacity-50"
+            >
+              <span v-if="!form.processing">Confirmar e Salvar</span>
+              <span v-else>Salvando...</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
     <Footer />
   </div>
 </template>

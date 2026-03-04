@@ -228,7 +228,16 @@ class ResultadoOperacaoController extends Controller
       abort(403, 'Você não tem permissão para editar este resultado.');
     }
 
-    $resultado->update($request->validated());
+    $dados = $request->validated();
+
+    // Extrai a justificativa — não persiste no modelo, vai para a auditoria
+    $justificativa = $dados['justificativa_edicao'];
+    unset($dados['justificativa_edicao']);
+
+    // Injeta no auditExtra para que a Auditable trait inclua no dados_novos do banco
+    $resultado->auditExtra = ['_justificativa_edicao' => $justificativa];
+
+    $resultado->update($dados);
 
     return redirect()
       ->route('resultados-operacao.show', ['resultado' => $resultado->id])

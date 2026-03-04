@@ -81,6 +81,7 @@ const form = useForm({
   outra_unidade_policial: props.operacao.outra_unidade_policial || '',
   vinculada_delegacia_seccional: props.operacao.vinculada_delegacia_seccional,
   solicitacao_apoio_diop: props.operacao.solicitacao_apoio_diop || '',
+  justificativa_edicao: '',
 });
 
 // Controle de etapas
@@ -89,6 +90,10 @@ const totalEtapas = 5;
 
 // Erros de validação client-side por etapa
 const errorsEtapa = ref({});
+
+const modalJustificativa = ref(false);
+const justificativaTexto = ref('');
+const justificativaErro = ref('');
 
 // Validação por etapa
 const validarEtapa = etapa => {
@@ -211,10 +216,29 @@ const voltarEtapa = () => {
   }
 };
 
-// Submit
-const submit = () => {
-  errorsEtapa.value = {};
-  form.put(route('operacoes.update', props.operacao.id));
+const abrirModalJustificativa = () => {
+  const erros = validarEtapa(etapaAtual.value);
+  errorsEtapa.value = erros;
+  if (Object.keys(erros).length > 0) return;
+  justificativaTexto.value = '';
+  justificativaErro.value = '';
+  modalJustificativa.value = true;
+};
+
+const confirmarEdicao = () => {
+  if (justificativaTexto.value.trim().length < 10) {
+    justificativaErro.value =
+      'A justificativa deve ter ao menos 10 caracteres.';
+    return;
+  }
+  modalJustificativa.value = false;
+  form.justificativa_edicao = justificativaTexto.value.trim();
+  form.put(route('operacoes.update', props.operacao.id), {
+    preserveScroll: true,
+    onError: () => {
+      etapaAtual.value = 1;
+    },
+  });
 };
 
 // Mostrar campo "outra unidade" apenas se necessário
@@ -988,10 +1012,13 @@ const erro = campo => {
                 Especifique a Solicitação (Opcional)
               </label>
               <p class="text-sm text-gray-500 mb-2">
-                Servidores, composição da equipe, recursos especiais, apoio logístico, entre
-                outros.
+                Servidores, composição da equipe, recursos especiais, apoio
+                logístico, entre outros.
               </p>
-              <p class="text-sm text-gray-500 mb-2">Obs.: Em caso de alvo do sexo feminino, informar a necessidade de policial do sexo feminino.</p>
+              <p class="text-sm text-gray-500 mb-2">
+                Obs.: Em caso de alvo do sexo feminino, informar a necessidade
+                de policial do sexo feminino.
+              </p>
               <textarea
                 v-model="form.solicitacao_apoio_diop"
                 rows="5"
@@ -1033,7 +1060,8 @@ const erro = campo => {
               </button>
 
               <button
-                type="submit"
+                type="button"
+                @click="abrirModalJustificativa"
                 :disabled="form.processing"
                 class="px-6 py-2 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -1046,6 +1074,66 @@ const erro = campo => {
       </form>
     </div>
   </div>
+  <Teleport to="body">
+    <div
+      v-if="modalJustificativa"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+    >
+      <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">
+              Justificativa da Alteração
+            </h3>
+            <p class="text-sm text-red-500">
+              Ficará registrada no histórico de auditoria.
+            </p>
+          </div>
+        </div>
+
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Por que você está realizando esta alteração?
+          <span class="text-red-500">*</span>
+        </label>
+        <textarea
+          v-model="justificativaTexto"
+          rows="4"
+          maxlength="1000"
+          placeholder="Descreva o motivo da alteração (mínimo 10 caracteres)..."
+          class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#bea55a] focus:border-transparent resize-none"
+          :class="justificativaErro ? 'border-red-500' : 'border-gray-300'"
+        ></textarea>
+        <div class="flex justify-between items-center mt-1 mb-4">
+          <p v-if="justificativaErro" class="text-red-500 text-sm">
+            {{ justificativaErro }}
+          </p>
+          <p v-else class="text-gray-400 text-xs">Mínimo 10 caracteres</p>
+          <span class="text-gray-400 text-xs"
+            >{{ justificativaTexto.length }}/1000</span
+          >
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button
+            type="button"
+            @click="modalJustificativa = false"
+            class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            @click="confirmarEdicao"
+            :disabled="form.processing"
+            class="px-6 py-2 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors disabled:opacity-50"
+          >
+            <span v-if="!form.processing">Confirmar e Salvar</span>
+            <span v-else>Salvando...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </Teleport>
   <Footer />
 </template>
 

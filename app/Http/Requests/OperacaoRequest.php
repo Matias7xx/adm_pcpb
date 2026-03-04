@@ -20,6 +20,8 @@ class OperacaoRequest extends FormRequest
    */
   public function rules(): array
   {
+    $isEdicao = $this->isMethod('PUT') || $this->isMethod('PATCH');
+
     // Regra de data: só exige after_or_equal:today na criação.
     // Na edição, a operação pode já ter uma data passada válida.
     $regrasData = ['required', 'date'];
@@ -168,6 +170,14 @@ class OperacaoRequest extends FormRequest
 
       // Solicitação de apoio (opcional)
       'solicitacao_apoio_diop' => ['nullable', 'string'],
+
+      'justificativa_edicao' => [
+        Rule::requiredIf($isEdicao),
+        'nullable',
+        'string',
+        'min:10',
+        'max:1000',
+      ],
     ];
   }
 
@@ -276,6 +286,13 @@ class OperacaoRequest extends FormRequest
       'vinculada_delegacia_seccional.required' =>
         'A delegacia seccional vinculada é obrigatória.',
       'vinculada_delegacia_seccional.in' => 'Delegacia seccional inválida.',
+
+      'justificativa_edicao.required' =>
+        'A justificativa da alteração é obrigatória.',
+      'justificativa_edicao.min' =>
+        'A justificativa deve ter ao menos 10 caracteres.',
+      'justificativa_edicao.max' =>
+        'A justificativa não pode ultrapassar 1000 caracteres.',
     ];
   }
 
