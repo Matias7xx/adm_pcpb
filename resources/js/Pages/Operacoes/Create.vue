@@ -1038,9 +1038,12 @@ const erro = campo => {
                   Especifique a Solicitação (Opcional)
                 </label>
                 <p class="text-sm text-gray-500 mb-2">
-                  Servidores (inclusive policial feminina, se necessário),
-                  composição da equipe, recursos especiais, apoio logístico,
-                  entre outros.
+                  Servidores, composição da equipe, recursos especiais, apoio
+                  logístico, entre outros.
+                </p>
+                <p class="text-sm text-gray-500 mb-2">
+                  Obs.: Em caso de alvo do sexo feminino, informar a necessidade
+                  de policial do sexo feminino.
                 </p>
                 <textarea
                   v-model="form.solicitacao_apoio_diop"

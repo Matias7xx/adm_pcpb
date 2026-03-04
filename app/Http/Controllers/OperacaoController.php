@@ -26,6 +26,22 @@ class OperacaoController extends Controller
     ) === mb_strtolower(trim($lotacao));
   }
 
+  private function operacoesVencidasSemResultado(string $lotacao)
+  {
+    return Operacao::where('unidade_policial_responsavel', $lotacao)
+      ->where('data_operacao', '<', now()->subHours(72)->toDateString())
+      ->whereDoesntHave('resultado')
+      ->orderBy('data_operacao', 'asc')
+      ->get(['id', 'nome_operacao', 'data_operacao']);
+  }
+
+  //Bloqueia o EDIT da operação vencida
+  private function estaVencidaSemResultado(Operacao $operacao): bool
+  {
+    return $operacao->data_operacao < now()->subHours(72)->toDateString() &&
+      !$operacao->resultado()->exists();
+  }
+
   /**
    * Display a listing of the resource.
    */
@@ -34,7 +50,7 @@ class OperacaoController extends Controller
     $user = auth()->user();
 
     // Filtros
-    $query = Operacao::with('user')
+    $query = Operacao::with(['user', 'resultado'])
       ->where('unidade_policial_responsavel', $user->lotacao)
       ->orderBy('data_operacao', 'desc');
 
@@ -75,6 +91,8 @@ class OperacaoController extends Controller
 
     $operacoes = $query->paginate(10);
 
+    $vencidas = $this->operacoesVencidasSemResultado($user->lotacao);
+
     return Inertia::render('Operacoes/Index', [
       'operacoes' => $operacoes,
       'filtros' => $request->only([
@@ -84,6 +102,8 @@ class OperacaoController extends Controller
         'busca',
         'uf_alvo',
       ]),
+      'bloqueado' => $vencidas->isNotEmpty(),
+      'operacoes_vencidas' => $vencidas,
     ]);
   }
 
@@ -92,6 +112,16 @@ class OperacaoController extends Controller
    */
   public function create()
   {
+    $vencidas = $this->operacoesVencidasSemResultado(auth()->user()->lotacao);
+    if ($vencidas->isNotEmpty()) {
+      return redirect()
+        ->route('operacoes.index')
+        ->with(
+          'error',
+          'Regularize os resultados pendentes antes de criar uma nova operação.',
+        );
+    }
+
     return Inertia::render('Operacoes/Create', [
       'opcoes' => [
         'origens' => Operacao::getOrigensOperacao(),
@@ -109,6 +139,17 @@ class OperacaoController extends Controller
   public function store(OperacaoRequest $request)
   {
     $user = auth()->user();
+
+    // Proteção contra bypass via API
+    $vencidas = $this->operacoesVencidasSemResultado($user->lotacao);
+    if ($vencidas->isNotEmpty()) {
+      return redirect()
+        ->route('operacoes.index')
+        ->with(
+          'error',
+          'Regularize os resultados pendentes antes de criar uma nova operação.',
+        );
+    }
 
     // Preencher dados automáticos do usuário logado
     $dados = $request->validated();
@@ -136,10 +177,12 @@ class OperacaoController extends Controller
 
     // Carregar relacionamento com resultado
     $operacao->load(['user', 'resultado']);
+    $vencidas = $this->operacoesVencidasSemResultado(auth()->user()->lotacao);
 
     return Inertia::render('Operacoes/Show', [
       'operacao' => $operacao,
       'estatisticas' => $operacao->getEstatisticas(),
+      'bloqueado' => $this->estaVencidaSemResultado($operacao),
     ]);
   }
 
@@ -150,6 +193,16 @@ class OperacaoController extends Controller
   {
     if (!$this->temPermissao($operacao)) {
       abort(403, 'Você não tem permissão para editar esta operação.');
+    }
+
+    // Bloqueia edição apenas se ESTA operação está vencida sem resultado. Para desabilitar é só comentar
+    if ($this->estaVencidaSemResultado($operacao)) {
+      return redirect()
+        ->route('operacoes.show', $operacao->id)
+        ->with(
+          'error',
+          'Cadastre o resultado desta operação antes de editá-la.',
+        );
     }
 
     return Inertia::render('Operacoes/Edit', [
@@ -171,6 +224,16 @@ class OperacaoController extends Controller
   {
     if (!$this->temPermissao($operacao)) {
       abort(403, 'Você não tem permissão para editar esta operação.');
+    }
+
+    // Bloqueia edição apenas se ESTA operação está vencida sem resultado. Para desabilitar é só comentar
+    if ($this->estaVencidaSemResultado($operacao)) {
+      return redirect()
+        ->route('operacoes.show', $operacao->id)
+        ->with(
+          'error',
+          'Cadastre o resultado desta operação antes de editá-la.',
+        );
     }
 
     $dados = $request->validated();

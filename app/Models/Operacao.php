@@ -182,12 +182,12 @@ class Operacao extends Model
   }
 
   public function setHorarioBriefingAttribute(?string $value): void
-{
+  {
     if ($value && preg_match('/^\d{2}:\d{2}$/', $value)) {
-        $value .= ':00';
+      $value .= ':00';
     }
     $this->attributes['horario_briefing'] = $value;
-}
+  }
 
   public static function getUnidadesFederativas()
   {

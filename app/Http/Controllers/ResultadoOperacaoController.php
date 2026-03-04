@@ -234,6 +234,9 @@ class ResultadoOperacaoController extends Controller
     $justificativa = $dados['justificativa_edicao'];
     unset($dados['justificativa_edicao']);
 
+    // Remove operacao_id — não pode ser alterado após criação
+    unset($dados['operacao_id']);
+
     // Injeta no auditExtra para que a Auditable trait inclua no dados_novos do banco
     $resultado->auditExtra = ['_justificativa_edicao' => $justificativa];
 

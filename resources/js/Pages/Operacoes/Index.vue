@@ -8,6 +8,8 @@ import Footer from '../Components/Footer.vue';
 const props = defineProps({
   operacoes: Object,
   filtros: Object,
+  bloqueado: Boolean,
+  operacoes_vencidas: Array,
 });
 
 // Filtros reativos
@@ -18,6 +20,17 @@ const filtrosBusca = ref({
   origem: props.filtros?.origem || '',
   uf_alvo: props.filtros?.uf_alvo || '',
 });
+
+const statusResultado = operacao => {
+  if (operacao.resultado != null) return 'ok';
+  const dataOp = new Date(
+    String(operacao.data_operacao).substring(0, 10) + 'T12:00:00'
+  );
+  const limite = new Date(Date.now() - 72 * 60 * 60 * 1000);
+  if (dataOp < limite) return 'vencida';
+  if (dataOp <= new Date()) return 'pendente';
+  return 'ok';
+};
 
 const aplicarFiltros = () => {
   router.get(route('operacoes.index'), filtrosBusca.value, {
@@ -73,8 +86,18 @@ const getOrigemClass = origem => {
               </p>
             </div>
             <Link
-              :href="route('operacoes.create')"
-              class="px-6 py-3 bg-[#bea55a] text-white rounded-lg hover:bg-[#968143] transition-colors flex items-center gap-2"
+              :href="bloqueado ? '#' : route('operacoes.create')"
+              :class="[
+                'px-6 py-3 rounded-lg flex items-center gap-2 transition-colors',
+                bloqueado
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none'
+                  : 'bg-[#bea55a] text-white hover:bg-[#968143]',
+              ]"
+              :title="
+                bloqueado
+                  ? 'Regularize os resultados pendentes primeiro'
+                  : 'Nova Operação'
+              "
             >
               <svg
                 class="w-5 h-5"
@@ -206,6 +229,111 @@ const getOrigemClass = origem => {
           </div>
         </div>
 
+        <!-- Aviso informativo -->
+        <div
+          class="bg-blue-50 border border-blue-200 rounded-lg mb-6 px-4 py-3 flex items-start gap-2"
+        >
+          <svg
+            class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z"
+            />
+          </svg>
+          <p class="text-sm text-blue-700">
+            <span class="font-semibold">Atenção:</span>
+            O resultado (debriefing) de cada operação deverá ser cadastrado em
+            até <span class="font-semibold">72 horas</span>, contadas da data de
+            sua deflagração. Após esse período, o sistema bloqueará
+            automaticamente o cadastro de novas operações.
+          </p>
+        </div>
+
+        <!-- Banner de bloqueio -->
+        <div
+          v-if="bloqueado"
+          class="bg-red-50 border border-red-200 rounded-lg mb-6 p-5"
+        >
+          <div class="flex items-start gap-3 mb-3">
+            <svg
+              class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+              />
+            </svg>
+            <div>
+              <p class="font-semibold text-red-800">
+                Ação necessária — Resultado pendente — Cadastro de operações
+                bloqueado
+              </p>
+              <p class="text-red-700 text-sm mt-1">
+                {{
+                  operacoes_vencidas.length === 1
+                    ? 'A operação abaixo ultrapassou 72h sem resultado/debriefing cadastrado. Regularize a situação para desbloqueio.'
+                    : `${operacoes_vencidas.length} operações ultrapassaram 72h sem resultado. Regularize a situação para desbloqueio.`
+                }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Card por operação vencida -->
+          <div class="space-y-2 ml-9">
+            <div
+              v-for="op in operacoes_vencidas"
+              :key="op.id"
+              class="flex items-center justify-between bg-white border border-red-200 rounded-lg px-4 py-3"
+            >
+              <div>
+                <p class="text-sm font-semibold text-gray-800">
+                  {{ op.nome_operacao }}
+                </p>
+                <p class="text-xs text-red-500 mt-0.5">
+                  Data:
+                  {{
+                    new Date(
+                      String(op.data_operacao).substring(0, 10) + 'T12:00:00'
+                    ).toLocaleDateString('pt-BR')
+                  }}
+                </p>
+              </div>
+              <Link
+                :href="
+                  route('resultados-operacao.create', { operacao_id: op.id })
+                "
+                class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors flex-shrink-0 ml-4"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Cadastrar Resultado
+              </Link>
+            </div>
+          </div>
+        </div>
+
         <!-- Lista de Operações -->
         <div class="bg-white shadow rounded-lg overflow-hidden">
           <div
@@ -266,7 +394,14 @@ const getOrigemClass = origem => {
                 <tr
                   v-for="operacao in operacoes.data"
                   :key="operacao.id"
-                  class="hover:bg-gray-50 transition-colors"
+                  :class="{
+                    'bg-red-50 hover:bg-red-100':
+                      statusResultado(operacao) === 'vencida',
+                    'bg-yellow-50 hover:bg-yellow-100':
+                      statusResultado(operacao) === 'pendente',
+                    'hover:bg-gray-50': statusResultado(operacao) === 'ok',
+                  }"
+                  class="transition-colors"
                 >
                   <td class="px-6 py-4">
                     <div class="flex flex-col">
@@ -276,8 +411,30 @@ const getOrigemClass = origem => {
                       >
                         {{ operacao.nome_operacao }}
                       </Link>
-                      <span class="text-xs text-gray-500 mt-1">
-                        ID: #{{ operacao.id }}
+                      <span class="text-xs text-gray-500 mt-1"
+                        >ID: #{{ operacao.id }}</span
+                      >
+                      <!-- Badge de resultado -->
+                      <span
+                        v-if="statusResultado(operacao) === 'vencida'"
+                        class="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-red-700"
+                      >
+                        ⚠ Resultado vencido
+                      </span>
+                      <span
+                        v-else-if="statusResultado(operacao) === 'pendente'"
+                        class="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-yellow-600"
+                      >
+                        ● Resultado pendente
+                      </span>
+                      <span
+                        v-else-if="
+                          statusResultado(operacao) === 'ok' &&
+                          operacao.resultado != null
+                        "
+                        class="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-green-600"
+                      >
+                        ✓ Resultado cadastrado
                       </span>
                     </div>
                   </td>
@@ -357,9 +514,21 @@ const getOrigemClass = origem => {
                         </svg>
                       </Link> -->
                       <Link
-                        :href="route('operacoes.edit', operacao.id)"
-                        class="text-yellow-600 hover:text-yellow-900"
-                        title="Editar"
+                        :href="
+                          statusResultado(operacao) === 'vencida'
+                            ? '#'
+                            : route('operacoes.edit', operacao.id)
+                        "
+                        :title="
+                          statusResultado(operacao) === 'vencida'
+                            ? 'Cadastre o resultado antes de editar'
+                            : 'Editar'
+                        "
+                        :class="
+                          statusResultado(operacao) === 'vencida'
+                            ? 'text-gray-300 cursor-not-allowed pointer-events-none'
+                            : 'text-yellow-600 hover:text-yellow-900'
+                        "
                       >
                         <svg
                           class="w-5 h-5"

@@ -24,7 +24,9 @@ class ResultadoOperacaoRequest extends FormRequest
 
     return [
       // ID da operação
-      'operacao_id' => ['required', 'exists:operacoes,id'],
+      'operacao_id' => $isEdicao
+        ? ['sometimes', 'exists:operacoes,id']
+        : ['required', 'exists:operacoes,id'],
 
       // Autoridade e Policial Responsáveis (editáveis)
       'autoridade_responsavel_nome' => ['required', 'string', 'max:255'],
