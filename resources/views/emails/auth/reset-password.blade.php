@@ -3,7 +3,7 @@
 
 Olá **{{ $user->name }}**,
 
-Você está recebendo este e-mail porque recebemos uma solicitação de redefinição de senha para sua conta no sistema da *ACADEPOL*.
+Você está recebendo este e-mail porque recebemos uma solicitação de redefinição de senha para sua conta no sistema da *Polícia Civil*.
 
 @component('mail::button', ['url' => $url])
 Redefinir Senha
@@ -21,6 +21,6 @@ Se você está tendo problemas para clicar no botão "Redefinir Senha", copie e 
 ---
 
 Atenciosamente,<br>
-*Academia de Polícia Civil*
+*Polícia Civil da Paraíba*
 
 @endcomponent

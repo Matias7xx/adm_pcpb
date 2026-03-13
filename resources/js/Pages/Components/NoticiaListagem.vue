@@ -72,17 +72,15 @@ const fetchNoticias = async (isRetry = false) => {
     }
 
     // Processar dados da API paginada
-    noticias.value = data.data
-      .map(noticia => ({
-        ...noticia,
-        id: noticia.id || Math.random().toString(36).substr(2, 9),
-        titulo: noticia.titulo || 'Título não disponível',
-        descricao_curta: noticia.descricao_curta || 'Descrição não disponível',
-        data_publicacao: formatDate(noticia.data_publicacao),
-        visualizacoes: parseInt(noticia.visualizacoes) || 0,
-        destaque: Boolean(noticia.destaque),
-      }))
-      .filter(noticia => noticia.titulo !== 'Título não disponível');
+    noticias.value = data.data.map(noticia => ({
+      ...noticia,
+      id: noticia.id || Math.random().toString(36).substr(2, 9),
+      titulo: noticia.titulo || 'Título não disponível',
+      descricao_curta: noticia.descricao_curta || 'Descrição não disponível',
+      data_publicacao: formatDate(noticia.data_publicacao),
+      visualizacoes: parseInt(noticia.visualizacoes) || 0,
+      destaque: Boolean(noticia.destaque),
+    }));
 
     // Atualizar informações de paginação
     currentPage.value = data.current_page || 1;

@@ -294,7 +294,7 @@
             <p>Se você acredita que isso é um erro, entre em contato com o 
                 <a href="mailto:{{ config('mail.from.address', 'suporte@acadepol.com') }}">suporte técnico</a>
             </p>
-            <p>© {{ date('Y') }} ACADEPOL - Academia de Polícia Civil da Paraíba</p>
+            <p>© {{ date('Y') }} Polícia Civil da Paraíba</p>
         </div>
     </div>
 </body>

@@ -124,8 +124,8 @@ const handleEscapeKey = event => {
 const menuItems = [
   { text: 'História', href: '/historia' },
   { text: 'Missão', href: '/missao' },
-  { text: 'Diretores e Ex-Diretores', href: '/diretores' },
-  { text: 'Estrutura Física', href: '/estrutura' },
+  //{ text: 'Diretores e Ex-Diretores', href: '/diretores' },
+  //{ text: 'Estrutura Física', href: '/estrutura' },
   { text: 'Regimento Interno', href: '/regimento-interno' },
   { text: 'Organograma', href: '/organograma' },
 ];

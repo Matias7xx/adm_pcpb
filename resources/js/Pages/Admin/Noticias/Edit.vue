@@ -17,7 +17,7 @@ import FormControl from '@/Components/FormControl.vue';
 import BaseDivider from '@/Components/BaseDivider.vue';
 import BaseButton from '@/Components/BaseButton.vue';
 import BaseButtons from '@/Components/BaseButtons.vue';
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import NoticiasEditor from './partials/NoticiasEditor.vue';
 
 const props = defineProps({
@@ -35,12 +35,60 @@ const props = defineProps({
   },
 });
 
+// extrair imagens do conteúdo ANTES de montar o editor
+// garante que o CKEditor receba o conteúdo limpo na inicialização
+const _migrateImages = () => {
+  const rawConteudo = props.noticia.conteudo || '';
+  const rawCarousel = props.noticia.carousel_images || [];
+
+  if (rawCarousel.length > 0 || !rawConteudo) {
+    return { conteudo: rawConteudo, carousel_images: rawCarousel };
+  }
+
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = rawConteudo;
+  const urls = [];
+  tempDiv.querySelectorAll('img').forEach(img => {
+    const src = img.getAttribute('src');
+    if (src && !src.startsWith('data:')) urls.push(src);
+  });
+
+  if (urls.length === 0) {
+    return { conteudo: rawConteudo, carousel_images: rawCarousel };
+  }
+
+  // Remove imagens e elementos que ficaram vazios
+  const isEmpty = el => el.textContent.replace(/[ \s]/g, '') === '';
+
+  tempDiv.querySelectorAll('img').forEach(img => {
+    const parent = img.parentElement;
+    img.remove();
+    if (parent && parent !== tempDiv && isEmpty(parent)) {
+      parent.remove();
+    }
+  });
+
+  // Remove p/figure/div vazios restantes (inclusive com &nbsp;)
+  tempDiv.querySelectorAll('p, figure, div').forEach(el => {
+    if (isEmpty(el) && !el.querySelector('iframe, video, a')) {
+      el.remove();
+    }
+  });
+
+  return {
+    conteudo: tempDiv.innerHTML.trim(),
+    carousel_images: urls.map(url => ({ url })),
+  };
+};
+
+const _migrated = _migrateImages();
+
 const form = useForm({
   titulo: props.noticia.titulo,
   descricao_curta: props.noticia.descricao_curta || '',
-  conteudo: props.noticia.conteudo || '',
+  conteudo: _migrated.conteudo,
   imagem: null,
-  carousel_images: props.noticia.carousel_images || [],
+  carousel_images: _migrated.carousel_images,
   remover_imagem: false,
   data_publicacao: props.noticia.data_publicacao,
   status: props.noticia.status,
@@ -53,8 +101,6 @@ const isUploading = ref(false);
 const uploadProgress = ref(0);
 const wordCount = ref(0);
 const isProcessingImages = ref(false);
-
-const carouselImagesLocal = ref([...(props.noticia.carousel_images || [])]);
 
 // Função para lidar com o preview da imagem
 const handleImageUpload = event => {
@@ -143,8 +189,6 @@ const cancelarRemocao = () => {
   }
 };
 
-const hasFileUpload = form.imagem instanceof File;
-
 // Função para processar imagens base64 no conteúdo
 const processContentImages = async content => {
   if (!content.includes('data:image/')) {
@@ -225,9 +269,6 @@ const submit = async () => {
       form.conteudo = processedContent;
     }
 
-    // IMPORTANTE: Garantir que carousel_images está atualizado
-    form.carousel_images = [...carouselImagesLocal.value];
-
     form
       .transform(data => ({
         ...data,
@@ -235,13 +276,14 @@ const submit = async () => {
       }))
       .post(route('admin.noticias.update', props.noticia.id), {
         preserveScroll: true,
-        forceFormData: hasFileUpload,
+        forceFormData: true,
         onSuccess: () => {
+          // Reset após sucesso
           isUploading.value = false;
           uploadProgress.value = 0;
           isProcessingImages.value = false;
         },
-        onError: errors => {
+        onError: () => {
           isProcessingImages.value = false;
         },
       });
@@ -275,14 +317,6 @@ const currentImagePreview = computed(() => {
   }
   return null;
 });
-
-watch(
-  carouselImagesLocal,
-  newValue => {
-    form.carousel_images = [...newValue]; // Cria uma cópia
-  },
-  { deep: true }
-);
 </script>
 
 <template>
@@ -350,7 +384,7 @@ watch(
             Informações da Notícia
           </h3>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
             <FormField
               label="Título"
               :class="{ 'text-red-400': form.errors.titulo }"
@@ -629,7 +663,7 @@ watch(
           <NoticiasEditor
             v-if="!isPreviewMode"
             v-model="form.conteudo"
-            v-model:carousel-images="carouselImagesLocal"
+            v-model:carousel-images="form.carousel_images"
             :error="form.errors.conteudo"
             @word-count-change="handleWordCountChange"
           />

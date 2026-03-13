@@ -20,18 +20,20 @@ import governoPb from '@/src/assets/governopb.png';
           <ul class="space-y-2.5">
             <li>
               <a
-                href="/cursos"
+                href="https://sistemas.pc.pb.gov.br/"
+                target="_blank"
                 class="text-sm text-gray-400 hover:text-[#bea55a] transition-colors duration-200 inline-block"
               >
-                Cursos
+                Sistemas
               </a>
             </li>
             <li>
               <a
-                href="/fale-conosco"
+                href="https://197.pc.pb.gov.br/"
+                target="_blank"
                 class="text-sm text-gray-400 hover:text-[#bea55a] transition-colors duration-200 inline-block"
               >
-                Contato
+                Disque Denúncia
               </a>
             </li>
             <li>
@@ -52,10 +54,11 @@ import governoPb from '@/src/assets/governopb.png';
             </li>
             <li>
               <a
-                href="/estrutura"
+                href="https://delegaciaonline.pc.pb.gov.br/"
+                target="_blank"
                 class="text-sm text-gray-400 hover:text-[#bea55a] transition-colors duration-200 inline-block"
               >
-                Estrutura
+                Delegacia Online
               </a>
             </li>
           </ul>

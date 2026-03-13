@@ -5,24 +5,24 @@ import Header from './Components/Header.vue';
 import Footer from './Components/Footer.vue';
 import ExibirDocumentos from './Components/ExibirDocumentos.vue';
 
-const DOCUMENT_URL = '/storage/documentos/OrganogramaAcadepol.pdf';
-const DOCUMENT_TITLE = 'Organograma da ACADEPOL';
-const DOCUMENT_FILENAME = 'Organograma_ACADEPOL';
+const DOCUMENT_URL = '/documentos/OrganogramaPC.pdf';
+const DOCUMENT_TITLE = 'Organograma da Polícia Civil da Paraíba';
+const DOCUMENT_FILENAME = 'Organograma_PCPB';
 const DOCUMENT_DESCRIPTION = 'Estrutura organizacional e hierárquica.';
 
 const additionalInfo = [
-  'Este organograma apresenta a estrutura atual da Academia de Polícia Civil da Paraíba.',
+  'Este organograma apresenta a estrutura atual da Polícia Civil da Paraíba.',
 ];
 </script>
 
 <template>
   <div class="bg-gray-100 min-h-screen">
     <Head>
-      <title>Organograma - ACADEPOL</title>
+      <title>Organograma - Polícia Civil da Paraíba</title>
       <meta name="description" :content="DOCUMENT_DESCRIPTION" />
       <meta
         name="keywords"
-        content="acadepol, organograma, polícia civil, estrutura, hierarquia, paraíba"
+        content="organograma, polícia civil, estrutura, hierarquia, paraíba"
       />
     </Head>
 
@@ -73,7 +73,7 @@ const additionalInfo = [
         </h2>
         <p class="text-gray-600 mb-4">
           O organograma institucional é uma representação gráfica da estrutura
-          hierárquica e organizacional da Academia de Polícia Civil da Paraíba,
+          hierárquica e organizacional da Polícia Civil da Paraíba,
           demonstrando as relações entre os diferentes departamentos e divisões.
         </p>
         <p class="text-gray-600">

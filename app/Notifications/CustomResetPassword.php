@@ -32,7 +32,7 @@ class CustomResetPassword extends ResetPasswordNotification implements
     );
 
     return new MailMessage()
-      ->subject('Redefinição de Senha - ACADEPOL')
+      ->subject('Redefinição de Senha - Polícia Civil')
       ->markdown('emails.auth.reset-password', [
         'user' => $notifiable,
         'url' => $url,

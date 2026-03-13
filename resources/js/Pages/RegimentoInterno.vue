@@ -5,28 +5,27 @@ import Header from './Components/Header.vue';
 import Footer from './Components/Footer.vue';
 import ExibirDocumentos from './Components/ExibirDocumentos.vue';
 
-const DOCUMENT_URL = '/storage/documentos/RegimentoInternoAcadepol.pdf';
-const DOCUMENT_TITLE = 'Regimento Interno da ACADEPOL';
-const DOCUMENT_FILENAME = 'Regimento_Interno_ACADEPOL';
+const DOCUMENT_URL = '/documentos/RegimentoInternoPC.pdf';
+const DOCUMENT_TITLE = 'Regimento Interno da Polícia Civil da Paraíba';
+const DOCUMENT_FILENAME = 'Regimento_Interno_PCPB';
 const DOCUMENT_DESCRIPTION =
-  'Este documento estabelece as normas e diretrizes que regulamentam o funcionamento interno da Academia de Polícia Civil.';
+  'Este documento estabelece as normas e diretrizes que regulamentam o funcionamento interno da Polícia Civil da Paraíba.';
 
 // Informações adicionais para o componente de visualização
 const additionalInfo = [
-  'Este documento é de uso interno e regula as condutas na Academia de Polícia.',
-  'Todos os alunos e servidores devem seguir as normas estabelecidas neste regimento.',
-  'Em caso de dúvidas, consulte a Diretoria da ACADEPOL.',
+  'Este documento é de uso interno e regula as condutas na Polícia Civil da Paraíba.',
+  'Todos os servidores devem seguir as normas estabelecidas neste regimento.',
 ];
 </script>
 
 <template>
   <div class="bg-gray-100 min-h-screen">
     <Head>
-      <title>Regimento Interno - ACADEPOL</title>
+      <title>Regimento Interno - Polícia Civil da Paraíba</title>
       <meta name="description" :content="DOCUMENT_DESCRIPTION" />
       <meta
         name="keywords"
-        content="regimento interno, acadepol, academia de polícia, normas, diretrizes"
+        content="regimento interno, polícia civil, paraíba, normas, diretrizes"
       />
     </Head>
 
@@ -94,16 +93,9 @@ const additionalInfo = [
             Importância do Regimento Interno
           </h2>
           <p class="text-gray-600 mb-4">
-            O Regimento Interno da ACADEPOL é o instrumento normativo que
-            estabelece a estrutura organizacional, as atribuições dos órgãos que
-            compõem a Academia, bem como as normas de funcionamento e
+            O Regimento Interno da Polícia Civil da Paraíba é o instrumento normativo que
+            estabelece a estrutura organizacional, as normas de funcionamento e
             procedimentos a serem adotados.
-          </p>
-          <p class="text-gray-600">
-            É fundamental que todos os envolvidos no processo de
-            ensino-aprendizagem, sejam servidores, professores ou alunos,
-            conheçam e sigam este regimento para garantir o bom funcionamento
-            institucional e a qualidade da formação profissional.
           </p>
         </div>
       </div>

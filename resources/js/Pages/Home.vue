@@ -17,7 +17,7 @@ import BannerCarousel from '@/Components/BannerCarousel.vue';
 </script>
 
 <template>
-  <Head title="Home" />
+  <Head title="Início" />
   <div class="min-h-screen flex flex-col">
     <!-- Header Section -->
     <header class="w-full">

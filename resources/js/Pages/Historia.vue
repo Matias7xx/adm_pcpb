@@ -2,30 +2,30 @@
 import SiteNavbar from './Components/SiteNavbar.vue';
 import Footer from './Components/Footer.vue';
 import { Head } from '@inertiajs/vue3';
-import Acadepol1 from '@/src/assets/acadepol1.jpg';
-import Placa from '@/src/assets/PLACA-ACADEPOL.jpg';
-import Evolucao from '@/src/assets/evolucao.jpeg';
+import DG from '@/src/assets/DELEGACIA-GERAL.jpg';
+import Central from '@/src/assets/CIDADE.jpeg';
+import Draco from '@/src/assets/DRACO.jpeg';
 import Header from './Components/Header.vue';
 
 const historia = {
-  title: 'Fundação e Primeiros Anos (1980-1982)',
+  title: 'Quando surgimos',
   description:
-    'A Academia de Ensino da Polícia Civil passou a ter existência legal com a Lei nº 4.216 de 17/12/1980, publicada no Diário oficial de 18/12/80, no governo de Tarcísio de Miranda Burity, e estava subordinada à Secretaria de Segurança Pública, cujo secretário era o Cel. Geraldo Amorim Navarro que muito se identificou com os ideais da Polícia Civil e abraçou com simpatia a defesa da classe. Inicialmente, a Academia funcionou em sede provisória denominada “Núcleo de Formação Policial”, localizada no bairro do Miramar. Através do Decreto nº 9.426, de 14 de abril de 1982, publicado no Diário Oficial do Estado de 17/04/ 1982, foi aprovado o Regimento Interno da Academia de Polícia Civil do Estado da Paraíba – ACADEPOL, cuja estrutura e funcionamento passaram a obedecer àquele Regimento e assim teve a sua finalidade e competência definidas, funcionando com a estrutura de Diretoria, Divisão de Pesquisa e Programação, Divisão de Ensino, Divisão de Acompanhamento e Avaliação, Divisão de Apoio ao Corpo Discente, Museu Policial, Divisão Administrativa, Congregação e Conselho Técnico. A partir de então a Academia assumiu uma posição de destaque entre os órgãos que integram a Secretaria de Segurança Pública.',
-  image: Placa,
+    'A polícia judiciária no Brasil remonta ao início do século XVII. Na Paraíba, a Polícia Civil segue o mesmo processo nacional, porém, apenas em 21 de agosto de 1981, é criada com estrutura de carreira pela Lei 4.273. A Lei Complementar n.º 85, publicada em 12 de agosto de 2008, é a Lei Orgânica que dispõe sobre a organização da Polícia Civil, suas obrigações perante a sociedade, seus deveres e regime disciplinar. É através desse instrumento que estão estabelecidas as categorias da Polícia Civil, o Plano de Cargos e Carreiras, e regras para o provimento de cargos a partir da realização de concursos (investidura, nomeação, posse). Versa sobre aposentadorias, promoções e honrarias que podem ser concedidas a membros que comprovem atos de bravuras, também sobre a atenção à saúde física e mental dos policiais, em função da salubridade da atividade. Está ordenada na Lei a prestação de assistência médico-psicológica quando necessário, em casos de desgastes emocionais ou distúrbios mentais resultantes do exercício da função.',
+  image: DG,
 };
 
 const estrutura = {
-  title: 'Estrutura e Localização',
+  title: 'Nossa função',
   description:
-    'A Academia de Polícia passou a funcionar em sede própria, com excelentes instalações para a época, na Av. Hilton Souto Maior, S/Nº, Mangabeira, sendo considerada uma das melhores do País, onde funcionou até agosto de 2013. O primeiro curso de formação ocorreu em 1980, onde foram formados Delegados de Polícia (480 horas/aula), Agentes de Investigação (460 horas/aula) e Escrivães de Polícia (420 horas/aula). O curso durava em média 03 meses e eram abordadas disciplinas de Direito, Técnicas de Investigação e Tiro Defensivo. O primeiro Diretor da Academia de Polícia foi o Dr. Eugênio Murilo S. Lemos Junior que hoje empresta o nome à nossa Biblioteca. Através da Portaria Ministerial n.º 512/MJ, de 05 de dezembro de 1984 (DOU de 06/12/1984) a Academia se tornou competente para promover Cursos de Formação de Vigilantes, o que posteriormente foi revogado pelo Decreto n.º 99.244 de 10 de maio de 1990, publicado no DOU em 10/05/90.',
-  image: Acadepol1,
+    'Praticar, com exclusividade, todos os atos necessários ao exercício das funções de polícia judiciária e investigativa de caráter criminalístico e criminológico. No sistema da Polícia Investigadora, adotado pelo Brasil, cabe às polícias judiciárias (POLÍCIAS CIVIL e FEDERAL) a direção da investigação criminal, sendo estas as titulares do procedimento investigativo criminal, observados os limites de suas competências. Portanto, a Polícia Civil, dirigida por delegados de polícia de carreira, atua, via de regra, depois que um crime ocorre e busca através da investigação criminal estabelecer a verdade real dos fatos.',
+  image: Draco,
 };
 
 const evolucao = {
-  title: 'Evolução Institucional',
+  title: 'Princípios institucionais',
   description:
-    'A Academia de Polícia teve o seu nome modificado para Academia de Ensino de Polícia com a Lei Orgânica n.º 8.186 de 17 de março de 2007, sendo conhecida popularmente como Acadepol. Em alguns momentos de sua existência a Academia de Ensino de Polícia oscilou entre pontos altos e baixos, chegando a ser cogitado, em tempos de decadência, a sua extinção. Todavia, em decorrência de esforços incansável para a conscientização da importância desta Instituição de ensino na formação, capacitação e valorização do profissional de Segurança Pública, a Acadepol tem vivenciado e mantido o seu pleno funcionamento. Consciente de sua missão de treinar e repassar valores ao seu corpo policial, a Academia de Ensino não se limitou apenas em formar o Policial Civil, mas trabalha sistematicamente o aperfeiçoamento, através da Educação Continuada.',
-  image: Evolucao,
+    'I – respeito ao Estado Democrático de Direito; II – garantia e promoção dos direitos e da dignidade da pessoa humana; III – obediência à hierarquia e à disciplina; IV – unidade de doutrina e uniformidade de procedimentos técnico-científicos, aplicados à investigação policial; V – participação comunitária; VI – integração, com reciprocidade, com os demais órgãos e agentes públicos que compõem o sistema de segurança pública.',
+  image: Central,
 };
 </script>
 

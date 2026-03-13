@@ -2,70 +2,83 @@
 import SiteNavbar from './Components/SiteNavbar.vue';
 import Footer from './Components/Footer.vue';
 import { Head } from '@inertiajs/vue3';
-import Missao from '@/src/assets/missao.jpeg';
-import Missao2 from '@/src/assets/missao2.jpeg';
+import Missao from '@/src/assets/BRASAOG.png';
+import Missao2 from '@/src/assets/CIDADE2.jpeg';
 import Header from './Components/Header.vue';
 
-const historia = {
-  title: 'MISSÃO',
-  title2: 'VISÃO',
+const missao = {
+  title: 'MISSÃO INSTITUCIONAL',
   description:
-    'Proporcionar a formação de policiais/cidadãos conscientes de seus direitos e deveres, tornando-os aptos para atuação como agentes transformadores da realidade onde estão inseridos, produzindo e difundindo conhecimentos éticos, sociais e técnico-científicos. Fomentando a cultura de paz e a mudança de comportamento para promover melhores condições de vida à sociedade.',
-  description2:
-    'Tornar e manter-se como Centro de Excelência no Ensino e Pesquisa em Segurança Pública.',
+    'Exercer, com excelência, as atribuições de polícia investigativa e judiciária para garantir a proteção de direitos, bem como a manutenção da segurança pública e da paz social.',
   image: Missao,
-  image2: Missao2,
 };
+
+const visao = {
+  title: 'VISÃO ESTRATÉGICA',
+  description:
+    'Tornar-se referência nacional em investigação criminal e ser reconhecida pela sociedade como uma instituição imprescindível no enfrentamento à criminalidade e a promoção da justiça.',
+  image: Missao2,
+};
+
+const valores = [
+  { label: 'PROTEÇÃO', description: 'à sociedade.' },
+  { label: 'COMPROMISSO', description: 'com a verdade.' },
+  { label: 'PROBIDADE', description: 'nas atividades.' },
+  { label: 'BRAVURA', description: 'no enfrentamento à criminalidade.' },
+];
+
+const slogan = 'Investigar e Proteger';
 </script>
 
 <template>
-  <Head title="História" />
+  <Head title="Missão" />
   <div class="min-h-screen flex flex-col bg-gray-100">
     <Header />
     <SiteNavbar />
     <section class="w-full bg-gray-100 py-10">
-      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center"
-        >
-          <!-- Imagem -->
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+
+        <!-- Missão e Visão -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
+          <!-- Imagem Missão -->
           <div class="relative w-full overflow-hidden rounded-lg shadow-lg">
             <img
-              :src="historia.image"
-              :alt="title"
+              :src="missao.image"
+              :alt="missao.title"
               class="w-full h-auto object-cover transform transition-all duration-300 hover:scale-105"
             />
           </div>
 
-          <!-- Texto -->
+          <!-- Texto Missão -->
           <div>
             <h2 class="text-3xl font-bold text-[#bea55a] mb-4">
-              {{ historia.title }}
+              {{ missao.title }}
             </h2>
-            <p class="text-gray-700 leading-relaxed text-justify">
-              {{ historia.description }}
+            <p class="text-gray-700 leading-relaxed text-justify italic">
+              "{{ missao.description }}"
             </p>
           </div>
 
-          <!-- Texto2 -->
+          <!-- Texto Visão -->
           <div>
             <h2 class="text-3xl font-bold text-[#bea55a] mb-4">
-              {{ historia.title2 }}
+              {{ visao.title }}
             </h2>
-            <p class="text-gray-700 leading-relaxed text-justify">
-              {{ historia.description2 }}
+            <p class="text-gray-700 leading-relaxed text-justify italic">
+              "{{ visao.description }}"
             </p>
           </div>
 
-          <!-- Imagem 2 -->
+          <!-- Imagem Visão -->
           <div class="relative w-full overflow-hidden rounded-lg shadow-lg">
             <img
-              :src="historia.image2"
-              :alt="title"
+              :src="visao.image"
+              :alt="visao.title"
               class="w-full h-auto object-cover transform transition-all duration-300 hover:scale-105"
             />
           </div>
         </div>
+
       </div>
     </section>
     <Footer />
