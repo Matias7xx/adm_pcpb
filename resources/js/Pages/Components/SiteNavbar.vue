@@ -273,20 +273,15 @@ onBeforeUnmount(() => {
           <DropdownInstitucional class="bg-[#bea55a] rounded-md z-[100]" />
           <DropdownServicos class="bg-[#bea55a] rounded-md" />
           <Link
-            href="/cursos"
+            href="/noticias"
             class="text-black bg-gray-200 rounded-md hover:text-[#a38e4d] px-3 py-2"
-            >Cursos</Link
+            >Notícias</Link
           >
           <!-- <Link href="#" class="text-black hover:text-[#a38e4d] px-3 py-2">Banco de Currículos</Link> -->
           <Link
             href="/concursos"
             class="text-black bg-gray-200 rounded-md hover:text-[#a38e4d] px-3 py-2"
             >Concursos</Link
-          >
-          <Link
-            href="/fale-conosco"
-            class="text-black bg-gray-200 rounded-md hover:text-[#a38e4d] px-3 py-2"
-            >Fale Conosco</Link
           >
 
           <!-- Redes Sociais no Mobile -->
