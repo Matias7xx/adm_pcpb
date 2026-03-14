@@ -1,17 +1,80 @@
 services:
   app:
     build: .
-    container_name: acadepol
+    container_name: pcpb
     ports:
       - "8015:80"
-    restart: always
+      - "5173:5173"   # Vite dev server (hot reload)
+    restart: unless-stopped
+    env_file:
+      - .env
     volumes:
-      - /data/acadepol:/var/www/storage/app/public
-      - /var/www/node_modules
-      - /var/www/vendor
+      # Monta o código local no container (necessário para hot reload)
+      - .:/var/www/html
+
+      # Storage persistente — escolha UMA das opções abaixo:
+      # Desenvolvimento (caminho relativo):
+      - ./storage/app/public:/var/www/html/storage/app/public
+      # Produção (caminho absoluto no servidor):
+      # - /data/pcpb:/var/www/html/storage/app/public
+
+      # Preserva node_modules e vendor do container (evita conflitos com a máquina local)
+      - /var/www/html/node_modules
+      - /var/www/html/vendor
+    depends_on:
+      - db
     networks:
-      - diti
+      - pcpb_network
+    environment:
+      - CHOKIDAR_USEPOLLING=true   # Necessário para hot reload com volumes Docker
+
+  db:
+    image: postgres:15-alpine
+    container_name: pcpb_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: laravel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pcpb_network
+
+  minio:
+    image: minio/minio:RELEASE.2024-10-02T17-50-41Z
+    container_name: pcpb_minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: "admin"
+      MINIO_ROOT_PASSWORD: "altere_esta_senha"
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"   # Console web: http://localhost:9001
+    command: server /data --console-address ":9001"
+    networks:
+      - pcpb_network
+
+  # Servidor de e-mail para testes locais — acesse em http://localhost:8025
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: pcpb_mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - pcpb_network
 
 networks:
-  diti:
-    external: true
+  pcpb_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  minio_data:
+  storage_data:

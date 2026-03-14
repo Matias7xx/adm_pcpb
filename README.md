@@ -1,95 +1,151 @@
-<h1 align="center">Laravel Vue Admin Panel</h1>
-<h3 align="center">A Single page Vue admin panel for Laravel projects.</h3>
-<p align="center">
-<a href="https://packagist.org/packages/balajidharma/laravel-vue-admin-panel"><img src="https://poser.pugx.org/balajidharma/laravel-vue-admin-panel/downloads" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/balajidharma/laravel-vue-admin-panel"><img src="https://poser.pugx.org/balajidharma/laravel-vue-admin-panel/v/stable" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/balajidharma/laravel-vue-admin-panel"><img src="https://poser.pugx.org/balajidharma/laravel-vue-admin-panel/license" alt="License"></a>
-</p>
+# Portal PCPB
 
-[![Laravel VUE admin panel preview](https://user-images.githubusercontent.com/6037466/184547401-1c481008-e013-4ba0-b9a8-3eaf3ff7b9a1.png)](https://github.com/balajidharma/laravel-vue-admin-panel)
+Portal institucional da Polícia Civil da Paraíba, desenvolvido com Laravel + Vue 3 + Inertia.js.
 
-## Built with
-- [Laravel 12](https://github.com/laravel/framework)
-- [spatie/laravel-permission](https://github.com/spatie/laravel-permission)
-- [Laravel Breeze](https://github.com/laravel/breeze)
-- [balajidharma/laravel-menu](https://github.com/balajidharma/laravel-menu)
-- [Vue 3](https://vuejs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Inertiajs](https://inertiajs.com/)
-- [Admin One - Admin Dashboard](https://github.com/justboil/admin-one-vue-tailwind)
+---
 
-## Installation
+## Stack
 
-### With Docker Desktop
-- To get started, you need to install [Docker Desktop](https://www.docker.com/products/docker-desktop).
-- You may run the following command in your terminal
-- Windows open WSL2 Linux terminal. [Docker Desktop WSL 2 backend](https://docs.docker.com/desktop/windows/wsl/)
-- `docker run --rm -v "$(pwd)":/opt -w /opt laravelsail/php83-composer:latest bash -c "composer create-project balajidharma/laravel-vue-admin-panel admin-app && cd admin-app && php artisan sail:install --with=mysql,redis,meilisearch,mailpit,selenium"`
-- `cd admin-app`
-- `./vendor/bin/sail pull mysql redis meilisearch mailpit selenium`
-- `./vendor/bin/sail build`
-- `./vendor/bin/sail up`
-- `./vendor/bin/sail npm install`
-- `./vendor/bin/sail npm run dev`
-- `./vendor/bin/sail artisan vendor:publish --tag=admin-core`
-- `./vendor/bin/sail artisan migrate --seed --seeder=AdminCoreSeeder`
-- `./vendor/bin/sail artisan storage:link`
-- Now open http://localhost/
+| Camada | Tecnologia |
+|---|---|
+| Backend | PHP 8.4 + Laravel 12 |
+| Frontend | Vue 3 + Inertia.js 2.0 + Tailwind CSS |
+| Banco de dados | PostgreSQL |
+| Storage | MinIO (S3-compatible) |
+| Servidor web | Apache (Docker) |
+| Runtime JS | Node.js 22 |
 
-### Without Docker Desktop
-- To get started, you need to install [PHP Composer](https://getcomposer.org/).
-- `Create a new MYSQL database and update database details in `.env` file: cp .env.example .env`
-- `Add your own database credentials in the .env file in DB_DATABASE, DB_USERNAME, DB_PASSWORD`
-- `Generate application key: php artisan key:generate`
-- `Install project dependencies: composer install`
-- `php artisan vendor:publish --tag=admin-core`
-- `php artisan migrate --seed --seeder=AdminCoreSeeder`
-- `php artisan storage:link`
-- `npm install`
-- `npm run dev`
-- `php artisan serve`
-- Now open http://localhost:8000/
+---
 
-###### Super Admin Login
-- Email - superadmin@example.com
-- Password - password
+## Funcionalidades
 
-#### Admin Configuration:
+### Área Pública
+- Páginas institucionais: História, Missão, Organograma, Regimento Interno
+- Listagem e leitura de Notícias
+- Veículos Apreendidos
+- Vídeos e Banners institucionais
 
-To change the Admin Prefix, change `prefix` on `config/admin.php` or add the `ADMIN_PREFIX` on env 
+### Área Autenticada (Servidores)
+- Registro e acompanhamento de Operações Policiais
+- Resultados de Operações
 
-```php
-'prefix' => env('ADMIN_PREFIX', 'admin'),
+### Painel Administrativo
+- Gerenciamento de Usuários, Funções e Permissões (Spatie)
+- Gestão de Notícias, Cursos, Banners e Vídeos
+- Controle de Veículos Apreendidos
+- Gestão de Menus
+- Audit Log completo de ações administrativas
+
+---
+
+## Autenticação
+
+O sistema utiliza um provedor customizado com dupla estratégia:
+
+1. **Via API externa** — autenticação por matrícula/senha contra endpoint configurado em `API_LOGIN_URL`, com token em `API_TOKEN`.
+2. **Fallback local** — em caso de falha de conexão, autentica contra o banco de dados local.
+
+Novos usuários recebem automaticamente a role `servidor`. Roles disponíveis: `super-admin`, `admin`, `diop`, `servidor`.
+
+---
+
+## Storage (MinIO)
+
+Dois buckets S3-compatíveis são utilizados:
+
+| Bucket | Variável de ambiente | Conteúdo |
+|---|---|---|
+| `funcionais` | `AWS_BUCKET_FOTOS` | Fotos dos servidores |
+| `veiculos` | `AWS_BUCKET` | Relação de veículos apreendidos |
+
+---
+
+## Configuração
+
+### Pré-requisitos
+- Docker e Docker Compose
+
+### Variáveis de ambiente obrigatórias
+
+```env
+APP_KEY=
+APP_URL=
+
+DB_HOST=
+DB_PORT=5432
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
+
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=
+AWS_ENDPOINT=
+AWS_BUCKET_FOTOS=funcionais
+AWS_BUCKET=veiculos
+
+API_TOKEN=
+API_LOGIN_URL=
 ```
 
-## Also Try
-- [Build a Vue admin panel from scratch](https://blog.devgenius.io/laravel-creates-a-vue-admin-panel-from-scratch-part-1-installation-and-authentication-56c451d4d697)
-- [Basic Laravel Admin Panel - Build with Blade template](https://github.com/balajidharma/basic-laravel-admin-panel)
+### Subindo o ambiente
 
-## Update guide
-Encountering errors post `composer update`? Reset the database and re-publish vendor assets to resolve issues.
+```bash
+# 1. Copiar e preencher os arquivos de configuração
+cp .env.example .env
+cp docker-compose.yml.example docker-compose.yml
+
+# 2. Build da imagem (obrigatório na primeira vez ou após mudanças no Dockerfile)
+docker compose build
+
+# 3. Subir os containers em background
+docker compose up -d
+
+# 4. Gerar chave da aplicação
+docker exec pcpb php artisan key:generate
+
+# 5. Migrations e seeders rodam automaticamente pelo entrypoint.
+#    Se precisar rodar manualmente:
+docker exec pcpb php artisan migrate --force
+docker exec pcpb php artisan db:seed --class=AdminCoreSeeder --force
+```
+
+> Para rebuild completo sem cache: `docker compose build --no-cache`
+
+---
+
+## Estrutura de rotas
 
 ```
-php artisan vendor:publish --tag=admin-core  --force
-
-php artisan migrate --seed --seeder=AdminCoreSeeder
+/                        → Home
+/historia                → História institucional
+/missao                  → Missão, Visão e Valores
+/noticias                → Listagem de notícias
+/veiculos-apreendidos    → Veículos apreendidos
+/operacoes               → Operações policiais (auth)
+/painel/                 → Painel administrativo (admin)
 ```
 
-## Screenshots
-<p align="center">
-	<img src="https://user-images.githubusercontent.com/6037466/184546912-efd044ad-cb66-4057-9eee-e9c53447763b.png" >
-	<br/><br/>
-	<img src="https://user-images.githubusercontent.com/6037466/184546928-0de1d84a-4dd9-4f7b-a3ac-b848209d0aef.png" >
-	<br/><br/>
-	<img src="https://user-images.githubusercontent.com/6037466/184547401-1c481008-e013-4ba0-b9a8-3eaf3ff7b9a1.png" >
-    <br/><br/>
-	<img src="https://user-images.githubusercontent.com/6037466/184547433-25f6a5a6-4e53-4448-948a-82f18a58d84c.png">
-	<br/><br/>
-	<img src="https://user-images.githubusercontent.com/6037466/184547446-d482df44-0835-4a37-8482-83d5279269fb.png">
-	<br/><br/>
-	<img src="https://user-images.githubusercontent.com/6037466/184570672-6413384d-a5c4-461b-9c8e-d97ede29a21f.png">
-</p>
+---
 
-## License
+## Auditoria
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+O sistema registra automaticamente todas as ações administrativas via `Trait Auditable`, aplicável a qualquer Model. Os eventos `created`, `updated` e `deleted` são persistidos na tabela `audit_logs` com dados anteriores, dados novos, usuário responsável, IP e rota.
+
+Módulos auditados: Usuários, Notícias, Operações, Resultados de Operação, Veículos, Banners, Vídeos e Sistema.
+
+---
+
+## Seeders (primeira execução)
+
+O entrypoint detecta automaticamente se o banco está vazio e executa os seeders iniciais:
+
+| Seeder | Descrição |
+|---|---|
+| `AdminCoreSeeder` | Cria usuário super-admin, roles e permissões base |
+
+---
+
+## Licença
+
+Uso restrito — Polícia Civil do Estado da Paraíba.
