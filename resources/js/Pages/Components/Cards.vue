@@ -112,11 +112,18 @@ const maisAcessados = ref([
     id: 4,
     titulo: 'Carteira de Identidade Nacional',
     link: '/escolha-cin',
+    external: false,
   },
+  // {
+  //   id: 5,
+  //   titulo: 'Antecedentes Criminais',
+  //   link: 'https://app.sesds.pb.gov.br/AAC/EmitirAAC',
+  // },
   {
     id: 5,
     titulo: 'Antecedentes Criminais',
-    link: 'https://app.sesds.pb.gov.br/AAC/EmitirAAC',
+    link: '/certidao-antecedentes',
+    external: false,
   },
   {
     id: 6,
@@ -127,6 +134,7 @@ const maisAcessados = ref([
     id: 7,
     titulo: 'Concurso Público',
     link: '/concursos',
+    external: false,
   },
 ]);
 

@@ -341,7 +341,7 @@ const getStatusBadge = veiculo => {
 
 /* TIPOGRAFIA */
 .section-title {
-  @apply text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-slate-900 mb-2;
+  @apply text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-gray-900 mb-2;
 }
 
 .section-subtitle {

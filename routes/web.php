@@ -98,6 +98,10 @@ Route::get('/missao', function () {
     return Inertia::render('Missao');
 })->name('missao');
 
+Route::get('/certidao-antecedentes', function () {
+    return Inertia::render('CertidaoAntecedentes');
+})->name('certidao.antecedentes');
+
 Route::get('/diretores', function () {
     return Inertia::render('Diretores');
 })->name('diretores');

@@ -1,87 +1,59 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import Header from './Components/Header.vue';
 import SiteNavbar from './Components/SiteNavbar.vue';
 import Footer from './Components/Footer.vue';
-import { ref } from 'vue';
 
-const linksConcursos = ref([
+const linksConcursos = [
   {
     id: 1,
     titulo: 'Concurso PC/PB - 2021',
     descricao: 'Informações completas sobre o edital e processo seletivo',
     url: 'https://www.cebraspe.org.br/concursos/pc_pb_21',
-    cor: 'bg-gray-500 hover:bg-[#bea55a]',
   },
   {
     id: 2,
     titulo: 'Concurso PC/PB - 2008',
     descricao: 'Informações completas sobre o edital e processo seletivo',
     url: 'http://www.cespe.unb.br/concursos/pcpb2008/',
-    cor: 'bg-gray-500 hover:bg-[#bea55a]',
   },
-]);
-
-const abrirLink = url => {
-  window.open(url, '_blank', 'noopener,noreferrer');
-};
+];
 </script>
 
 <template>
   <Head title="Concursos" />
 
-  <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+  <div class="min-h-screen flex flex-col bg-gray-100">
     <Header />
     <SiteNavbar />
 
-    <!-- Cabeçalho -->
-    <div
-      class="bg-gradient-to-r from-black to-gray-900 text-white py-5 shadow-md"
-    >
-      <div class="container mx-auto flex justify-center items-center px-4">
-        <div class="flex items-center">
-          <h1 class="text-3xl font-bold">Concursos Anteriores</h1>
+    <section class="w-full bg-gray-100 py-10">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <!-- Título -->
+        <div class="text-center">
+          <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">
+            Concursos Anteriores
+          </h1>
         </div>
-        <!-- <Link
-          :href="route('home')"
-          class="flex items-center text-[#bea55a] hover:text-gray-300 transition"
-        >
-          <span>Voltar</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 ml-1"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </Link> -->
-      </div>
-    </div>
 
-    <!-- Conteúdo Principal -->
-    <div class="container mx-auto py-8 px-4">
-      <!-- Grid de Links -->
-      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        <div
-          v-for="link in linksConcursos"
-          :key="link.id"
-          @click="abrirLink(link.url)"
-          class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer overflow-hidden border border-gray-100"
-        >
-          <!-- Header do Card -->
-          <div
-            :class="`${link.cor} p-6 text-white transition-colors duration-300`"
+        <!-- Cards -->
+        <div class="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          <a
+            v-for="concurso in linksConcursos"
+            :key="concurso.id"
+            :href="concurso.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group bg-white rounded-xl shadow-md hover:shadow-lg border-2 border-transparent hover:border-[#bea55a] transition-all duration-300 overflow-hidden"
           >
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3">
+            <!-- Topo do card -->
+            <div
+              class="bg-gray-500 group-hover:bg-[#bea55a] transition-colors duration-300 p-5 text-white flex items-center justify-between"
+            >
+              <div class="flex items-center gap-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
+                  class="h-6 w-6 flex-shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -93,13 +65,11 @@ const abrirLink = url => {
                     d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
                   />
                 </svg>
-                <h3 class="text-xl font-semibold">
-                  {{ link.titulo }}
-                </h3>
+                <h3 class="text-lg font-semibold">{{ concurso.titulo }}</h3>
               </div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 opacity-75"
+                class="h-5 w-5 opacity-75 flex-shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -112,41 +82,23 @@ const abrirLink = url => {
                 />
               </svg>
             </div>
-          </div>
 
-          <!-- Conteúdo do Card -->
-          <div class="p-6">
-            <p class="text-gray-600 leading-relaxed mb-4">
-              {{ link.descricao }}
-            </p>
-
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-gray-500 font-medium">
-                Clique para acessar
-              </span>
-              <div
-                class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"
+            <!-- Corpo do card -->
+            <div class="p-5">
+              <p class="text-gray-600 leading-relaxed mb-4">
+                {{ concurso.descricao }}
+              </p>
+              <span
+                class="text-sm text-[#bea55a] font-medium group-hover:underline"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4 text-gray-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </div>
+                Clique para acessar →
+              </span>
             </div>
-          </div>
+          </a>
         </div>
       </div>
-    </div>
+    </section>
+
+    <Footer />
   </div>
-  <Footer />
 </template>

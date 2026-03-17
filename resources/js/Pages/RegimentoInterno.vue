@@ -93,9 +93,9 @@ const additionalInfo = [
             Importância do Regimento Interno
           </h2>
           <p class="text-gray-600 mb-4">
-            O Regimento Interno da Polícia Civil da Paraíba é o instrumento normativo que
-            estabelece a estrutura organizacional, as normas de funcionamento e
-            procedimentos a serem adotados.
+            O Regimento Interno da Polícia Civil da Paraíba é o instrumento
+            normativo que estabelece a estrutura organizacional, as normas de
+            funcionamento e procedimentos a serem adotados.
           </p>
         </div>
       </div>

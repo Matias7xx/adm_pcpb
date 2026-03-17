@@ -63,11 +63,8 @@ const getOrigemClass = origem => {
 </script>
 
 <template>
-  <div>
-    <Head>
-      <title>Operações</title>
-    </Head>
-
+  <Head title="Operações" />
+  <div class="min-h-screen flex flex-col bg-gray-50">
     <Header />
     <SiteNavbar />
 
@@ -434,7 +431,7 @@ const getOrigemClass = origem => {
                         "
                         class="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-green-600"
                       >
-                        ✓ Resultado cadastrado
+                        ✓ Debriefing cadastrado
                       </span>
                     </div>
                   </td>
@@ -630,5 +627,3 @@ const getOrigemClass = origem => {
     <Footer />
   </div>
 </template>
-
-<style scoped></style>

@@ -37,9 +37,10 @@ const slogan = 'Investigar e Proteger';
     <SiteNavbar />
     <section class="w-full bg-gray-100 py-10">
       <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-
         <!-- Missão e Visão -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center"
+        >
           <!-- Imagem Missão -->
           <div class="relative w-full overflow-hidden rounded-lg shadow-lg">
             <img
@@ -78,7 +79,6 @@ const slogan = 'Investigar e Proteger';
             />
           </div>
         </div>
-
       </div>
     </section>
     <Footer />

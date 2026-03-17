@@ -73,8 +73,8 @@ const additionalInfo = [
         </h2>
         <p class="text-gray-600 mb-4">
           O organograma institucional é uma representação gráfica da estrutura
-          hierárquica e organizacional da Polícia Civil da Paraíba,
-          demonstrando as relações entre os diferentes departamentos e divisões.
+          hierárquica e organizacional da Polícia Civil da Paraíba, demonstrando
+          as relações entre os diferentes departamentos e divisões.
         </p>
         <p class="text-gray-600">
           Esta representação visual ajuda a compreender o fluxo de autoridade,

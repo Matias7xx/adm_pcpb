@@ -261,9 +261,7 @@ const iframeStyle = computed(() => {
       v-if="additionalInfo.length > 0"
       class="bg-gray-50 p-4 sm:p-6 border-t border-gray-200"
     >
-      <h2 class="text-lg font-medium text-gray-800 mb-4">
-        Importante
-      </h2>
+      <h2 class="text-lg font-medium text-gray-800 mb-4">Importante</h2>
       <ul class="mt-2 text-sm text-gray-600 space-y-1 list-disc list-inside">
         <li v-for="(info, index) in additionalInfo" :key="index">
           {{ info }}
