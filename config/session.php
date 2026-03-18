@@ -126,7 +126,7 @@ return [
     |
     */
 
-    'cookie' => env('SESSION_COOKIE', 'acadepol_session'),
+    'cookie' => env('SESSION_COOKIE', 'pcpb_session'),
 
     /*
     |--------------------------------------------------------------------------
