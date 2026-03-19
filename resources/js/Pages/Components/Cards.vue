@@ -154,7 +154,7 @@ const outros = ref([
   {
     id: 3,
     titulo: 'Boletim Interno',
-    link: 'https://policiacivil.pb.gov.br/boletim-interno-1',
+    link: 'https://biblioteca.pc.pb.gov.br/boletins',
     external: true,
   },
   {

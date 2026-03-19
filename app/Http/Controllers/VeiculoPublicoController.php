@@ -48,6 +48,19 @@ class VeiculoPublicoController extends Controller
     }
   }
 
+  //Determinar MIME type pela extensão do arquivo.
+  private function getMimeType(string $nomeArquivo): string
+  {
+    $extensao = strtolower(pathinfo($nomeArquivo, PATHINFO_EXTENSION));
+
+    return match ($extensao) {
+      'pdf'  => 'application/pdf',
+      'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'xls'  => 'application/vnd.ms-excel',
+      default => 'application/octet-stream',
+    };
+  }
+
   /**
    * Preview do documento (visualizar inline)
    */
@@ -71,7 +84,9 @@ class VeiculoPublicoController extends Controller
 
       // Obter conteúdo do arquivo
       $conteudo = Storage::disk('s3')->get($caminhoArquivo);
-      $mimeType = Storage::disk('s3')->mimeType($caminhoArquivo);
+
+      // MIME determinado pela extensão (evita falha do mimeType() no MinIO)
+      $mimeType = $this->getMimeType($veiculo->arquivo);
 
       // Retornar inline (para visualizar, não baixar)
       return response($conteudo)
@@ -113,7 +128,9 @@ class VeiculoPublicoController extends Controller
 
       // Obter conteúdo do arquivo
       $conteudo = Storage::disk('s3')->get($veiculo->caminho_arquivo);
-      $mimeType = Storage::disk('s3')->mimeType($veiculo->caminho_arquivo);
+
+      // MIME determinado pela extensão (evita falha do mimeType() no MinIO)
+      $mimeType = $this->getMimeType($veiculo->arquivo);
 
       // Retornar arquivo para download
       return response($conteudo)

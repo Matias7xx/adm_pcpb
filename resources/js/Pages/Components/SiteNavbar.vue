@@ -89,7 +89,13 @@ onBeforeUnmount(() => {
         <div class="flex justify-between items-center h-12">
           <div class="hidden sm:flex space-x-6 items-center">
             <DropdownInstitucional />
-            <DropdownServicos />
+            <DropdownServicos v-if="$page.props.auth.user" />
+            <a
+              href="https://delegaciaonline.pc.pb.gov.br/"
+              class="text-black hover:bg-[#a38e4d] rounded-md px-3 py-2 text-sm font-medium"
+              target="_blank"
+              >Delegacia Online</a
+            >
             <Link
               href="/noticias"
               class="text-black hover:bg-[#a38e4d] rounded-md px-3 py-2 text-sm font-medium"
@@ -101,6 +107,11 @@ onBeforeUnmount(() => {
               class="text-black hover:bg-[#a38e4d] rounded-md px-3 py-2 text-sm font-medium"
               >Concursos</Link
             >
+            <!-- <Link
+              href="/noticias"
+              class="text-black hover:bg-[#a38e4d] rounded-md px-3 py-2 text-sm font-medium"
+              >Delegacias</Link
+            > -->
             <!-- <Link
               href="/fale-conosco"
               class="text-black hover:bg-[#a38e4d] rounded-md px-3 py-2 text-sm font-medium"
@@ -271,7 +282,15 @@ onBeforeUnmount(() => {
       >
         <div class="flex flex-col space-y-2 p-4">
           <DropdownInstitucional class="bg-[#bea55a] rounded-md z-[100]" />
-          <DropdownServicos class="bg-[#bea55a] rounded-md" />
+          <DropdownServicos class="bg-[#bea55a] rounded-md" v-if="$page.props.auth.user" />
+
+          <a
+              href="https://delegaciaonline.pc.pb.gov.br/"
+              class="text-black bg-gray-200 rounded-md hover:text-[#a38e4d] px-3 py-2"
+              target="_blank"
+              >Delegacia Online</a
+            >
+
           <Link
             href="/noticias"
             class="text-black bg-gray-200 rounded-md hover:text-[#a38e4d] px-3 py-2"
@@ -283,6 +302,11 @@ onBeforeUnmount(() => {
             class="text-black bg-gray-200 rounded-md hover:text-[#a38e4d] px-3 py-2"
             >Concursos</Link
           >
+          <!-- <Link
+            href="/concursos"
+            class="text-black bg-gray-200 rounded-md hover:text-[#a38e4d] px-3 py-2"
+            >Delegacias</Link
+          > -->
 
           <!-- Redes Sociais no Mobile -->
           <div class="mt-3 border-t border-gray-200 pt-2 flex justify-center">

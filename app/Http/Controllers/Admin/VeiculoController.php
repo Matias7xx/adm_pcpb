@@ -265,10 +265,11 @@ class VeiculoController extends Controller
         'titulo' => $request->titulo,
         'descricao' => $request->descricao,
         'dias_exibicao' => $request->dias_exibicao,
-        'data_publicacao' =>
-          $request->data_publicacao ?? $veiculo->data_publicacao,
+        'data_publicacao' => $request->data_publicacao
+          ? \Carbon\Carbon::parse($request->data_publicacao)->toDateString()
+          : $veiculo->data_publicacao,
         'ordem' => $request->ordem ?? $veiculo->ordem,
-        'ativo' => $request->ativo ?? $veiculo->ativo,
+        'ativo' => filter_var($request->ativo ?? $veiculo->ativo, FILTER_VALIDATE_BOOLEAN),
       ];
 
       // Se enviou novo arquivo

@@ -51,9 +51,9 @@ class AppServiceProvider extends ServiceProvider
   public function boot()
   {
     // Força HTTPS em ambiente de produção
-    if ($this->app->environment('production')) {
+    if (str_starts_with(config('app.url'), 'https')) {
       URL::forceScheme('https');
-    }
+    } 
 
     // Configurar Paginator para usar Tailwind CSS
     Paginator::useBootstrap();
