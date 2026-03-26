@@ -132,7 +132,7 @@ const handlePhotoError = () => {
                   Informações Pessoais
                 </button>
 
-                <button
+                <!-- <button
                   @click="activeTab = 'security'"
                   class="w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
                   :class="
@@ -156,7 +156,7 @@ const handlePhotoError = () => {
                     />
                   </svg>
                   Segurança
-                </button>
+                </button> -->
                 <!-- Conta -->
                 <!-- <button 
                                     @click="activeTab = 'account'"
@@ -200,7 +200,7 @@ const handlePhotoError = () => {
           </div>
 
           <!-- Segurança Tab -->
-          <div
+          <!-- <div
             v-if="activeTab === 'security'"
             class="bg-white shadow rounded-lg overflow-hidden"
           >
@@ -214,7 +214,7 @@ const handlePhotoError = () => {
             <div class="p-6">
               <UpdatePasswordForm class="max-w-3xl" />
             </div>
-          </div>
+          </div> -->
 
           <!-- Conta Tab (excluir conta)-->
           <!-- <div v-if="activeTab === 'account'" class="bg-white shadow rounded-lg overflow-hidden">

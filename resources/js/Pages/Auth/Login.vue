@@ -186,13 +186,13 @@ const submit = () => {
               :class="{ 'opacity-25': form.processing }"
               :disabled="form.processing"
             />
-            <BaseButton
+            <!-- <BaseButton
               v-if="canResetPassword"
               :href="route('password.request')"
               class="bg-[#bea54a] text-[black] hover:bg-[#a38e5d]"
               outline
               label="Esqueci a senha"
-            />
+            /> -->
           </BaseButtons>
 
           <Link :href="route('home')" class="hover:text-[#a38e5d]">
