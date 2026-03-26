@@ -156,8 +156,8 @@ class Veiculo extends Model
       return [
         'text' =>
           $this->dias_restantes === 1
-            ? '1 dia restante - Prazo Final'
-            : "{$this->dias_restantes} dias restantes - Prazo Final",
+            ? '1 dia restante'
+            : "{$this->dias_restantes} dias restantes",
         'type' => 'critico',
         'color' => 'red',
         'icon' => 'alert',
@@ -167,7 +167,7 @@ class Veiculo extends Model
     // Se próximo (7 dias ou menos)
     if ($this->dias_restantes <= 7) {
       return [
-        'text' => "{$this->dias_restantes} dias restantes - Prazo Final",
+        'text' => "{$this->dias_restantes} dias restantes",
         'type' => 'proximo',
         'color' => 'yellow',
         'icon' => 'clock',
