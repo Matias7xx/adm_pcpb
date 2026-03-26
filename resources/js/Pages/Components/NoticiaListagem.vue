@@ -431,7 +431,7 @@ onUnmounted(() => {
               <div class="flex-1">
                 <Link :href="`/noticias/${noticia.id}`">
                   <h3
-                    class="text-lg font-bold text-[#bea55a] mb-4 leading-tight line-clamp-3 group-hover:text-[#a38d49] transition-colors duration-300"
+                    class="text-lg font-bold text-neutral-800 mb-4 leading-tight line-clamp-3 group-hover:text-[#a38d49] transition-colors duration-300"
                   >
                     {{ noticia.titulo }}
                   </h3>

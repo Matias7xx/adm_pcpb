@@ -31,6 +31,7 @@ const props = defineProps({
 
 const form = useForm({
   search: props.filters?.search || '',
+  tipo:   props.filters?.tipo   || '',
 });
 
 const formDelete = useForm({});
@@ -89,6 +90,16 @@ const toggleAtivo = id => {
                 class="flex-1 px-3 py-2 max-w-full focus:ring focus:outline-none border-gray-700 rounded w-full dark:placeholder-gray-400 bg-white dark:bg-slate-800 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-gray-900 dark:text-white"
                 placeholder="Buscar por título ou descrição"
               />
+                <select
+                  v-model="form.tipo"
+                  class="px-3 py-2 border border-gray-300 rounded bg-white dark:bg-slate-800
+                        dark:border-gray-700 text-gray-900 dark:text-white focus:outline-none
+                        focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                >
+                  <option value="">Todos os tipos</option>
+                  <option value="topo">Topo</option>
+                  <option value="inferior">Inferior</option>
+                </select>
               <BaseButton
                 label="Buscar"
                 type="submit"
@@ -108,6 +119,7 @@ const toggleAtivo = id => {
               <th><Sort label="Título" attribute="titulo" /></th>
               <th>Preview</th>
               <th><Sort label="Ordem" attribute="ordem" /></th>
+              <th>Local</th>
               <th>Link</th>
               <th>Período</th>
               <th>Status</th>
@@ -170,6 +182,18 @@ const toggleAtivo = id => {
                   class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
                 >
                   {{ banner.ordem }}
+                </span>
+              </td>
+                <td data-label="Tipo">
+                <span
+                  :class="[
+                    'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
+                    banner.tipo === 'topo'
+                      ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                      : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
+                  ]"
+                >
+                  {{ banner.tipo === 'topo' ? 'Topo' : 'Inferior' }}
                 </span>
               </td>
               <td data-label="Link">

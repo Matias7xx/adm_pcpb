@@ -33,6 +33,7 @@ const form = useForm({
   nova_aba: props.banner.nova_aba,
   ordem: props.banner.ordem,
   ativo: props.banner.ativo,
+  tipo: props.banner.tipo ?? 'topo',
   data_inicio: props.banner.data_inicio || '',
   data_fim: props.banner.data_fim || '',
   remover_imagem: false,
@@ -258,6 +259,39 @@ const submit = () => {
               Abrir link em nova aba
             </span>
           </label>
+        </FormField>
+
+        <FormField
+          label="Posição do Banner"
+          help="Define onde o banner aparece na página inicial"
+        >
+          <div class="flex gap-6">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                v-model="form.tipo"
+                type="radio"
+                value="topo"
+                class="w-4 h-4 text-blue-600 focus:ring-blue-500"
+              />
+              <span class="text-gray-700 dark:text-gray-300">
+              Topo — Carousel principal
+              </span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                v-model="form.tipo"
+                type="radio"
+                value="inferior"
+                class="w-4 h-4 text-blue-600 focus:ring-blue-500"
+              />
+              <span class="text-gray-700 dark:text-gray-300">
+              Inferior — Seção de Banner (máx. 4)
+              </span>
+            </label>
+          </div>
+          <p v-if="form.errors.tipo" class="text-sm text-red-600 mt-1">
+            {{ form.errors.tipo }}
+          </p>
         </FormField>
 
         <FormField

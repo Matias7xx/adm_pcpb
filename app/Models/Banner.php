@@ -23,51 +23,44 @@ class Banner extends Model
     'nova_aba',
     'ordem',
     'ativo',
+    'tipo',          // 'topo' | 'inferior'
     'data_inicio',
     'data_fim',
   ];
 
   protected $casts = [
-    'ativo' => 'boolean',
-    'nova_aba' => 'boolean',
+    'ativo'       => 'boolean',
+    'nova_aba'    => 'boolean',
     'data_inicio' => 'date',
-    'data_fim' => 'date',
+    'data_fim'    => 'date',
   ];
 
-  /**
-   * Scope para banners ativos
-   */
+  /** Scope para banners ativos */
   public function scopeAtivos($query)
   {
     return $query
       ->where('ativo', true)
       ->where(function ($q) {
-        $q->whereNull('data_inicio')->orWhere(
-          'data_inicio',
-          '<=',
-          now()->toDateString(),
-        );
+        $q->whereNull('data_inicio')->orWhere('data_inicio', '<=', now()->toDateString());
       })
       ->where(function ($q) {
-        $q->whereNull('data_fim')->orWhere(
-          'data_fim',
-          '>=',
-          now()->toDateString(),
-        );
+        $q->whereNull('data_fim')->orWhere('data_fim', '>=', now()->toDateString());
       });
   }
 
-  /**
-   * Scope para ordenar por ordem
-   */
+  /** Scope para banners do topo (carousel) */
+  public function scopeTipo($query, string $tipo)
+  {
+    return $query->where('tipo', $tipo);
+  }
+
+  /** Scope para ordenar por ordem */
   public function scopeOrdenados($query)
   {
     return $query->orderBy('ordem')->orderBy('created_at', 'desc');
   }
 
-  /**
-   * Obter URL completa da imagem
-   */
+  /** URL completa da imagem */
   public function getImagemUrlAttribute()
   {
     if ($this->imagem) {
@@ -76,22 +69,16 @@ class Banner extends Model
     return null;
   }
 
-  /**
-   * Verificar se o banner está em período válido
-   */
+  /** Verificar se o banner está em período válido */
   public function isEmPeriodoValido()
   {
     $hoje = now()->toDateString();
-
     $inicioValido = !$this->data_inicio || $this->data_inicio <= $hoje;
-    $fimValido = !$this->data_fim || $this->data_fim >= $hoje;
-
+    $fimValido    = !$this->data_fim    || $this->data_fim    >= $hoje;
     return $inicioValido && $fimValido;
   }
 
-  /**
-   * Verificar se pode ser exibido
-   */
+  /** Verificar se pode ser exibido */
   public function podeSerExibido()
   {
     return $this->ativo && $this->isEmPeriodoValido();

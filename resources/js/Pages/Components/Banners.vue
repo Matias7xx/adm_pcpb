@@ -1,127 +1,149 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 
-const bannerItems = ref([
-  {
-    id: 1,
-    titulo: 'Paraíba da Gente',
-    imagem: '/images/banners/banner1.png',
-    link: 'https://heyzine.com/flip-book/22d36b7a40.html#page/1',
-    alt: 'Banner Paraíba da Gente - Dezembro 2024',
-    descricao: 'Revista digital com notícias e realizações',
-  },
-  {
-    id: 2,
-    titulo: 'Jornal A União',
-    imagem: '/images/banners/banner2.png',
-    link: 'https://auniao.pb.gov.br/',
-    alt: 'Banner Jornal A União - Acesse o site',
-    descricao: 'Portal de notícias oficial',
-  },
-]);
-
+const banners    = ref([]);
+const loading    = ref(true);
 const imageLoaded = ref({});
+
+const fetchBanners = async () => {
+  try {
+    loading.value = true;
+    const response = await axios.get('/banners?tipo=inferior');
+    banners.value  = response.data;
+  } catch (error) {
+    console.error('Erro ao carregar banners inferiores:', error);
+    banners.value = [];
+  } finally {
+    loading.value = false;
+  }
+};
 
 const handleImageLoad = id => {
   imageLoaded.value[id] = true;
 };
+
+/**
+ * Classes do grid conforme a quantidade de banners (máx 4).
+ *
+ * 1 → 1 coluna centralizada (pequena)
+ * 2 → 2 colunas
+ * 3 → 3 colunas
+ * 4 → 4 colunas em linha no desktop, 2×2 no tablet
+ */
+const gridClass = computed(() => {
+  const n = banners.value.length;
+  if (n === 1) return 'grid-cols-1 place-items-center';
+  if (n === 2) return 'grid-cols-1 sm:grid-cols-2 max-w-2xl mx-auto';
+  if (n === 3) return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto';
+  return 'grid-cols-2 lg:grid-cols-4 mx-auto'; // 4 → 1 linha no desktop
+});
+
+onMounted(fetchBanners);
 </script>
 
 <template>
-  <section
+  <section v-if="!loading && banners.length > 0"
     class="banners-section-bg bg-gray-100"
     aria-label="Publicações e portais oficiais"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+      <!-- Cabeçalho -->
       <div class="section-header">
         <div class="header-line"></div>
         <h2 class="section-title">Acesse</h2>
         <div class="header-line"></div>
       </div>
 
-      <!-- Descrição -->
-      <p class="section-description">
-        Confira a revista digital Paraíba da Gente e o Jornal A União
-      </p>
+      <!-- Skeleton de carregamento -->
+      <template v-if="loading">
+        <div :class="['grid gap-4 lg:gap-6', 'grid-cols-1 sm:grid-cols-2']">
+          <div
+            v-for="i in 2"
+            :key="i"
+            class="banner-card skeleton-loader"
+            aria-hidden="true"
+          />
+        </div>
+      </template>
+
+      <!-- Sem banners cadastrados -->
+      <template v-else-if="!loading && banners.length === 0">
+        <!-- Seção omitida quando vazia -->
+      </template>
 
       <!-- Grid de banners -->
-      <div class="banners-grid">
-        <a
-          v-for="banner in bannerItems"
-          :key="banner.id"
-          :href="banner.link"
-          :aria-label="`Acessar ${banner.titulo} - ${banner.descricao}`"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="banner-card group"
-        >
-          <!-- Skeleton loader -->
-          <div v-if="!imageLoaded[banner.id]" class="skeleton-loader" />
+      <template v-else>
+        <div :class="['grid gap-4 lg:gap-6', gridClass]">
+          <component
+            :is="banner.link ? 'a' : 'div'"
+            v-for="banner in banners"
+            :key="banner.id"
+            v-bind="banner.link
+              ? {
+                  href: banner.link,
+                  target: banner.nova_aba ? '_blank' : '_self',
+                  rel: banner.nova_aba ? 'noopener noreferrer' : undefined,
+                  'aria-label': `Acessar ${banner.titulo}${banner.descricao ? ' - ' + banner.descricao : ''}`,
+                }
+              : { role: 'img', 'aria-label': banner.titulo }
+            "
+            class="banner-card group"
+          >
+            <!-- Skeleton individual enquanto imagem carrega -->
+            <div v-if="!imageLoaded[banner.id]" class="skeleton-loader" />
 
-          <!-- Imagem -->
-          <img
-            :src="banner.imagem"
-            :alt="banner.alt || banner.titulo"
-            class="banner-image"
-            :class="{ loaded: imageLoaded[banner.id] }"
-            loading="lazy"
-            @load="handleImageLoad(banner.id)"
-          />
+            <!-- Imagem -->
+            <img
+              :src="banner.imagem"
+              :alt="banner.titulo"
+              :class="['banner-image', { loaded: imageLoaded[banner.id] }]"
+              loading="lazy"
+              @load="handleImageLoad(banner.id)"
+            />
 
-          <!-- Overlay -->
-          <div class="banner-overlay">
-            <div class="overlay-content">
-              <span class="overlay-title">{{ banner.titulo }}</span>
-              <span class="overlay-action">
-                Clique para acessar
-                <svg
-                  class="w-5 h-5 inline-block ml-1.5 transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+            <!-- Overlay no hover -->
+            <div v-if="banner.link" class="banner-overlay" aria-hidden="true">
+              <div class="overlay-content">
+                <span class="overlay-action">
+                  Acessar
+                  <svg
+                    class="w-4 h-4 ml-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                     stroke-width="2"
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </span>
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
+                  </svg>
+                </span>
+              </div>
             </div>
-          </div>
-        </a>
-      </div>
+          </component>
+        </div>
+      </template>
     </div>
   </section>
 </template>
 
 <style scoped>
-/* Seção com background em largura total */
+/* Seção  */
 .banners-section-bg {
-  @apply py-8 lg:py-12;
-  /* background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 50%, #f9fafb 100%); */
-  position: relative;
+  @apply py-6;
 }
 
-/* Textura de pontos sutil */
-.banners-section-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(
-    circle at 1px 1px,
-    rgba(0, 0, 0, 0.02) 1px,
-    transparent 0
-  );
-  background-size: 20px 20px;
-  pointer-events: none;
+/* Impede interação com overlay */
+.banners-section-bg * {
+  pointer-events: auto;
 }
 
-/* Header com linha decorativa */
+/* Cabeçalho  */
 .section-header {
-  @apply flex items-center justify-center gap-4 mb-4;
+  @apply flex items-center justify-center gap-4 mb-5;
 }
 
 .header-line {
@@ -135,46 +157,30 @@ const handleImageLoad = id => {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.section-description {
-  @apply text-gray-600 text-center text-base sm:text-lg mb-10 lg:mb-12;
-  @apply max-w-2xl mx-auto;
-}
-
-/* Grid de banners */
-.banners-grid {
-  @apply grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10;
-  position: relative;
-  z-index: 1;
-}
-
-/* Card do banner */
+/* Card do banner  */
 .banner-card {
   @apply relative overflow-hidden rounded-xl shadow-md transition-all duration-300;
-  @apply hover:shadow-2xl focus:outline-none;
+  @apply hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-500;
   aspect-ratio: 1 / 1;
+  max-height: 280px;
   display: block;
-  max-width: 500px;
-  margin: 0 auto;
   will-change: box-shadow;
 }
 
 /* Skeleton loader */
 .skeleton-loader {
   @apply absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200;
-  animation: shimmer 2s infinite;
+  animation: shimmer 1.8s infinite linear;
+  background-size: 1000px 100%;
   z-index: 1;
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -500px 0;
-  }
-  100% {
-    background-position: 500px 0;
-  }
+  0%   { background-position: -1000px 0; }
+  100% { background-position:  1000px 0; }
 }
 
-/* Imagem do banner */
+/* Imagem */
 .banner-image {
   @apply w-full h-full object-cover opacity-0 transition-opacity duration-500;
   position: relative;
@@ -185,23 +191,22 @@ const handleImageLoad = id => {
   @apply opacity-100;
 }
 
-/* Overlay no hover */
+/* Overlay */
 .banner-overlay {
   @apply absolute inset-0 opacity-0 transition-all duration-300;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.7) 100%
+    rgba(0, 0, 0, 0.25) 0%,
+    rgba(0, 0, 0, 0.65) 100%
   );
   z-index: 3;
 }
 
-.banner-card:hover .banner-overlay,
-.banner-card:focus .banner-overlay {
+.banner-card:hover  .banner-overlay,
+.banner-card:focus  .banner-overlay {
   @apply opacity-100;
 }
 
-/* Conteúdo do overlay */
 .overlay-content {
   @apply absolute inset-0 flex flex-col items-center justify-center p-6 text-center;
 }
@@ -224,27 +229,14 @@ const handleImageLoad = id => {
   transform: translateY(-2px);
 }
 
-/* Responsividade - Mobile */
+/* Responsividade */
 @media (max-width: 768px) {
-  .banners-section-bg {
-    @apply py-6; /* ESPAÇAMENTO REDUZIDO NO MOBILE */
-  }
+  .banners-section-bg { @apply py-6; }
 
-  .banners-grid {
-    @apply gap-6;
-  }
+  .banner-card { margin: 0 auto; }
 
-  .banner-card {
-    max-width: 100%;
-  }
-
-  .overlay-title {
-    @apply text-xl;
-  }
-
-  .overlay-action {
-    @apply text-sm px-4 py-2;
-  }
+  .overlay-title  { @apply text-xl; }
+  .overlay-action { @apply text-sm px-4 py-2; }
 
   .section-title {
     @apply text-xl;
@@ -252,33 +244,18 @@ const handleImageLoad = id => {
     gap: 0.5rem;
   }
 
-  .header-line {
-    max-width: 100px;
-  }
+  .header-line { max-width: 100px; }
 }
 
 @media (max-width: 640px) {
-  .section-description {
-    @apply text-sm;
-  }
-
-  .overlay-title {
-    @apply text-lg;
-  }
+  .overlay-title { @apply text-lg; }
 }
 
-/* Telas grandes */
 @media (min-width: 1280px) {
-  .banners-grid {
-    @apply gap-12;
-  }
-
-  .banners-section-bg {
-    @apply py-12; /* ESPAÇAMENTO REDUZIDO EM TELAS GRANDES */
-  }
+  .banners-section-bg { @apply py-8; }
 }
 
-/* Acessibilidade - redução de movimento */
+/* Acessibilidade */
 @media (prefers-reduced-motion: reduce) {
   .banner-card,
   .banner-overlay,
@@ -286,9 +263,6 @@ const handleImageLoad = id => {
   .banner-image {
     @apply transition-none;
   }
-
-  .skeleton-loader {
-    animation: none;
-  }
+  .skeleton-loader { animation: none; }
 }
 </style>
