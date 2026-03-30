@@ -20,11 +20,11 @@ import governoPb from '@/src/assets/governopb.png';
           <ul class="space-y-2.5">
             <li>
               <a
-                href="https://sistemas.pc.pb.gov.br/"
+                href="https://auniao.pb.gov.br/doe"
                 target="_blank"
                 class="text-sm text-gray-400 hover:text-[#bea55a] transition-colors duration-200 inline-block"
               >
-                Sistemas
+                Diário Oficial
               </a>
             </li>
             <li>
