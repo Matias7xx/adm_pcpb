@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erro @yield('code', '500') - ACADEPOL</title>
+    <title>Erro @yield('code', '500') - PCPB</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -291,9 +291,6 @@
         
         <!-- Informações do rodapé -->
         <div class="footer-info">
-            <p>Se você acredita que isso é um erro, entre em contato com o 
-                <a href="mailto:{{ config('mail.from.address', 'suporte@acadepol.com') }}">suporte técnico</a>
-            </p>
             <p>© {{ date('Y') }} Polícia Civil da Paraíba</p>
         </div>
     </div>
