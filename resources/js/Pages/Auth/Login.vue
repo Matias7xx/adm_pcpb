@@ -115,13 +115,22 @@ const submit = () => {
         <NotificationBarInCard v-if="status" color="info">
           {{ status }}
         </NotificationBarInCard>
-        <div
-          class="w-full mt-2 px-1 py-1 overflow-hidden text-center flex justify-center"
-        >
-          <!-- <p class="text-gray-500 mb-3 text-sm sm:text-base px-2">
-            {{ loginDescription }}
-          </p> -->
+
+        <!-- Aviso: credenciais do RH -->
+        <div class="mt-3 mb-1 px-1 py-2.5 bg-blue-50 border border-blue-200 rounded-lg text-sm text-center text-gray-600">
+          <i class="fas fa-info-circle text-blue-400 mr-1"></i>
+          Utilize as mesmas credenciais do
+          <a
+            href="https://sistemas.pc.pb.gov.br/rh/template/index.php"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-blue-600 font-semibold hover:underline"
+          >
+            Sistema de Recursos Humanos
+            <i class="fas fa-external-link-alt text-xs ml-0.5"></i>
+          </a>
         </div>
+
         <FormField
           label="Matrícula"
           label-for="matricula"
