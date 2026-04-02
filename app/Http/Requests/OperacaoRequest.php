@@ -22,12 +22,14 @@ class OperacaoRequest extends FormRequest
   {
     $isEdicao = $this->isMethod('PUT') || $this->isMethod('PATCH');
 
-    // Regra de data: só exige after_or_equal:today na criação.
-    // Na edição, a operação pode já ter uma data passada válida.
-    $regrasData = ['required', 'date'];
-    if (!$this->isMethod('PUT') && !$this->isMethod('PATCH')) {
-      $regrasData[] = 'after_or_equal:today';
-    }
+    // Regra de data: aceita qualquer data do ano corrente (criação e edição).
+    $anoAtual = now()->year;
+    $regrasData = [
+      'required',
+      'date',
+      'after_or_equal:' . $anoAtual . '-01-01',
+      'before_or_equal:' . $anoAtual . '-12-31',
+    ];
 
     return [
       // Dados da operação
@@ -212,7 +214,9 @@ class OperacaoRequest extends FormRequest
       'data_operacao.required' => 'A data da operação é obrigatória.',
       'data_operacao.date' => 'Data inválida.',
       'data_operacao.after_or_equal' =>
-        'A data da operação não pode ser anterior a hoje.',
+        'A data da operação deve ser do ano atual (' . now()->year . ').',
+      'data_operacao.before_or_equal' =>
+        'A data da operação deve ser do ano atual (' . now()->year . ').',
 
       'local_briefing.required' => 'O local do briefing é obrigatório.',
       'horario_briefing.required' => 'O horário do briefing é obrigatório.',

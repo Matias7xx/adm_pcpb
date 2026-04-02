@@ -366,12 +366,12 @@ const getOrigemClass = origem => {
                     Operação
                   </th>
                   <th
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Data
                   </th>
                   <th
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Origem
                   </th>
@@ -435,18 +435,18 @@ const getOrigemClass = origem => {
                       </span>
                     </div>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                     {{
                       new Date(operacao.data_operacao).toLocaleDateString(
                         'pt-BR'
                       )
                     }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex flex-col gap-1">
+                  <td class="px-6 py-4 whitespace-nowrap text-center">
+                    <div class="flex flex-col gap-1 items-center">
                       <span
                         :class="getOrigemClass(operacao.origem_operacao)"
-                        class="px-2 py-1 text-xs font-semibold rounded-full self-start"
+                        class="px-2 py-1 text-xs font-semibold rounded-full"
                       >
                         {{ operacao.origem_operacao }}
                       </span>

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OperacaoRequest;
+use App\Mail\NovaOperacao;
 use App\Models\Operacao;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -159,6 +162,19 @@ class OperacaoController extends Controller
     $dados['unidade_policial_responsavel'] = $user->lotacao;
 
     $operacao = Operacao::create($dados);
+
+    // Notificar a DIOP por e-mail
+    $diopEmail = config('mail.diop_email', env('DIOP_EMAIL'));
+    if ($diopEmail) {
+      try {
+        Mail::to($diopEmail)->send(new NovaOperacao($operacao));
+      } catch (\Exception $e) {
+        Log::error('Falha ao enviar e-mail de nova operação para DIOP', [
+          'operacao_id' => $operacao->id,
+          'error' => $e->getMessage(),
+        ]);
+      }
+    }
 
     // Passar o ID explicitamente ao invés do objeto
     return redirect()

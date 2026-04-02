@@ -175,7 +175,7 @@ function origemClass(origem) {
                 <th class="pb-3 pr-4">Data</th>
                 <th class="pb-3 pr-4">Unidade</th>
                 <th class="pb-3 pr-4">Origem</th>
-                <th class="pb-3 pr-4">Resultado</th>
+                <th class="pb-3 pr-4">Debriefing</th>
                 <th class="pb-3 pr-2 text-right">Ver</th>
               </tr>
             </thead>

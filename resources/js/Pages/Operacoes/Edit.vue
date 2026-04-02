@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import { Head, Link } from '@inertiajs/vue3';
 import Header from '../Components/Header.vue';
@@ -111,8 +111,15 @@ const validarEtapa = etapa => {
       erros.origem_operacao = 'A origem da operação é obrigatória.';
     if (!form.uf_responsavel)
       erros.uf_responsavel = 'A UF responsável é obrigatória.';
-    if (!form.data_operacao)
+    if (!form.data_operacao) {
       erros.data_operacao = 'A data da operação é obrigatória.';
+    } else {
+      const anoData = new Date(form.data_operacao).getUTCFullYear();
+      const anoAtual = new Date().getFullYear();
+      if (anoData !== anoAtual) {
+        erros.data_operacao = `A data da operação deve ser do ano atual (${anoAtual}).`;
+      }
+    }
     if (!form.cidades_alvo?.trim())
       erros.cidades_alvo = 'As cidades alvo são obrigatórias.';
     if (!form.crimes_investigados?.trim())
@@ -225,6 +232,33 @@ const abrirModalJustificativa = () => {
   modalJustificativa.value = true;
 };
 
+const campoParaEtapa = {
+  nome_operacao: 1,
+  autoridade_responsavel_nome: 1,
+  autoridade_responsavel_matricula: 1,
+  origem_operacao: 1,
+  uf_responsavel: 1,
+  ufs_alvo_outros_estados: 1,
+  data_operacao: 1,
+  cidades_alvo: 1,
+  crimes_investigados: 1,
+  local_briefing: 2,
+  horario_briefing: 2,
+  quantidade_total_alvos: 3,
+  quantidade_mandados_prisao: 3,
+  quantidade_mandados_busca_apreensao: 3,
+  quantidade_mandados_busca_apreensao_infrator: 3,
+  quantidade_alvos_outros_estados: 3,
+  quantidade_policiais_empregados: 3,
+  quantidade_viaturas_empregadas: 3,
+  vinculada_unidade: 4,
+  vinculada_unidade_especializada: 4,
+  outra_unidade_policial: 4,
+  vinculada_delegacia_seccional: 4,
+  solicitacao_apoio_diop: 5,
+  justificativa_edicao: 5,
+};
+
 const confirmarEdicao = () => {
   if (justificativaTexto.value.trim().length < 10) {
     justificativaErro.value =
@@ -235,11 +269,29 @@ const confirmarEdicao = () => {
   form.justificativa_edicao = justificativaTexto.value.trim();
   form.put(route('operacoes.update', props.operacao.id), {
     preserveScroll: true,
-    onError: () => {
-      etapaAtual.value = 1;
+    onError: errors => {
+      const etapasComErro = Object.keys(errors)
+        .map(campo => campoParaEtapa[campo])
+        .filter(Boolean);
+      if (etapasComErro.length > 0) {
+        etapaAtual.value = Math.min(...etapasComErro);
+      }
     },
   });
 };
+
+// Limpa o erro do servidor quando o campo é corrigido
+watch(
+  () => ({ ...form.data() }),
+  (newVal, oldVal) => {
+    const alterados = Object.keys(newVal).filter(
+      k => JSON.stringify(newVal[k]) !== JSON.stringify(oldVal[k])
+    );
+    if (alterados.length > 0) {
+      form.clearErrors(...alterados);
+    }
+  }
+);
 
 // Mostrar campo "outra unidade" apenas se necessário
 const mostrarOutraUnidade = computed(() => {
@@ -328,6 +380,25 @@ const erro = campo => {
             ></div>
           </div>
         </div>
+      </div>
+
+      <!-- Banner de erros do servidor -->
+      <div
+        v-if="Object.keys(form.errors).length > 0"
+        class="mb-4 rounded-lg border border-red-200 bg-red-50 p-4"
+      >
+        <p class="text-sm font-semibold text-red-700 mb-2">
+          Corrija os erros abaixo antes de continuar:
+        </p>
+        <ul class="list-disc list-inside space-y-1">
+          <li
+            v-for="(msg, campo) in form.errors"
+            :key="campo"
+            class="text-sm text-red-600"
+          >
+            {{ msg }}
+          </li>
+        </ul>
       </div>
 
       <!-- Formulário -->
