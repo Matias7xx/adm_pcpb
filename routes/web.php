@@ -38,7 +38,6 @@ URL::forceRootUrl(env('APP_URL')); */
 Route::get('/', function () {
     return Inertia::render('Home', [
         'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
@@ -336,6 +335,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->where('certificado', '[0-9]+');
     });
 });
+
+Route::get('/register', fn() => abort(404));
+Route::post('/register', fn() => abort(404));
 
 // Rotas de autenticação
 require __DIR__.'/auth.php';
