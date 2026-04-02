@@ -118,22 +118,15 @@ class LaravelUploadAdapter {
             return response.json();
           })
           .then(data => {
-            if (data.uploaded && data.url) {
-              console.log(
-                '✅ Upload de imagem realizado com sucesso:',
-                data.url
-              );
-              resolve({
-                default: data.url,
-              });
-            } else {
-              throw new Error(data.error?.message || 'Upload falhou');
-            }
-          })
-          .catch(error => {
-            console.error('❌ Erro no upload de imagem:', error);
-            reject(error);
-          });
+  if (data.uploaded && data.url) {
+    resolve({ default: data.url });
+  } else {
+    throw new Error(data.error?.message || 'Upload falhou');
+  }
+})
+.catch(error => {
+  reject(error);
+});
       });
     });
   }
@@ -613,27 +606,14 @@ const editorConfig = {
 
 const onReady = editorInst => {
   editorInstance.value = editorInst;
-
-  // Definir conteúdo inicial
   editorInst.setData(content.value);
   updateWordCount();
 
-  // Listener para mudanças no conteúdo - COM DEBOUNCE
-  let updateTimeout = null;
   editorInst.model.document.on('change:data', () => {
     const newData = editorInst.getData();
-
-    // Limpar timeout anterior
-    if (updateTimeout) {
-      clearTimeout(updateTimeout);
-    }
-
-    // Agendar atualização
-    updateTimeout = setTimeout(() => {
-      content.value = newData;
-      emit('update:modelValue', newData);
-      updateWordCount();
-    }, 300); // 300ms de delay
+    content.value = newData;
+    emit('update:modelValue', newData);
+    updateWordCount();
   });
 };
 
@@ -727,6 +707,10 @@ onMounted(async () => {
   if (content.value) {
     updateWordCount(content.value);
   }
+});
+
+defineExpose({
+  getContent: () => editorInstance.value?.getData() ?? content.value
 });
 </script>
 

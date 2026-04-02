@@ -5,7 +5,7 @@ import axios from 'axios';
 const props = defineProps({
   autoPlayInterval: {
     type: Number,
-    default: 5000,
+    default: 8000,
   },
   height: {
     type: String,

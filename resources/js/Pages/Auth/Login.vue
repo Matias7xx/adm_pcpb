@@ -69,7 +69,7 @@ const handleSubmit = () => {
         <!-- Logo -->
         <div class="relative z-10 mb-6 flex flex-col items-center">
             <img
-                src="/images/logo-pc.png"
+                src="/images/logoPC.png"
                 alt="Logo Polícia Civil"
                 class="w-32 sm:w-40 h-auto filter drop-shadow-lg"
             />

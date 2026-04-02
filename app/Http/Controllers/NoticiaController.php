@@ -54,13 +54,9 @@ class NoticiaController extends Controller
   /**
    * Exibe uma notícia específica
    */
-  public function exibir($id)
+  public function exibir($slug)
   {
-    if (!is_numeric($id)) {
-      abort(404, 'Notícia não encontrada');
-    }
-
-    $noticia = Noticia::where('id', $id)
+    $noticia = Noticia::where('slug', $slug)
       ->where('status', 'publicado')
       ->firstOrFail();
 
@@ -106,13 +102,13 @@ class NoticiaController extends Controller
       ],
       'proximaNoticia' => $proximaNoticia
         ? [
-          'id' => $proximaNoticia->id,
+          'slug' => $proximaNoticia->slug,
           'titulo' => $proximaNoticia->titulo,
         ]
         : null,
       'noticiaAnterior' => $noticiaAnterior
         ? [
-          'id' => $noticiaAnterior->id,
+          'slug' => $noticiaAnterior->slug,
           'titulo' => $noticiaAnterior->titulo,
         ]
         : null,
@@ -141,6 +137,7 @@ class NoticiaController extends Controller
         ->map(function ($noticia) {
           return [
             'id' => $noticia->id,
+            'slug' => $noticia->slug,
             'titulo' => $noticia->titulo,
             'descricao_curta' => $noticia->descricao_curta,
             'imagem' => $noticia->imagem
@@ -174,6 +171,7 @@ class NoticiaController extends Controller
         ->map(function ($noticia) {
           return [
             'id' => $noticia->id,
+            'slug' => $noticia->slug,
             'titulo' => $noticia->titulo,
             'descricao_curta' => $noticia->descricao_curta,
             'imagem' => $noticia->imagem
@@ -222,6 +220,7 @@ class NoticiaController extends Controller
     $noticias->getCollection()->transform(function ($noticia) {
       return [
         'id' => $noticia->id,
+        'slug' => $noticia->slug,
         'titulo' => $noticia->titulo,
         'descricao_curta' => $noticia->descricao_curta,
         'imagem' => $noticia->imagem

@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('noticias', function (Blueprint $table) {
+            $table->string('slug')->nullable()->unique()->after('titulo');
+        });
+
+        // Gerar slugs para notícias existentes
+        $noticias = DB::table('noticias')->whereNull('deleted_at')->get(['id', 'titulo']);
+
+        foreach ($noticias as $noticia) {
+            $base = Str::slug($noticia->titulo);
+            $slug = $base;
+            $i = 1;
+
+            while (DB::table('noticias')->where('slug', $slug)->where('id', '!=', $noticia->id)->exists()) {
+                $slug = $base . '-' . $i++;
+            }
+
+            DB::table('noticias')->where('id', $noticia->id)->update(['slug' => $slug]);
+        }
+    }
+
+    public function down(): void
+    {
+        Schema::table('noticias', function (Blueprint $table) {
+            $table->dropColumn('slug');
+        });
+    }
+};

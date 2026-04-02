@@ -147,7 +147,7 @@ Route::get('/cursos/{curso}', [CursoController::class, 'showCurso'])
 */
 
 Route::get('/noticias', [NoticiaController::class, 'ListarTodas'])->name('noticias');
-Route::get('/noticias/{id}', [NoticiaController::class, 'exibir'])->name('noticias.exibir');
+Route::get('/noticias/{slug}', [NoticiaController::class, 'exibir'])->name('noticias.exibir');
 Route::get('/api/ultimas-noticias', [NoticiaController::class, 'ultimasNoticias'])->name('api.ultimas-noticias');
 Route::get('/api/noticias-home', [NoticiaController::class, 'noticiasHome'])->name('api.noticias-home');
 

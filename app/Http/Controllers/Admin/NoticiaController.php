@@ -89,11 +89,6 @@ class NoticiaController extends Controller
       'status' => 'required|in:rascunho,publicado,arquivado',
     ]);
 
-    // Processar imagens e documentos do conteúdo primeiro
-    $validated['conteudo'] = $this->processContentMedia(
-      $validated['conteudo'],
-      $validated['titulo'],
-    );
 
     // Sanitizar o HTML para suportar documentos
     $validated['conteudo'] = Purifier::clean($validated['conteudo'], [
@@ -112,6 +107,13 @@ class NoticiaController extends Controller
       'HTML.TargetBlank' => true, // Permite target="_blank"
     ]);
 
+
+    // Processar imagens e documentos do conteúdo primeiro
+    $validated['conteudo'] = $this->processContentMedia(
+      $validated['conteudo'],
+      $validated['titulo'],
+    );
+
     // Processar upload de imagem de capa
     if ($request->hasFile('imagem')) {
       $imagePath = UploadHelper::uploadImage(
@@ -125,13 +127,28 @@ class NoticiaController extends Controller
       }
     }
 
+    if (!empty($validated['imagem'])) {
+    $capaUrl = UploadHelper::getPublicUrl($validated['imagem']);
+    $carousel = $validated['carousel_images'] ?? [];
+    
+    // Remove a capa se já estiver no carrossel (evita duplicata)
+    $carousel = array_filter($carousel, fn($img) => 
+        !str_contains($img['url'] ?? '', '/capa/')
+    );
+    
+    // Insere a capa como primeira imagem
+    array_unshift($carousel, ['url' => $capaUrl]);
+    $validated['carousel_images'] = array_values($carousel);
+}
+
     // Processar imagens do carrossel (VISUALIZAÇÃO DA NOTÍCIA)
     if (
       isset($validated['carousel_images']) &&
       is_array($validated['carousel_images'])
     ) {
-      $validated['carousel_images'] = array_values(
-        $validated['carousel_images'],
+      $validated['carousel_images'] = $this->processCarouselTempImages(
+        array_values($validated['carousel_images']),
+        $validated['titulo'],
       );
     }
 
@@ -224,12 +241,6 @@ class NoticiaController extends Controller
     $tituloNovo = $validated['titulo'];
     $tituloMudou = $tituloAntigo !== $tituloNovo;
 
-    // Processar apenas imagens base64 novas e documentos temporários, não reprocessar URLs existentes
-    $validated['conteudo'] = $this->processOnlyNewContentMedia(
-      $validated['conteudo'],
-      $validated['titulo'],
-    );
-
     // Sanitizar o HTML para suportar documentos
     $validated['conteudo'] = Purifier::clean($validated['conteudo'], [
       'HTML.Allowed' =>
@@ -246,6 +257,12 @@ class NoticiaController extends Controller
       'HTML.TidyLevel' => 'none',
       'HTML.TargetBlank' => true, // Permite target="_blank"
     ]);
+
+     // Processar apenas imagens base64 novas e documentos temporários, não reprocessar URLs existentes
+    $validated['conteudo'] = $this->processOnlyNewContentMedia(
+      $validated['conteudo'],
+      $validated['titulo'],
+    );
 
     // Remover imagem atual se solicitado
     if ($request->input('remover_imagem') && $noticia->imagem) {
@@ -278,6 +295,20 @@ class NoticiaController extends Controller
       }
     }
 
+    $imagemFinal = $validated['imagem'] ?? $noticia->imagem;
+      if (!empty($imagemFinal)) {
+    $capaUrl = UploadHelper::getPublicUrl($imagemFinal);
+    $carousel = $validated['carousel_images'] ?? [];
+
+    $carousel = array_filter($carousel, fn($img) =>
+        !str_contains($img['url'] ?? '', '/capa/')
+    );
+
+    array_unshift($carousel, ['url' => $capaUrl]);
+    $validated['carousel_images'] = array_values($carousel);
+}
+    
+
     // Remover campo remover_imagem antes de atualizar
     if (isset($validated['remover_imagem'])) {
       unset($validated['remover_imagem']);
@@ -288,8 +319,9 @@ class NoticiaController extends Controller
       isset($validated['carousel_images']) &&
       is_array($validated['carousel_images'])
     ) {
-      $validated['carousel_images'] = array_values(
-        $validated['carousel_images'],
+      $validated['carousel_images'] = $this->processCarouselTempImages(
+        array_values($validated['carousel_images']),
+        $validated['titulo'],
       );
     }
 
@@ -328,6 +360,8 @@ class NoticiaController extends Controller
 
     // Processar imagens base64 (imagens realmente novas)
     $html = $this->processOnlyNewContentImages($html, $tituloNoticia);
+
+    $html = $this->processTemporaryImages($html, $tituloNoticia);
 
     // Processar documentos temporários (que estão na pasta temp)
     $html = $this->processTemporaryDocuments($html, $tituloNoticia);
@@ -549,6 +583,8 @@ class NoticiaController extends Controller
 
     // Processar imagens base64
     $html = $this->processContentImages($html, $tituloNoticia);
+
+    $html = $this->processTemporaryImages($html, $tituloNoticia);
 
     // Processar documentos temporários
     $html = $this->processTemporaryDocuments($html, $tituloNoticia);
@@ -886,6 +922,76 @@ class NoticiaController extends Controller
         "Destaque substituído com sucesso! '{$noticiaNova->titulo}' agora está em destaque.",
       );
   }
+
+  private function processCarouselTempImages(array $carouselImages, string $tituloNoticia): array
+  {
+    foreach ($carouselImages as &$image) {
+      $url = $image['url'] ?? null;
+      if (!$url || !str_contains($url, '/storage/noticias/temp/')) {
+        continue;
+      }
+
+      $relativePath = str_replace(
+        '/storage/',
+        '',
+        parse_url($url, PHP_URL_PATH),
+      );
+
+      if (Storage::disk('public')->exists($relativePath)) {
+        $newPath = UploadHelper::moveImage(
+          $relativePath,
+          'noticias',
+          $tituloNoticia,
+          'content',
+        );
+        if ($newPath) {
+          $image['url'] = UploadHelper::getPublicUrl($newPath);
+        }
+      }
+    }
+
+    return $carouselImages;
+  }
+
+  private function processTemporaryImages($html, $tituloNoticia)
+{
+    if (!$html) {
+        return $html;
+    }
+
+    preg_match_all(
+        '/<img[^>]+src="([^"]*\/storage\/noticias\/temp\/[^"]+)"[^>]*>/i',
+        $html,
+        $matches,
+        PREG_SET_ORDER,
+    );
+
+    \Log::info('processTemporaryImages: encontradas ' . count($matches) . ' imagens temp');
+
+    foreach ($matches as $match) {
+        $tempUrl = $match[1];
+        $relativePath = str_replace(
+            '/storage/',
+            '',
+            parse_url($tempUrl, PHP_URL_PATH),
+        );
+
+        \Log::info('processTemporaryImages: relativePath=' . $relativePath);
+        \Log::info('processTemporaryImages: existe=' . (Storage::disk('public')->exists($relativePath) ? 'sim' : 'não'));
+
+        if (Storage::disk('public')->exists($relativePath)) {
+            $newPath = UploadHelper::moveImage($relativePath, 'noticias', $tituloNoticia, 'content');
+            \Log::info('processTemporaryImages: newPath=' . ($newPath ?? 'null'));
+
+            if ($newPath) {
+                $newUrl = UploadHelper::getPublicUrl($newPath);
+                $html = str_replace($tempUrl, $newUrl, $html);
+            }
+        }
+    }
+
+    return $html;
+}
 
   /**
    * Atualizar ordem dos destaques

@@ -113,7 +113,7 @@ const fetchDestacadas = async () => {
         excerpt: noticia.descricao_curta || '',
         image: noticia.imagem || PLACEHOLDER_LOCAL,
         originalImage: noticia.imagem,
-        link: `/noticias/${noticia.id}`,
+        link: `/noticias/${noticia.slug}`,
       }))
       .filter(item => item.title && item.id);
 

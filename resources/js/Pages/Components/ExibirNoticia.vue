@@ -366,9 +366,9 @@ const navegarComScroll = url =>
         <!-- Anterior -->
         <Link
           v-if="noticiaAnterior"
-          :href="`/noticias/${noticiaAnterior.id}`"
+          :href="`/noticias/${noticiaAnterior.slug}`"
           class="nav-noticia-card group"
-          @click.prevent="navegarComScroll(`/noticias/${noticiaAnterior.id}`)"
+          @click.prevent="navegarComScroll(`/noticias/${noticiaAnterior.slug}`)"
         >
           <svg
             class="nav-noticia-arrow"
@@ -397,9 +397,9 @@ const navegarComScroll = url =>
         <!-- Próxima -->
         <Link
           v-if="proximaNoticia"
-          :href="`/noticias/${proximaNoticia.id}`"
+          :href="`/noticias/${proximaNoticia.slug}`"
           class="nav-noticia-card group text-right"
-          @click.prevent="navegarComScroll(`/noticias/${proximaNoticia.id}`)"
+          @click.prevent="navegarComScroll(`/noticias/${proximaNoticia.slug}`)"
         >
           <div class="flex-1 min-w-0">
             <p class="text-xs text-gray-400 mb-0.5">Próxima notícia</p>

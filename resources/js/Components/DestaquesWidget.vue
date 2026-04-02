@@ -76,8 +76,8 @@ const trocarOrdem = () => {
   );
 };
 
-const visualizarNoSite = noticiaId => {
-  window.open(`/noticias/${noticiaId}`, '_blank');
+const visualizarNoSite = noticiaSlug => {
+  window.open(`/noticias/${noticiaSlug}`, '_blank');
 };
 
 onMounted(() => {
@@ -199,7 +199,7 @@ watch(
               class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-all flex items-center justify-center opacity-0 hover:opacity-100"
             >
               <button
-                @click="visualizarNoSite(destaquesOrdenados[0].id)"
+                @click="visualizarNoSite(destaquesOrdenados[0].slug)"
                 class="bg-white text-gray-800 px-4 py-2 rounded-lg mx-1 hover:bg-gray-100 transition-colors flex items-center space-x-2"
                 title="Visualizar no site"
               >
@@ -296,7 +296,7 @@ watch(
               class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-all flex items-center justify-center opacity-0 hover:opacity-100"
             >
               <button
-                @click="visualizarNoSite(destaquesOrdenados[1].id)"
+                @click="visualizarNoSite(destaquesOrdenados[1].slug)"
                 class="bg-white text-gray-800 px-4 py-2 rounded-lg mx-1 hover:bg-gray-100 transition-colors flex items-center space-x-2"
                 title="Visualizar no site"
               >

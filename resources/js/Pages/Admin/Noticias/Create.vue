@@ -38,6 +38,7 @@ const form = useForm({
 });
 
 // Estado
+const editorRef = ref(null);
 const imagePreview = ref(null);
 const isUploading = ref(false);
 const uploadProgress = ref(0);
@@ -171,7 +172,14 @@ const processContentImages = async content => {
 
 // Método para enviar o formulário
 const submit = async () => {
+  console.log('CONTEUDO NO SUBMIT:', form.conteudo);
+  console.log('EDITOR REF:', editorRef.value);
   try {
+    // Forçar sincronização do conteúdo do editor
+    if (editorRef.value) {
+      form.conteudo = editorRef.value.getContent();
+    }
+
     // Processar imagens no conteúdo antes de enviar
     if (form.conteudo.includes('data:image/')) {
       const processedContent = await processContentImages(form.conteudo);
@@ -488,6 +496,7 @@ const isProcessing = computed(() => {
         <!-- Editor de Conteúdo -->
         <div class="mb-6">
           <NoticiasEditor
+            ref="editorRef" 
             v-model="form.conteudo"
             v-model:carousel-images="form.carousel_images"
             :error="form.errors.conteudo"

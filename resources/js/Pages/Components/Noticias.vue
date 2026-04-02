@@ -213,7 +213,7 @@ onUnmounted(() => {
 
             <div class="p-5 flex flex-col flex-1">
               <div class="flex-1">
-                <Link :href="`/noticias/${noticia.id}`">
+                <Link :href="`/noticias/${noticia.slug}`">
                   <h3
                     class="text-lg font-bold text-neutral-800 mb-4 leading-tight line-clamp-3 group-hover:text-[#a38d49] transition-colors"
                   >
@@ -226,7 +226,7 @@ onUnmounted(() => {
                 class="mt-auto pt-4 border-t border-gray-100 flex flex-col gap-2"
               >
                 <Link
-                  :href="`/noticias/${noticia.id}`"
+                  :href="`/noticias/${noticia.slug}`"
                   class="text-sm font-bold uppercase tracking-wider text-gray-800 hover:text-[#bea55a] flex items-center gap-1 transition-colors"
                 >
                   SAIBA MAIS »

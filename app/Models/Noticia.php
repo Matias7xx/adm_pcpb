@@ -5,12 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 use App\Helpers\UploadHelper;
 use App\Traits\Auditable;
 
 class Noticia extends Model
 {
-  use HasFactory, SoftDeletes, Auditable;
+  use HasFactory, HasSlug, SoftDeletes, Auditable;
+
+  public function getSlugOptions(): SlugOptions
+  {
+    return SlugOptions::create()
+      ->generateSlugsFrom('titulo')
+      ->saveSlugsTo('slug')
+      ->slugsShouldBeNoLongerThan(200);
+  }
 
   protected string $auditModulo = 'noticia';
   protected string $auditLabel = 'titulo';
@@ -20,6 +30,7 @@ class Noticia extends Model
 
   protected $fillable = [
     'titulo',
+    'slug',
     'descricao_curta',
     'conteudo',
     'imagem',
