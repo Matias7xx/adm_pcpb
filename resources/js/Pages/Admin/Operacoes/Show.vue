@@ -207,6 +207,10 @@ function formatarDinheiro(valor) {
               <dt class="text-gray-500 font-medium">Unidade Especializada</dt>
               <dd class="text-gray-800">{{ operacao.vinculada_unidade_especializada ?? '-' }}</dd>
             </div>
+            <div v-if="operacao.outra_unidade_policial" class="flex justify-between border-b pb-2">
+              <dt class="text-gray-500 font-medium">Outra Unidade Policial</dt>
+              <dd class="text-gray-800 text-right">{{ operacao.outra_unidade_policial }}</dd>
+            </div>
             <div class="flex justify-between pb-2">
               <dt class="text-gray-500 font-medium">Delegacia Seccional</dt>
               <dd class="text-gray-800">{{ operacao.vinculada_delegacia_seccional ?? '-' }}</dd>
@@ -225,6 +229,10 @@ function formatarDinheiro(valor) {
               <p class="text-xs text-gray-500 font-medium">Total de Alvos</p>
               <p class="text-2xl font-bold text-gray-800 mt-1">{{ estatisticas.total_alvos }}</p>
             </div>
+            <div v-if="estatisticas.alvos_outros_estados" class="bg-gray-50 rounded-lg p-3 text-center">
+              <p class="text-xs text-gray-500 font-medium">Alvos Outros Estados</p>
+              <p class="text-2xl font-bold text-gray-800 mt-1">{{ estatisticas.alvos_outros_estados }}</p>
+            </div>
             <div class="bg-gray-50 rounded-lg p-3 text-center">
               <p class="text-xs text-gray-500 font-medium">Total de Mandados</p>
               <p class="text-2xl font-bold text-gray-800 mt-1">{{ estatisticas.total_mandados }}</p>
@@ -236,6 +244,10 @@ function formatarDinheiro(valor) {
             <div class="bg-gray-50 rounded-lg p-3 text-center">
               <p class="text-xs text-gray-500 font-medium">Mandados Busca</p>
               <p class="text-2xl font-bold text-gray-800 mt-1">{{ estatisticas.mandados_busca }}</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3 text-center">
+              <p class="text-xs text-gray-500 font-medium">Mandados Busca Infrator</p>
+              <p class="text-2xl font-bold text-gray-800 mt-1">{{ estatisticas.mandados_busca_infrator }}</p>
             </div>
             <div class="bg-gray-50 rounded-lg p-3 text-center">
               <p class="text-xs text-gray-500 font-medium">Policiais</p>
@@ -277,9 +289,17 @@ function formatarDinheiro(valor) {
             <div>
               <h4 class="text-sm font-semibold text-gray-600 mb-3 uppercase tracking-wide">Mandados</h4>
               <dl class="space-y-2 text-sm">
+                <div v-if="operacao.resultado.numero_processo_pje" class="flex justify-between border-b pb-2">
+                  <dt class="text-gray-500">Nº Processo PJe</dt>
+                  <dd class="font-semibold text-gray-800 font-mono">{{ operacao.resultado.numero_processo_pje }}</dd>
+                </div>
                 <div class="flex justify-between border-b pb-2">
                   <dt class="text-gray-500">Prisão cumpridos</dt>
                   <dd class="font-semibold text-gray-800">{{ operacao.resultado.mandados_prisao_cumpridos }}</dd>
+                </div>
+                <div v-if="operacao.resultado.mandados_prisao_cumpridos_detalhes" class="border-b pb-2">
+                  <dt class="text-gray-500 mb-1">Presos (nome/CPF)</dt>
+                  <dd class="text-gray-800 whitespace-pre-line text-xs bg-gray-50 rounded p-2">{{ operacao.resultado.mandados_prisao_cumpridos_detalhes }}</dd>
                 </div>
                 <div class="flex justify-between border-b pb-2">
                   <dt class="text-gray-500">Prisão não cumpridos</dt>
@@ -293,6 +313,10 @@ function formatarDinheiro(valor) {
                   <dt class="text-gray-500">Busca infrator cumpridos</dt>
                   <dd class="font-semibold text-gray-800">{{ operacao.resultado.mandados_busca_infrator_cumpridos }}</dd>
                 </div>
+                <div class="flex justify-between border-b pb-2">
+                  <dt class="text-gray-500">Busca infrator não cumpridos</dt>
+                  <dd class="font-semibold text-gray-800">{{ operacao.resultado.mandados_busca_infrator_nao_cumpridos }}</dd>
+                </div>
                 <div class="flex justify-between pb-2">
                   <dt class="text-gray-500">Prisões em flagrante</dt>
                   <dd class="font-semibold text-gray-800">{{ operacao.resultado.prisoes_flagrante }}</dd>
@@ -300,9 +324,9 @@ function formatarDinheiro(valor) {
               </dl>
             </div>
 
-            <!-- Apreensões -->
+            <!-- Apreensões: armas + munições -->
             <div>
-              <h4 class="text-sm font-semibold text-gray-600 mb-3 uppercase tracking-wide">Apreensões</h4>
+              <h4 class="text-sm font-semibold text-gray-600 mb-3 uppercase tracking-wide">Armas e Munições</h4>
               <dl class="space-y-2 text-sm">
                 <div class="flex justify-between border-b pb-2">
                   <dt class="text-gray-500">Armas apreendidas</dt>
@@ -320,8 +344,23 @@ function formatarDinheiro(valor) {
                     </span>
                   </div>
                 </div>
+                <div v-if="operacao.resultado.detalhes_armas_apreendidas" class="border-b pb-2">
+                  <dt class="text-gray-500 mb-1">Detalhes (tipo/calibre)</dt>
+                  <dd class="text-gray-800 whitespace-pre-line text-xs bg-gray-50 rounded p-2">{{ operacao.resultado.detalhes_armas_apreendidas }}</dd>
+                </div>
+                <div v-if="operacao.resultado.municoes_apreendidas" class="pb-2">
+                  <dt class="text-gray-500 mb-1">Munições (qtd/calibre)</dt>
+                  <dd class="text-gray-800 whitespace-pre-line text-xs bg-gray-50 rounded p-2">{{ operacao.resultado.municoes_apreendidas }}</dd>
+                </div>
+              </dl>
+            </div>
+
+            <!-- Apreensões: entorpecentes -->
+            <div>
+              <h4 class="text-sm font-semibold text-gray-600 mb-3 uppercase tracking-wide">Entorpecentes</h4>
+              <dl class="space-y-2 text-sm">
                 <div v-if="operacao.resultado.entorpecente_apreendido?.length" class="border-b pb-2">
-                  <dt class="text-gray-500 mb-1">Entorpecentes</dt>
+                  <dt class="text-gray-500 mb-1">Tipos</dt>
                   <div class="flex flex-wrap gap-1">
                     <span
                       v-for="tipo in operacao.resultado.entorpecente_apreendido"
@@ -332,17 +371,31 @@ function formatarDinheiro(valor) {
                     </span>
                   </div>
                 </div>
-                <div class="flex justify-between border-b pb-2">
-                  <dt class="text-gray-500">Valores em dinheiro</dt>
+                <div v-if="operacao.resultado.detalhes_entorpecentes" class="pb-2">
+                  <dt class="text-gray-500 mb-1">Detalhes (peso/qtd)</dt>
+                  <dd class="text-gray-800 whitespace-pre-line text-xs bg-gray-50 rounded p-2">{{ operacao.resultado.detalhes_entorpecentes }}</dd>
+                </div>
+                <div v-if="!operacao.resultado.entorpecente_apreendido?.length && !operacao.resultado.detalhes_entorpecentes">
+                  <p class="text-gray-400 text-xs italic">Não informado</p>
+                </div>
+              </dl>
+            </div>
+
+            <!-- Apreensões: valores, veículos e objetos -->
+            <div class="lg:col-span-2">
+              <h4 class="text-sm font-semibold text-gray-600 mb-3 uppercase tracking-wide">Valores e Objetos</h4>
+              <dl class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                <div class="border-b sm:border-b-0 pb-2 sm:pb-0">
+                  <dt class="text-gray-500 mb-1">Valores em dinheiro</dt>
                   <dd class="font-semibold text-gray-800">{{ formatarDinheiro(operacao.resultado.valores_dinheiro) }}</dd>
                 </div>
-                <div v-if="operacao.resultado.veiculos_apreendidos" class="flex justify-between border-b pb-2">
-                  <dt class="text-gray-500">Veículos</dt>
-                  <dd class="font-semibold text-gray-800 text-right max-w-xs">{{ operacao.resultado.veiculos_apreendidos }}</dd>
+                <div v-if="operacao.resultado.veiculos_apreendidos">
+                  <dt class="text-gray-500 mb-1">Veículos apreendidos</dt>
+                  <dd class="text-gray-800 whitespace-pre-line text-xs bg-gray-50 rounded p-2">{{ operacao.resultado.veiculos_apreendidos }}</dd>
                 </div>
-                <div v-if="operacao.resultado.demais_objetos_apreendidos" class="flex justify-between pb-2">
-                  <dt class="text-gray-500">Demais objetos</dt>
-                  <dd class="font-semibold text-gray-800 text-right max-w-xs">{{ operacao.resultado.demais_objetos_apreendidos }}</dd>
+                <div v-if="operacao.resultado.demais_objetos_apreendidos">
+                  <dt class="text-gray-500 mb-1">Demais objetos</dt>
+                  <dd class="text-gray-800 whitespace-pre-line text-xs bg-gray-50 rounded p-2">{{ operacao.resultado.demais_objetos_apreendidos }}</dd>
                 </div>
               </dl>
             </div>
@@ -359,7 +412,7 @@ function formatarDinheiro(valor) {
             <div class="lg:col-span-2 border-t pt-4 mt-2">
               <dl class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
                 <div>
-                  <dt class="text-gray-500 font-medium text-xs uppercase">Autoridade (resultado)</dt>
+                  <dt class="text-gray-500 font-medium text-xs uppercase">Autoridade Policial Responsável</dt>
                   <dd class="text-gray-800 mt-1">
                     {{ operacao.resultado.autoridade_responsavel_nome ?? '-' }}
                     <span v-if="operacao.resultado.autoridade_responsavel_matricula" class="block text-xs text-gray-400">
@@ -368,11 +421,14 @@ function formatarDinheiro(valor) {
                   </dd>
                 </div>
                 <div>
-                  <dt class="text-gray-500 font-medium text-xs uppercase">Policial (resultado)</dt>
+                  <dt class="text-gray-500 font-medium text-xs uppercase">Policial Civil Responsável pelo preenchimento</dt>
                   <dd class="text-gray-800 mt-1">
                     {{ operacao.resultado.policial_responsavel_nome ?? '-' }}
                     <span v-if="operacao.resultado.policial_responsavel_matricula" class="block text-xs text-gray-400">
                       Mat. {{ operacao.resultado.policial_responsavel_matricula }}
+                    </span>
+                    <span v-if="operacao.resultado.unidade_policial_responsavel" class="block text-xs text-gray-400">
+                      {{ operacao.resultado.unidade_policial_responsavel }}
                     </span>
                   </dd>
                 </div>

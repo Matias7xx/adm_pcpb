@@ -1033,6 +1033,7 @@ class NoticiaController extends Controller
         return [
           'id' => $noticia->id,
           'titulo' => $noticia->titulo,
+          'slug' => $noticia->slug,
           'imagem' => $noticia->imagem
             ? \App\Helpers\UploadHelper::getPublicUrl($noticia->imagem)
             : null,
