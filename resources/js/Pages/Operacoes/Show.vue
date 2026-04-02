@@ -10,8 +10,9 @@ const props = defineProps({
   bloqueado: Boolean,
 });
 
-const formatarData = data => {
-  return new Date(data).toLocaleDateString('pt-BR');
+const formatarData = (data, local = false) => {
+  const opts = local ? {} : { timeZone: 'UTC' };
+  return new Date(data).toLocaleDateString('pt-BR', opts);
 };
 
 const formatarHora = hora => {
@@ -538,7 +539,7 @@ const getUnidadeEspecializadaNome = codigo => {
         <div class="bg-white shadow rounded-lg p-6 mt-6">
           <div class="text-sm text-gray-600 text-center">
             <p>
-              Operação cadastrada em {{ formatarData(operacao.created_at) }}
+              Operação cadastrada em {{ formatarData(operacao.created_at, true) }}
             </p>
           </div>
         </div>

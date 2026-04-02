@@ -9,9 +9,10 @@ const props = defineProps({
   estatisticas: Object,
 });
 
-const formatarData = data => {
+const formatarData = (data, local = false) => {
   if (!data) return '';
-  return new Date(data).toLocaleDateString('pt-BR');
+  const opts = local ? {} : { timeZone: 'UTC' };
+  return new Date(data).toLocaleDateString('pt-BR', opts);
 };
 
 const formatarValor = valor => {
@@ -826,7 +827,7 @@ const getUnidadeEspecializadaNome = codigo => {
             <p class="text-sm text-gray-500">
               Resultado cadastrado em
               <span class="font-medium text-gray-700">{{
-                formatarData(resultado.created_at)
+                formatarData(resultado.created_at, true)
               }}</span>
             </p>
             <!-- <button

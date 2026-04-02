@@ -15,7 +15,7 @@ class OperacaoController extends Controller
     $this->authorize('adminViewAny', Operacao::class);
 
     $query = Operacao::with(['user:id,name,matricula', 'resultado'])
-      ->orderBy('data_operacao', 'desc');
+      ->orderBy('created_at', 'desc');
 
     if ($request->filled('busca')) {
       $busca = mb_strtolower($request->busca, 'UTF-8');

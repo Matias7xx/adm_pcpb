@@ -438,7 +438,8 @@ const getOrigemClass = origem => {
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                     {{
                       new Date(operacao.data_operacao).toLocaleDateString(
-                        'pt-BR'
+                        'pt-BR',
+                        { timeZone: 'UTC' }
                       )
                     }}
                   </td>

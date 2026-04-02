@@ -137,7 +137,7 @@ const operacaoSelecionada = computed(() => {
 
 const formatarData = data => {
   if (!data) return '';
-  return new Date(data).toLocaleDateString('pt-BR');
+  return new Date(data).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 };
 
 const nenhumaArmaMarcada = computed(() => {
