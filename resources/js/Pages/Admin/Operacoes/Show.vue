@@ -177,13 +177,13 @@ function formatarDinheiro(valor) {
                 <span class="block text-xs text-gray-400">Mat. {{ operacao.autoridade_responsavel_matricula }}</span>
               </dd>
             </div>
-            <div class="flex justify-between border-b pb-2">
-              <dt class="text-gray-500 font-medium">Policial Responsável</dt>
+            <!-- <div class="flex justify-between border-b pb-2">
+              <dt class="text-gray-500 font-medium">Policial Responsável pelo Preenchimento</dt>
               <dd class="text-gray-800 text-right">
                 {{ operacao.policial_responsavel_nome }}
                 <span class="block text-xs text-gray-400">Mat. {{ operacao.policial_responsavel_matricula }}</span>
               </dd>
-            </div>
+            </div> -->
             <div class="flex justify-between border-b pb-2">
               <dt class="text-gray-500 font-medium">Cadastrado por</dt>
               <dd class="text-gray-800 text-right">
