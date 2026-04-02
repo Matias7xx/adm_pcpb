@@ -49,6 +49,7 @@ class AuthServiceProvider extends ServiceProvider
     'App\Models\Certificado' => 'App\Policies\CertificadoPolicy',
     'App\Models\AuditLog' => 'App\Policies\AuditLogPolicy',
     'App\Models\Veiculo' => 'App\Policies\VeiculoPolicy',
+    'App\Models\Operacao' => 'App\Policies\OperacaoPolicy',
   ];
 
   /**

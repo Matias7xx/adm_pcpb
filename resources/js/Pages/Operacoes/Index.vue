@@ -381,7 +381,7 @@ const getOrigemClass = origem => {
                     Autoridade
                   </th>
                   <th
-                    class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Ações
                   </th>
@@ -482,10 +482,10 @@ const getOrigemClass = origem => {
                     </div>
                   </td>
                   <td
-                    class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                    class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium"
                   >
-                    <div class="flex items-center justify-end gap-2">
-                      <!-- <Link
+                    <div class="flex items-center justify-center gap-2">
+                      <Link
                         :href="route('operacoes.show', operacao.id)"
                         class="text-blue-600 hover:text-blue-900"
                         title="Visualizar"
@@ -509,7 +509,7 @@ const getOrigemClass = origem => {
                             d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                           />
                         </svg>
-                      </Link> -->
+                      </Link>
                       <Link
                         :href="
                           statusResultado(operacao) === 'vencida'

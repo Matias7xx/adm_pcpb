@@ -25,6 +25,7 @@ use App\Http\Controllers\OcupacaoController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\VeiculoController;
 use App\Http\Controllers\Admin\AuditLogController;
+use App\Http\Controllers\Admin\OperacaoController as AdminOperacaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -299,6 +300,16 @@ Route::group([
 
     Route::get('audit-logs',       [AuditLogController::class, 'index'])->name('audit-logs.index');
     Route::get('audit-logs/{auditLog}', [AuditLogController::class, 'show'])->name('audit-logs.show');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Operações (DIOP / Super-Admin)
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('operacoes-admin')->name('operacoes-admin.')->group(function () {
+        Route::get('/', [AdminOperacaoController::class, 'index'])->name('index');
+        Route::get('/{operacao}', [AdminOperacaoController::class, 'show'])->name('show');
+    });
 
 
 });

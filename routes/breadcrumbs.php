@@ -5,6 +5,16 @@ use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 use Illuminate\Support\Facades\Route;
 use App\Helpers\BreadcrumbsHelper;
 
+Breadcrumbs::for('admin.operacoes-admin.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push('Operações', route('admin.operacoes-admin.index'));
+});
+
+Breadcrumbs::for('admin.operacoes-admin.show', function (BreadcrumbTrail $trail, $operacao) {
+    $trail->parent('admin.operacoes-admin.index');
+    $trail->push($operacao->nome_operacao);
+});
+
 Breadcrumbs::for('admin.audit-logs.index', function (BreadcrumbTrail $trail) {
       $trail->parent('admin.dashboard');
       $trail->push('Logs de Auditoria', route('admin.audit-logs.index'));
