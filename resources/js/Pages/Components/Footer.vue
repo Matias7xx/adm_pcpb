@@ -84,7 +84,7 @@ import governoPb from '@/src/assets/governopb.png';
                 href="tel:+558336128600"
                 class="text-gray-400 hover:text-[#bea55a] transition-colors duration-200"
               >
-                (83) 3612-8600
+                (83) 3238-4430
               </a>
             </div>
           </div>
